@@ -6,13 +6,14 @@
 #include "conveyorbeltStation.h"
 
 void conveyorbeltStation::runSimulationStep() {
-    //TODO
-    conv->runActuator(boxSet,this);
 
+    conv->runActuator(boxSet,this);
+    lb->checkSensor(boxSet);
 }
 
 conveyorbeltStation::conveyorbeltStation(BaseProductionStation *next, string name) :BaseProductionStation(next,"conveyorbeltStation:"+name ){
     conv = new conveyorbelt("Band1");
+    lb = new lightBarrier(80);
     addActuator(conv);
 }
 
