@@ -16,7 +16,7 @@
 using namespace std;
 class BaseWorkpiece; // beak circular dependencies
 class BaseActuator;
-
+class BaseSensor;
 class BaseProductionStation {
 
 
