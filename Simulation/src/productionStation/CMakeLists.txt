@@ -2,6 +2,6 @@ set(dir src/productionStation/)
 #${dir}
 set(src_productionStation
 
-        #${dir}ProductionStation.cpp
-        #${dir}ProductionStation.hr
+        ${dir}BaseProductionStation.h
+        ${dir}BaseProductionStation.cpp
         PARENT_SCOPE )

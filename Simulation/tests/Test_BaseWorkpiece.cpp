@@ -6,7 +6,7 @@
 #include "../src/workpiece/BaseWorkpiece.h"
 
 
-TEST(BaseWorkPiece,initObj){
+TEST(BaseWorkPiece,CreateObj){
     BaseWorkpiece b1(0);
     BaseWorkpiece b2;
     BaseWorkpiece b3(10,"test");

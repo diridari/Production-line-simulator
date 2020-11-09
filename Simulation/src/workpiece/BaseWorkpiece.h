@@ -16,10 +16,39 @@ private:
     const string workpieceName;
 public:
     BaseWorkpiece();
+    /**
+     * create workpiece by name
+     * position = 0
+     * @param name name of obj
+     */
     explicit BaseWorkpiece(string name);
+
+    /**
+    * create workpiece by name
+    * @param name name of obj
+    * @param position_ pos of obj
+    */
     explicit BaseWorkpiece(uint32_t position_, string name = "Baseworkpiece");
+
+    /**
+     * get to current position of the obj
+     * @return position
+     */
     uint32_t getPosition() const;
+
+    /**
+     * set to obj position
+     * Max : MAXPOSITION
+     * Min : 0
+     * @param pos
+     * @return
+     */
     uint8_t setPosition(uint32_t pos);
+
+    /**
+     * get obj name
+     * @return
+     */
     string getName() const;
 
     /**
@@ -29,6 +58,9 @@ public:
      */
     uint8_t moveBy(int32_t increasePosition);
 
+
+    friend std::ostream &operator<<(std::ostream &strm, BaseWorkpiece a);
+
 };
-std::ostream &operator<<(std::ostream &strm, BaseWorkpiece a);
+
 #endif //PRODUCTION_LINE_SIMULATOR_BASEWORKPIECE_H

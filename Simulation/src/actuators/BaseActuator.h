@@ -5,12 +5,26 @@
 #ifndef PRODUCTION_LINE_SIMULATOR_BASEACTUATOR_H
 #define PRODUCTION_LINE_SIMULATOR_BASEACTUATOR_H
 #include <stdint.h>
+#include <string>
+#include <iostream>
+using namespace std;
+
+
+enum actuatorState{
+    ACTUATOR_OFF,
+    ACTUATOR_ON
+
+};
+std::ostream &operator<<(std::ostream &strm, actuatorState a);
 
 class BaseActuator {
 private:
-    uint8_t actuatorState;
+    string  actuatorName;
+    actuatorState actuatorState_ = ACTUATOR_OFF;
 public:
-    uint8_t getActuatorState();
+    string getActuatorName();
+    actuatorState getActuatorState();
+    friend std::ostream &operator<<(std::ostream &strm, BaseActuator &a);
 };
 
 
