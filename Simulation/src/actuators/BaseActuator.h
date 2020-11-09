@@ -7,6 +7,8 @@
 #include <stdint.h>
 #include <string>
 #include <iostream>
+#include <lib/SimpleLogging/include/logging.h>
+
 using namespace std;
 
 
@@ -22,8 +24,10 @@ private:
     string  actuatorName;
     actuatorState actuatorState_ = ACTUATOR_OFF;
 public:
+    BaseActuator(string name): actuatorName(name){};
     string getActuatorName();
     actuatorState getActuatorState();
+    void setActuatorState(actuatorState toSet);
     friend std::ostream &operator<<(std::ostream &strm, BaseActuator &a);
 };
 

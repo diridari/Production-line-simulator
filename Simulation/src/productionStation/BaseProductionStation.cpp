@@ -26,7 +26,7 @@ string BaseProductionStation::getStationName() {
 }
 
 BaseProductionStation::BaseProductionStation(BaseProductionStation *nextStation, string stationName) : nextStation(nextStation), stationName(stationName){
-    boxSet = new queue<BaseWorkpiece*>();
+    boxSet = new vector<BaseWorkpiece*>();
     sensorSet = new  vector<BaseSensor*>();
     actuatorSet = new vector<BaseActuator*>();
 }
@@ -37,7 +37,13 @@ bool BaseProductionStation::canReceiveNewWorkpiece() {
 }
 
 void BaseProductionStation::runSimulationStep() {
-    // Move all Boxes
-    
-    // Check sensor State
+
+}
+
+bool BaseProductionStation::insertBox(BaseWorkpiece *wp) {
+    if(canReceiveNewWorkpiece()){
+        boxSet->insert(boxSet->begin(),wp);
+        return true;
+    }
+    return false;
 }

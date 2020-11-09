@@ -10,6 +10,8 @@
 #include <src/workpiece/BaseWorkpiece.h>
 #include <src/sensors/BaseSensor.h>
 #include <src/actuators/BaseActuator.h>
+#include <lib/SimpleLogging/include/logging.h>
+
 
 using namespace std;
 class BaseProductionStation {
@@ -18,7 +20,7 @@ class BaseProductionStation {
 protected:
     BaseProductionStation *nextStation = nullptr;
     string stationName;
-    std::queue<BaseWorkpiece*> * boxSet;
+    vector<BaseWorkpiece*> * boxSet;
     vector<BaseSensor*> * sensorSet;
     vector<BaseActuator*> * actuatorSet;
 
@@ -42,9 +44,15 @@ public:
      * @param toAadd actuator to add
      */
     void addActuator(BaseActuator * toAadd);
-
-    void runSimulationStep();
-    bool canReceiveNewWorkpiece();
+    /**
+     * insert box at the begin of the station
+     * Just possible if there is space check canReceiveNewWorkpiece
+     * @param wp
+     * @return true on success
+     */
+    bool insertBox(BaseWorkpiece *wp);
+    virtual void runSimulationStep();
+    virtual bool canReceiveNewWorkpiece();
 
    friend std::ostream &operator<<(std::ostream &strm, BaseProductionStation a);
 
