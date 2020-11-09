@@ -21,6 +21,7 @@ void BaseActuator::setActuatorState(actuatorState toSet) {
     actuatorState_ = toSet;
 }
 
+
 std::ostream &operator<<(ostream &strm, actuatorState a) {
     switch (a) {
         case ACTUATOR_OFF :

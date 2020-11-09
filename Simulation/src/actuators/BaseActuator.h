@@ -8,10 +8,12 @@
 #include <string>
 #include <iostream>
 #include <lib/SimpleLogging/include/logging.h>
+#include <src/productionStation/BaseProductionStation.h>
+#include <src/workpiece/BaseWorkpiece.h>
 
 using namespace std;
 
-
+class BaseProductionStation;
 enum actuatorState{
     ACTUATOR_OFF,
     ACTUATOR_ON
@@ -28,6 +30,14 @@ public:
     string getActuatorName();
     actuatorState getActuatorState();
     void setActuatorState(actuatorState toSet);
+
+    /**
+     * run this actuator for each Workpiece.
+     * Workpieces can move to the next station
+     * @param boxSet set of boxes to run
+     * @param nextStation
+     */
+    virtual void runActuator( vector<BaseWorkpiece*> * boxSet, BaseProductionStation *nextStation) {};
     friend std::ostream &operator<<(std::ostream &strm, BaseActuator &a);
 };
 

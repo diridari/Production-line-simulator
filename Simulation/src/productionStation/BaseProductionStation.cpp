@@ -31,10 +31,39 @@ BaseProductionStation::BaseProductionStation(BaseProductionStation *nextStation,
     actuatorSet = new vector<BaseActuator*>();
 }
 
-bool BaseProductionStation::canReceiveNewWorkpiece() {
+bool BaseProductionStation::canReceiveNewWorkpiece(uint8_t sizeOfBox ) {
+
+    // get left box
+    if(boxSet->size() >0){ // has boxes
+        BaseWorkpiece *box = boxSet->at(0);
+        if(box->getPosition() <=  (sizeOfBox/2 + sizeOfBox%2)){
+            return false;
+        }
+    }
+
     return true;
-    //TODO
 }
+bool BaseProductionStation::canWorkpieceBePlacedAt(uint8_t posToPlace, BaseWorkpiece *toPlace) {
+
+    if(boxSet->size() >0){ // has boxes
+        uint8_t radius = (toPlace->getWorkpieceSize()/2 + toPlace->getWorkpieceSize()%2);
+        int32_t box_min = toPlace->getPosition()-radius;
+        int32_t box_max = toPlace->getPosition()+radius;
+        for(int i = 0; i<boxSet->size();i++){ // check each box
+            BaseWorkpiece *box = boxSet->at(i);
+            uint8_t radius = (box->getWorkpieceSize()/2 + box->getWorkpieceSize()%2);
+            int32_t tmp_min = box->getPosition()-radius;
+            int32_t tmp_max = box->getPosition()+radius;
+            if(box_min > tmp_max && box_max < tmp_min){
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+
 
 void BaseProductionStation::runSimulationStep() {
 
@@ -47,3 +76,4 @@ bool BaseProductionStation::insertBox(BaseWorkpiece *wp) {
     }
     return false;
 }
+

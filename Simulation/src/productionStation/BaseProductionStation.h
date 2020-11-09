@@ -7,15 +7,18 @@
 
 #include <string>
 #include <queue>
-#include <src/workpiece/BaseWorkpiece.h>
-#include <src/sensors/BaseSensor.h>
-#include <src/actuators/BaseActuator.h>
 #include <lib/SimpleLogging/include/logging.h>
+#include <src/workpiece/BaseWorkpiece.h>
+#include <src/actuators/BaseActuator.h>
+#include <src/sensors/BaseSensor.h>
 
 
 using namespace std;
-class BaseProductionStation {
+class BaseWorkpiece; // beak circular dependencies
+class BaseActuator;
 
+class BaseProductionStation {
+    static uint32_t sizeOfStation = 100;
 
 protected:
     BaseProductionStation *nextStation = nullptr;
@@ -52,7 +55,8 @@ public:
      */
     bool insertBox(BaseWorkpiece *wp);
     virtual void runSimulationStep();
-    virtual bool canReceiveNewWorkpiece();
+    bool canReceiveNewWorkpiece(uint8_t sizeOfBox = 1);
+    bool canWorkpieceBePlacedAt(uint8_t posToPlace,BaseWorkpiece *toPlace);
 
    friend std::ostream &operator<<(std::ostream &strm, BaseProductionStation a);
 

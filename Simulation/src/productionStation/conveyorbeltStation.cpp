@@ -6,14 +6,8 @@
 #include "conveyorbeltStation.h"
 
 void conveyorbeltStation::runSimulationStep() {
-    if(conv->getActuatorState() == ACTUATOR_ON){
-        Log::log("move boxes on "+ this->getStationName(),Debug)
-        for(int i = boxSet->size()-1; i>= 0; i--){
-            BaseWorkpiece * wp = boxSet->at(i);
-            wp->moveBy(2);
-        }
-    }
-
+    //TODO
+    conv->runActuator(boxSet,nextStation);
 
 }
 

@@ -23,7 +23,7 @@ BaseWorkpiece::BaseWorkpiece(string name): BaseWorkpiece(0,name) {
 BaseWorkpiece::BaseWorkpiece(): BaseWorkpiece(0,"BaseWorkpiece"){
 }
 
-BaseWorkpiece::BaseWorkpiece(uint32_t position_, string name): position(position_),workpieceName(name) {
+BaseWorkpiece::BaseWorkpiece(uint32_t position_, string name): position(position_),workpieceName(name),size(10) {
 
 }
 
@@ -53,3 +53,8 @@ std::ostream &operator<<(ostream &strm, BaseWorkpiece a) {
 
     return strm << " ";
 }
+
+uint8_t BaseWorkpiece::getWorkpieceSize() {
+    return size;
+}
+

@@ -7,12 +7,15 @@
 #include <stdint.h>
 #include <string>
 #include <iostream>
+#include <src/productionStation/BaseProductionStation.h>
+
 #define WORKPIECE_MAX_INCREASE 10000
 #define MAXPOSITION 1000000
 using namespace std;
 class BaseWorkpiece {
 private:
     uint32_t position;
+    uint8_t size;
     const string workpieceName;
 public:
     BaseWorkpiece();
@@ -58,6 +61,7 @@ public:
      */
     uint8_t moveBy(int32_t increasePosition);
 
+    uint8_t getWorkpieceSize();
 
     friend std::ostream &operator<<(std::ostream &strm, BaseWorkpiece a);
 
