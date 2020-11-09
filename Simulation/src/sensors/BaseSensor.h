@@ -7,6 +7,8 @@
 
 #include <stdint.h>
 #include <iostream>
+#include <src/workpiece/BaseWorkpiece.h>
+
 using namespace std;
 
 typedef enum sensorState{
@@ -17,10 +19,17 @@ typedef enum sensorState{
 std::ostream &operator<<(ostream &strm, sensorState a);
 
 class BaseSensor {
-private:
+protected:
     sensorState sensorState = SENSOR_OFF;
 public:
     uint8_t getSensorState();
+    /**
+    * run this actuator for each Workpiece.
+    * Workpieces can move to the next station if thex reach the end of the station
+    * @param boxSet set of boxes to run
+    * @param nextStation
+    */
+    virtual void checkSensor( vector<BaseWorkpiece*> * boxSet) {};
     friend std::ostream &operator<<(std::ostream &strm, BaseSensor a);
 
 };

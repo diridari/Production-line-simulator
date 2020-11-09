@@ -8,7 +8,7 @@ conveyorbelt::conveyorbelt(string name) : BaseActuator("conveyorbelt:"+ name){}
 
 void conveyorbelt::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation *station) {
     if(getActuatorState() == ACTUATOR_ON){
-        Log::log("move boxes on "+ getActuatorName() ,Debug)
+        Log::log(station->getStationName() + ": move boxes on "+ getActuatorName() ,Debug)
         // move each box
         for(int i = boxSet->size()-1; i>= 0; i--){
             BaseWorkpiece * wp = boxSet->at(i);
@@ -17,7 +17,7 @@ void conveyorbelt::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionSt
                 if(wp->getPosition()+2 < BaseProductionStation::sizeOfStation) { // Move Box
                    wp->moveBy(2);
                 }else{ // moved out of station
-                    Log::log("element has moved out of Station --> move to next",Info);
+                    Log::log(station->getStationName() + ": element has moved out of Station --> move to next",Info);
                     boxSet->erase(boxSet->begin()+i); // drop element
                     wp->setPosition(0); //reset pos information
                     station->getNextStationInChain()->insertBox(wp); // insert in next chain
