@@ -14,6 +14,7 @@
 using namespace std;
 
 class BaseProductionStation;
+class BaseWorkpiece;
 enum actuatorState{
     ACTUATOR_OFF,
     ACTUATOR_ON
@@ -33,11 +34,11 @@ public:
 
     /**
      * run this actuator for each Workpiece.
-     * Workpieces can move to the next station
+     * Workpieces can move to the next station if thex reach the end of the station
      * @param boxSet set of boxes to run
      * @param nextStation
      */
-    virtual void runActuator( vector<BaseWorkpiece*> * boxSet, BaseProductionStation *nextStation) {};
+    virtual void runActuator( vector<BaseWorkpiece*> * boxSet, BaseProductionStation *station) {};
     friend std::ostream &operator<<(std::ostream &strm, BaseActuator &a);
 };
 

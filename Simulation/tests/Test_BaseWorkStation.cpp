@@ -45,3 +45,4 @@ TEST(BaseWorkstation,canStationReceiveBoxGetFirstBox){
     ASSERT_TRUE(s1.canReceiveNewWorkpiece(9));
     ASSERT_TRUE(s1.canReceiveNewWorkpiece(8));
 }
+

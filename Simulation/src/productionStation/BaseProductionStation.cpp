@@ -5,6 +5,8 @@
 #include <lib/SimpleLogging/include/logging.h>
 #include "BaseProductionStation.h"
 #include <string>
+
+
 std::ostream &operator<<(ostream &strm, BaseProductionStation a) {
     strm << "BaseProductionStation : {" << a.getStationName() <<"} ";
 
@@ -43,26 +45,6 @@ bool BaseProductionStation::canReceiveNewWorkpiece(uint8_t sizeOfBox ) {
 
     return true;
 }
-bool BaseProductionStation::canWorkpieceBePlacedAt(uint8_t posToPlace, BaseWorkpiece *toPlace) {
-
-    if(boxSet->size() >0){ // has boxes
-        uint8_t radius = (toPlace->getWorkpieceSize()/2 + toPlace->getWorkpieceSize()%2);
-        int32_t box_min = toPlace->getPosition()-radius;
-        int32_t box_max = toPlace->getPosition()+radius;
-        for(int i = 0; i<boxSet->size();i++){ // check each box
-            BaseWorkpiece *box = boxSet->at(i);
-            uint8_t radius = (box->getWorkpieceSize()/2 + box->getWorkpieceSize()%2);
-            int32_t tmp_min = box->getPosition()-radius;
-            int32_t tmp_max = box->getPosition()+radius;
-            if(box_min > tmp_max && box_max < tmp_min){
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
 
 
 void BaseProductionStation::runSimulationStep() {
@@ -75,5 +57,21 @@ bool BaseProductionStation::insertBox(BaseWorkpiece *wp) {
         return true;
     }
     return false;
+}
+
+vector<BaseWorkpiece *> *BaseProductionStation::getBoxesOnStation() {
+    return boxSet;
+}
+
+vector<BaseActuator *> *BaseProductionStation::getActuators() {
+    return actuatorSet;
+}
+
+vector<BaseSensor *> *BaseProductionStation::getSensors() {
+    return sensorSet;
+}
+
+BaseProductionStation *BaseProductionStation::getNextStationInChain() {
+    return nextStation;
 }
 

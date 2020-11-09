@@ -7,7 +7,7 @@
 
 void conveyorbeltStation::runSimulationStep() {
     //TODO
-    conv->runActuator(boxSet,nextStation);
+    conv->runActuator(boxSet,this);
 
 }
 

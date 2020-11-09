@@ -12,7 +12,7 @@ class conveyorbelt: public BaseActuator {
 
 public:
     conveyorbelt(string name);
-    void runActuator( vector<BaseWorkpiece*> * boxSet, BaseProductionStation *nextStation);
+    void runActuator( vector<BaseWorkpiece*> * boxSet, BaseProductionStation *station);
 
 };
 

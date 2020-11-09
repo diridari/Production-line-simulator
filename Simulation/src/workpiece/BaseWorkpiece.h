@@ -12,11 +12,13 @@
 #define WORKPIECE_MAX_INCREASE 10000
 #define MAXPOSITION 1000000
 using namespace std;
+class BaseProductionStation;
 class BaseWorkpiece {
 private:
     uint32_t position;
     uint8_t size;
     const string workpieceName;
+
 public:
     BaseWorkpiece();
     /**
@@ -55,6 +57,14 @@ public:
     string getName() const;
 
     /**
+     * can a box be plased on a position whitout bumping into on other box
+     * @param posToPlace  base position to be placed. Can be negative to determine that the base position is on the prev station
+     * @param toPlace box to be placed
+     * @return can be placed on posToPlace
+     */
+    bool canWorkpieceBePlacedAt(int32_t posToPlace,BaseProductionStation *stationToPlace);
+
+    /**
      * increase or decrease position by the paramter
      * @param increasePosition add position (max by WORKPIECE_MAX_INCREASE)
      * @return 1 == success
@@ -64,6 +74,7 @@ public:
     uint8_t getWorkpieceSize();
 
     friend std::ostream &operator<<(std::ostream &strm, BaseWorkpiece a);
+
 
 };
 
