@@ -6,7 +6,8 @@
 #include "conveyorbeltStation.h"
 
 void conveyorbeltStation::runSimulationStep() {
-
+    BaseProductionStation::runSimulationStep();
+    Log::log("run sim step for conveyorbeltStation:"+stationName ,DebugL2)
     conv->runActuator(boxSet,this);
     lb->checkSensor(boxSet);
 }

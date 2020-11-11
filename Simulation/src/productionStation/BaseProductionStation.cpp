@@ -48,7 +48,10 @@ bool BaseProductionStation::canReceiveNewWorkpiece(uint8_t sizeOfBox ) {
 
 
 void BaseProductionStation::runSimulationStep() {
-
+    if(nextStation != nullptr){
+        nextStation->runSimulationStep();
+    }
+    Log::log("run sim step for BaseProductionStation" + stationName,DebugL2)
 }
 
 bool BaseProductionStation::insertBox(BaseWorkpiece *wp) {

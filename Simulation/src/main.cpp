@@ -1,6 +1,10 @@
 
 
 #include <lib/SimpleLogging/include/logging.h>
+#include <thread>
+#include <src/gui/MainWindow.h>
+#include <zconf.h>
+#include <src/productionStation/conveyorbeltStation.h>
 #include "version.h"
 
 int main(int argc, char *argv[])
@@ -11,6 +15,14 @@ int main(int argc, char *argv[])
     Log::log("run event Loop",Info);
     Log:log("start simulation version: " + to_string(VERSION_MAJOR) + "."+ to_string(VERSION_MINOR) + "."+ to_string(VERSION_REVISION) +"\r\n",Message);
 
+    conveyorbeltStation *c3 = new conveyorbeltStation(nullptr,"band 3");
+    conveyorbeltStation *c2 = new conveyorbeltStation(c3,"band 2");
+    conveyorbeltStation *c1 = new conveyorbeltStation(c2,"band 1");
+    c3->setConveyorbeltState(ACTUATOR_ON);
+    c2->setConveyorbeltState(ACTUATOR_ON);
+    c1->setConveyorbeltState(ACTUATOR_ON);
+    BaseWorkpiece *wp1 = new BaseWorkpiece;
+    c1->insertBox(wp1);
     // simulation steps
     /**
      * 1. Operate all Workpieces
@@ -26,6 +38,14 @@ int main(int argc, char *argv[])
      * 2. Depending of the new box positions the sensor states gets calculated
      * 3.
      */
+     new thread(runGui,argc,argv,c1);
+
+    while (1){
+        usleep(100000);
+        Log::log("run simulation step",Info);
+        c1->runSimulationStep();
+
+    }
     return 0;
 
 }
