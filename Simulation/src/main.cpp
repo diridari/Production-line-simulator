@@ -5,8 +5,10 @@
 #include <src/gui/MainWindow.h>
 #include <zconf.h>
 #include <src/productionStation/conveyorbeltStation.h>
+#include <QtWidgets/QApplication>
 #include "version.h"
-
+#include "ObjMapper.h"
+#include "main.h"
 int main(int argc, char *argv[])
 {
 
@@ -38,15 +40,26 @@ int main(int argc, char *argv[])
      * 2. Depending of the new box positions the sensor states gets calculated
      * 3.
      */
-     new thread(runGui,argc,argv,c1);
 
-    while (1){
-        usleep(100000);
-        Log::log("run simulation step",Info);
-        c1->runSimulationStep();
-
-    }
-    return 0;
-
+    QApplication app(argc,argv);
+    MainWindow w;
+    void run (BaseProductionStation *c1,MainWindow *w);
+    new thread(run,c1,&w);
+    usleep(10000);
+    objMapper = new ObjMapper(&w);
+    objMapper->addStatin(c1);
+    objMapper->addStatin(c2);
+    objMapper->insertBox(wp1,c1);
+    return app.exec();
 }
 
+void run (BaseProductionStation *c1,MainWindow *w) {
+    while (1) {
+        usleep(100000);
+        Log::log("run simulation step", Info);
+        c1->runSimulationStep();
+        w->update(); // update gui
+
+    }
+
+}

@@ -5,4 +5,6 @@ set(src_gui
         ${dir}MainWindow.h
         ${dir}GuiStation.cpp
         ${dir}GuiStation.h
+        ${dir}GuiBox.cpp
+        ${dir}GuiBox.h
         PARENT_SCOPE )

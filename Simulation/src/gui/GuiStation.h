@@ -8,11 +8,19 @@
 
 #include <QtWidgets/QWidget>
 #include <src/productionStation/BaseProductionStation.h>
+#include <QLabel>
 
 class GuiStation : public QWidget{
     BaseProductionStation *connectedStation;
+    uint32_t posx, posY;
+    QLabel *l;
 public:
     GuiStation(BaseProductionStation *connectedStation, QWidget *parent = nullptr);
+    /**
+     * return gui psoition
+     * @return
+     */
+    // TODO getPosition();
 
 };
 

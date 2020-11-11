@@ -13,4 +13,7 @@ set(src_files
         ${src_gui}
         ${src_workpiece}
         ${dir}version.h
+        ${dir}ObjMapper.cpp
+        ${dir}ObjMapper.h
+        ${dir}main.h
         PARENT_SCOPE )
