@@ -4,17 +4,17 @@
 
 #include "GuiBox.h"
 
-GuiBox::GuiBox(BaseWorkpiece *connectedWorkpiece, GuiStation * currentStation, QWidget *parent):
-            QWidget(parent), connectedWorkpiece(connectedWorkpiece),currentStation(currentStation) {
-    l = new QLabel();
-    l->setPixmap(QPixmap("../img/box.png").scaled(50,50));
+GuiBox::GuiBox(BaseWorkpiece *connectedWorkpiece, GuiStation * currentStation, QLabel *parent):
+        QLabel(parent), connectedWorkpiece(connectedWorkpiece),currentStation(currentStation) {
+    Log::log("new gui statioon",Error);
 
-    l->move(currentStation->pos().x(),currentStation->pos().y() + connectedWorkpiece->getPosition());
-    l->show();
+    setPixmap(QPixmap("../img/box.png").scaled(50,50,Qt::KeepAspectRatio));
+    setScaledContents(true);
+    move(currentStation->pos().x(),currentStation->pos().y() + connectedWorkpiece->getPosition());
 }
 
 void GuiBox::updateBoxPos() {
-    l->move(currentStation->pos().x(),currentStation->pos().y() + connectedWorkpiece->getPosition());
+    move(currentStation->pos().x(),currentStation->pos().y() + connectedWorkpiece->getPosition());
 }
 
 void GuiBox::setStation(GuiStation *gs) {

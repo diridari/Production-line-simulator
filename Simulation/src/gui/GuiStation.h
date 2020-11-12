@@ -10,12 +10,12 @@
 #include <src/productionStation/BaseProductionStation.h>
 #include <QLabel>
 
-class GuiStation : public QWidget{
+class GuiStation : public QLabel{
     BaseProductionStation *connectedStation;
     uint32_t posx, posY;
     QLabel *l;
 public:
-    GuiStation(BaseProductionStation *connectedStation, QWidget *parent = nullptr);
+    GuiStation(BaseProductionStation *connectedStation, QLabel*parent = nullptr);
     /**
      * return gui psoition
      * @return

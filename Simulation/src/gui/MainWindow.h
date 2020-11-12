@@ -8,34 +8,45 @@
 #include <QtWidgets/QLabel>
 #include <src/productionStation/BaseProductionStation.h>
 #include "GuiBox.h"
+#include <QtWidgets/QGridLayout>
 
-void runGui(int argc, char *argv[], BaseProductionStation *startStation);
-void runGui2(QApplication *app) ;
 class MainWindow :public QWidget{
     BaseProductionStation * startStation;
     vector<GuiBox*> *boxSet;
+    QVBoxLayout *mainLayout;
+    QGridLayout *gridLayout;
 public:
     MainWindow(QWidget *parent = nullptr);
     QWidget *mainWidget;
 
     GuiBox * addBox(BaseWorkpiece * wp,GuiStation *guiStation){
+
         if(guiStation == nullptr || wp == nullptr){
             Log::log("gui add Box received nullpntr",Error);
             return nullptr;
         }
-        GuiBox *b = new GuiBox(wp,guiStation,mainWidget);
-        b->show();
-        boxSet->push_back(b);
-        return b;
+       GuiBox * b = new GuiBox(wp,guiStation);
+
+       b->show();
+       boxSet->push_back(b);
+       return b;
+
     }
 
     GuiStation * addStation(BaseProductionStation *ps) {
         if (ps == nullptr) {
             Log::log("gui add station received nullpntr",Error);
         }
-        GuiStation *s = new GuiStation(ps,mainWidget);
-        s->show();
+        GuiStation * s = new GuiStation(ps);
+        insertWidget(s);
         return s;
+    }
+    void insertWidget(QWidget *w){
+        static int x = 0;
+        gridLayout->addWidget(w,x,x,1,1);
+        w->show();
+        this->show();
+        x++;
     }
 public slots:
 

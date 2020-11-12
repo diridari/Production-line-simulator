@@ -10,35 +10,31 @@
 #include <QtWidgets/QApplication>
 #include <lib/SimpleLogging/include/logging.h>
 
-void runGui(int argc, char *argv[], BaseProductionStation *startStation) {
-    QApplication app(argc,argv);
-    MainWindow w;
-    // Event loop
-    Log::log("gui exit: " + to_string(app.exec()),Error);
-    exit(-1);
-}
-void runGui2(QApplication *app) {
-    Log::log("gui exit: " + to_string(app->exec()),Error);
-    exit(-1);
-}
 
 MainWindow::MainWindow(QWidget *parent) : QWidget(parent){
+    Log::log("generate Main window",Info);
 
-
-    QGridLayout *gridLayout = new QGridLayout;
-    boxSet = new vector<GuiBox*>();
+    gridLayout = new QGridLayout;
     mainWidget = new QWidget();
+    QLabel *l1 = new QLabel;
+    l1->setPixmap(QPixmap("../img/BaseStation.png").scaled(200,200,Qt::KeepAspectRatio)); // insert image and define resulution
+    l1->setScaledContents(true); // adjust image to WIndo size
+   // gridLayout->addWidget(new GuiStation(nullptr),1,1,1,1);
+  //  gridLayout->addWidget(new GuiStation(nullptr),0,0,1,1);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainWidget->setMinimumSize(600,600);
+
+
+    boxSet = new vector<GuiBox*>();
+
     // Add the previous two inner layouts
-    mainLayout->addLayout(gridLayout);
-
-    mainWidget->setLayout(mainLayout);
+    mainWidget->setLayout(gridLayout);
     mainWidget->show();
 }
 
 
 void MainWindow::update() {
+    Log::log("update gui",Message);
     for(int i = 0; i< boxSet->size();i++){
         boxSet->at(i)->updateBoxPos();
     }

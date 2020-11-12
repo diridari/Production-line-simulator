@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 {
 
     Log::advancedConf()->setCliHighLight(false);
-    Log::setLogLevel(Message,DebugL3);
+    Log::setLogLevel(Info,DebugL3);
     Log::log("run event Loop",Info);
     Log:log("start simulation version: " + to_string(VERSION_MAJOR) + "."+ to_string(VERSION_MINOR) + "."+ to_string(VERSION_REVISION) +"\r\n",Message);
 
@@ -43,9 +43,9 @@ int main(int argc, char *argv[])
 
     QApplication app(argc,argv);
     MainWindow w;
+
     void run (BaseProductionStation *c1,MainWindow *w);
     new thread(run,c1,&w);
-    usleep(10000);
     objMapper = new ObjMapper(&w);
     objMapper->addStatin(c1);
     objMapper->addStatin(c2);
@@ -54,6 +54,7 @@ int main(int argc, char *argv[])
 }
 
 void run (BaseProductionStation *c1,MainWindow *w) {
+
     while (1) {
         usleep(100000);
         Log::log("run simulation step", Info);

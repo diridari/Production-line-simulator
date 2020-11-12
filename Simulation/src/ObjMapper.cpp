@@ -15,11 +15,14 @@ GuiStation *ObjMapper::getGuiStation(BaseProductionStation *ps) {
 }
 
 void ObjMapper::insertBox(BaseWorkpiece *wp, BaseProductionStation *newStation) {
+    Log::log("add mapping for Box",Info);
     GuiBox *b = mainWindow->addBox(wp,getGuiStation(newStation));
     if(b != nullptr) {
         BoxMapper *m = new BoxMapper;
         m->gui = b;
         m->wp = wp;
+    }else{
+        Log::log("add mapping for Box failed ",Error);
     }
 }
 
@@ -50,11 +53,14 @@ ObjMapper::ObjMapper(MainWindow *mainWindow_) {
 }
 
 void ObjMapper::addStatin(BaseProductionStation *ps) {
+    Log::log("add mapping for Basestation",Info);
     GuiStation *g = mainWindow->addStation(ps);
     if(g != nullptr){
         StationMapper *m = new StationMapper;
         m->station = ps;
         m->gui = g;
         stationMapper->push_back(m);
+    }else{
+        Log::log("add mapping for Basestation failed ",Error);
     }
 }
