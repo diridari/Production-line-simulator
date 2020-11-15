@@ -8,7 +8,9 @@
 #include <QtWidgets/QApplication>
 #include "version.h"
 #include "ObjMapper.h"
-#include "main.h"
+ObjMapper *objectMapper;
+
+
 int main(int argc, char *argv[])
 {
 
@@ -17,12 +19,21 @@ int main(int argc, char *argv[])
     Log::log("run event Loop",Info);
     Log:log("start simulation version: " + to_string(VERSION_MAJOR) + "."+ to_string(VERSION_MINOR) + "."+ to_string(VERSION_REVISION) +"\r\n",Message);
 
-    conveyorbeltStation *c3 = new conveyorbeltStation(nullptr,"band 3");
+    conveyorbeltStation *c5 = new conveyorbeltStation(nullptr,"band 5");
+    conveyorbeltStation *c4 = new conveyorbeltStation(c5,"band 4");
+    conveyorbeltStation *c3 = new conveyorbeltStation(c4,"band 3");
     conveyorbeltStation *c2 = new conveyorbeltStation(c3,"band 2");
     conveyorbeltStation *c1 = new conveyorbeltStation(c2,"band 1");
-    c3->setConveyorbeltState(ACTUATOR_ON);
-    c2->setConveyorbeltState(ACTUATOR_ON);
+
+
     c1->setConveyorbeltState(ACTUATOR_ON);
+    c2->setConveyorbeltState(ACTUATOR_ON);
+    c3->setConveyorbeltState(ACTUATOR_ON);
+    c4->setConveyorbeltState(ACTUATOR_ON);
+    c5->setConveyorbeltState(ACTUATOR_ON);
+
+    c1->setOutputDirection(Direction::directionDown);
+    c4->setOutputDirection(Direction::directionDown);
     BaseWorkpiece *wp1 = new BaseWorkpiece;
     c1->insertBox(wp1);
     // simulation steps
@@ -40,16 +51,13 @@ int main(int argc, char *argv[])
      * 2. Depending of the new box positions the sensor states gets calculated
      * 3.
      */
-
+    objectMapper = new ObjMapper;
     QApplication app(argc,argv);
-    MainWindow w;
+    MainWindow w(c1);
 
     void run (BaseProductionStation *c1,MainWindow *w);
     new thread(run,c1,&w);
-    objMapper = new ObjMapper(&w);
-    objMapper->addStatin(c1);
-    objMapper->addStatin(c2);
-    objMapper->insertBox(wp1,c1);
+    w.show();
     return app.exec();
 }
 
@@ -58,7 +66,6 @@ void run (BaseProductionStation *c1,MainWindow *w) {
     while (1) {
         usleep(100000);
         Log::log("run simulation step", Info);
-        c1->runSimulationStep();
         w->update(); // update gui
 
     }

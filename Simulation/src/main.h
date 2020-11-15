@@ -7,6 +7,6 @@
 
 #include "ObjMapper.h"
 
-ObjMapper *objMapper;
+extern ObjMapper *objectMapper;
 
 #endif //PRODUCTION_LINE_SIMULATOR_MAIN_H

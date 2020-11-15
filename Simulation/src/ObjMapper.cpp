@@ -12,28 +12,10 @@ GuiStation *ObjMapper::getGuiStation(BaseProductionStation *ps) {
             return m->gui;
         }
     }
+    Log::log("failed to map station to gui station",Error);
+    return nullptr;
 }
 
-void ObjMapper::insertBox(BaseWorkpiece *wp, BaseProductionStation *newStation) {
-    Log::log("add mapping for Box",Info);
-    GuiBox *b = mainWindow->addBox(wp,getGuiStation(newStation));
-    if(b != nullptr) {
-        BoxMapper *m = new BoxMapper;
-        m->gui = b;
-        m->wp = wp;
-    }else{
-        Log::log("add mapping for Box failed ",Error);
-    }
-}
-
-void ObjMapper::changeBoxStation(BaseWorkpiece *wp, BaseProductionStation *newStation) {
-    GuiBox *g =getGuiBox(wp);
-    if(g == nullptr){
-        Log::log("no gui box for box" + (wp->getName()),Error);
-        return;
-    }
-    g->setStation(getGuiStation(newStation));
-}
 
 GuiBox *ObjMapper::getGuiBox(BaseWorkpiece *wp) {
     BaseWorkpiece *baseWorkpiece = nullptr;
@@ -46,21 +28,16 @@ GuiBox *ObjMapper::getGuiBox(BaseWorkpiece *wp) {
     return nullptr;
 }
 
-ObjMapper::ObjMapper(MainWindow *mainWindow_) {
+ObjMapper::ObjMapper() {
     boxMapper = new  vector<BoxMapper*>();
     stationMapper = new vector<StationMapper*>();
-    mainWindow = mainWindow_;
 }
 
-void ObjMapper::addStatin(BaseProductionStation *ps) {
-    Log::log("add mapping for Basestation",Info);
-    GuiStation *g = mainWindow->addStation(ps);
-    if(g != nullptr){
-        StationMapper *m = new StationMapper;
-        m->station = ps;
-        m->gui = g;
-        stationMapper->push_back(m);
-    }else{
-        Log::log("add mapping for Basestation failed ",Error);
-    }
+void ObjMapper::addStation(BaseProductionStation *ps, GuiStation *gs) {
+    stationMapper->push_back(new StationMapper(ps,gs));
 }
+
+void ObjMapper::addBox(BaseWorkpiece *wp, GuiBox *gb) {
+    boxMapper->push_back(new BoxMapper(wp,gb));
+}
+

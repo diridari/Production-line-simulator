@@ -10,17 +10,31 @@
 #include <src/productionStation/BaseProductionStation.h>
 #include <QLabel>
 
-class GuiStation : public QLabel{
+class GuiStation : public QWidget{
     BaseProductionStation *connectedStation;
-    uint32_t posx, posY;
+    uint32_t posX, posY;
     QLabel *l;
+    Direction inputDirection,outputDirection;
+
+
 public:
-    GuiStation(BaseProductionStation *connectedStation, QLabel*parent = nullptr);
+    GuiStation(BaseProductionStation *connectedStation, Direction inputDirection, Direction outputDirection,  QWidget *parent = nullptr);
+    Direction getInputDirection();
+    Direction getOutputDirection();
+
     /**
      * return gui psoition
      * @return
      */
-    // TODO getPosition();
+     void setPosition(int posX, int posY);
+     uint32_t getPositionX(){
+         return posX;
+     }
+    uint32_t getPositionY(){
+         return posY;
+     }
+    void handleBoxes();
+
 
 };
 

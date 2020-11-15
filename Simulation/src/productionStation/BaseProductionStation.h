@@ -18,7 +18,7 @@ class BaseWorkpiece; // beak circular dependencies
 class BaseActuator;
 class BaseSensor;
 typedef enum Direction{
-    up,down,left,right
+    directionUp,directionDown,directionLeft,directionRight
 }Direction;
 class BaseProductionStation {
 
@@ -29,7 +29,7 @@ protected:
     vector<BaseWorkpiece*> * boxSet;
     vector<BaseSensor*> * sensorSet;
     vector<BaseActuator*> * actuatorSet;
-    Direction inputDirection,outputdirection
+    Direction inputDirection,outputDirection;
 
 public:
 
@@ -41,8 +41,16 @@ public:
      * @param inputDirection  from where incoming boxes are received
      * @param outputDirection from where outgoing boxes are leaving
      */
-    explicit BaseProductionStation(BaseProductionStation * nextStation = nullptr, string stationName = "namelessStation",Direction inputDirection = left,Direction outputDirection = right);
+    explicit BaseProductionStation(BaseProductionStation * nextStation = nullptr, string stationName = "namelessStation",
+                                   Direction inputDirection = directionLeft,Direction outputDirection = directionRight);
     string getStationName();
+
+    void setOutputDirection(Direction outputDirection_){
+        outputDirection = outputDirection_;
+    }
+    void setInputDirection(Direction inputDirection_){
+        inputDirection = inputDirection_;
+    }
     /**
      * add a Sensor to that station
      * needed for defining the station
@@ -92,7 +100,8 @@ public:
     vector<BaseSensor*> * getSensors();
     vector<BaseActuator*> * getActuators();
     BaseProductionStation * getNextStationInChain();
-
+    Direction getInputDirection();
+    Direction getOutputDirection();
    friend std::ostream &operator<<(std::ostream &strm, BaseProductionStation a);
 
 

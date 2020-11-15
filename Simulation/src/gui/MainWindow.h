@@ -10,44 +10,16 @@
 #include "GuiBox.h"
 #include <QtWidgets/QGridLayout>
 
+
+#define MinStationSize 300
 class MainWindow :public QWidget{
     BaseProductionStation * startStation;
     vector<GuiBox*> *boxSet;
-    QVBoxLayout *mainLayout;
-    QGridLayout *gridLayout;
+    vector<GuiStation*> *stationSet;
 public:
-    MainWindow(QWidget *parent = nullptr);
-    QWidget *mainWidget;
+    MainWindow(BaseProductionStation *startStation, QWidget *parent = nullptr);
 
-    GuiBox * addBox(BaseWorkpiece * wp,GuiStation *guiStation){
 
-        if(guiStation == nullptr || wp == nullptr){
-            Log::log("gui add Box received nullpntr",Error);
-            return nullptr;
-        }
-       GuiBox * b = new GuiBox(wp,guiStation);
-
-       b->show();
-       boxSet->push_back(b);
-       return b;
-
-    }
-
-    GuiStation * addStation(BaseProductionStation *ps) {
-        if (ps == nullptr) {
-            Log::log("gui add station received nullpntr",Error);
-        }
-        GuiStation * s = new GuiStation(ps);
-        insertWidget(s);
-        return s;
-    }
-    void insertWidget(QWidget *w){
-        static int x = 0;
-        gridLayout->addWidget(w,x,x,1,1);
-        w->show();
-        this->show();
-        x++;
-    }
 public slots:
 
     void update();

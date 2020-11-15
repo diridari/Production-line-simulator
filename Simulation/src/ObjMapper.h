@@ -12,11 +12,14 @@
 typedef struct StationMapper{
     BaseProductionStation *station;
     GuiStation * gui;
+    StationMapper(BaseProductionStation *wp,GuiStation * gui):station(station),gui(gui){ };
+
 }StationMapper;
 
 typedef struct BoxMapper{
     BaseWorkpiece *wp;
     GuiBox * gui;
+    BoxMapper(BaseWorkpiece *wp,GuiBox * gui):wp(wp),gui(gui){ };
 }BoxMapper;
 
 
@@ -26,20 +29,15 @@ typedef struct BoxMapper{
 class ObjMapper {
     vector<BoxMapper*> *boxMapper;
     vector<StationMapper*> *stationMapper;
-    MainWindow *mainWindow;
 
 public:
-    ObjMapper( MainWindow *mainWindow_);
+    ObjMapper();
 
     GuiStation * getGuiStation(BaseProductionStation *ps);
     GuiBox * getGuiBox(BaseWorkpiece *wp);
 
-    void insertBox(BaseWorkpiece *wp,BaseProductionStation * newStation);
-    void deleteBox(BaseWorkpiece *wp){
-        //TODO
-    };
-    void changeBoxStation(BaseWorkpiece *wp,BaseProductionStation * newStation);
-    void addStatin(BaseProductionStation *ps);
+    void addStation(BaseProductionStation *ps, GuiStation *gs);
+    void addBox(BaseWorkpiece *wp, GuiBox *gb);
 
 };
 

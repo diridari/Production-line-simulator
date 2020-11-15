@@ -28,7 +28,7 @@ string BaseProductionStation::getStationName() {
 }
 
 BaseProductionStation::BaseProductionStation(BaseProductionStation *nextStation, string stationName,Direction inputDirection,Direction outputDirection) :
-        nextStation(nextStation), stationName(stationName), outputdirection(outputDirection),inputDirection(inputDirection){
+        nextStation(nextStation), stationName(stationName), outputDirection(outputDirection),inputDirection(inputDirection){
     boxSet = new vector<BaseWorkpiece*>();
     sensorSet = new  vector<BaseSensor*>();
     actuatorSet = new vector<BaseActuator*>();
@@ -77,5 +77,13 @@ vector<BaseSensor *> *BaseProductionStation::getSensors() {
 
 BaseProductionStation *BaseProductionStation::getNextStationInChain() {
     return nextStation;
+}
+
+Direction BaseProductionStation::getInputDirection() {
+    return inputDirection;
+}
+
+Direction BaseProductionStation::getOutputDirection() {
+    return outputDirection;
 }
 

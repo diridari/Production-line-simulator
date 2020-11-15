@@ -11,15 +11,14 @@
 #include <QtWidgets/QLabel>
 #include "GuiStation.h"
 
-class GuiBox : public QLabel{
+class GuiBox : public QWidget{
     BaseWorkpiece *connectedWorkpiece;
     GuiStation *currentStation; // determine abs pos + direction of movement
     uint32_t AbsPosX,AbsPosY;
     QLabel *l;
 public:
-    GuiBox( BaseWorkpiece *connectedWorkpiece, GuiStation * currentStation, QLabel *parent = nullptr);
-    void updateBoxPos();
-    void setStation(GuiStation *gs);;
+    GuiBox(BaseWorkpiece *connectedWorkpiece, QWidget *parent = nullptr);
+
 
 };
 
