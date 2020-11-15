@@ -17,6 +17,9 @@ using namespace std;
 class BaseWorkpiece; // beak circular dependencies
 class BaseActuator;
 class BaseSensor;
+typedef enum Direction{
+    up,down,left,right
+}Direction;
 class BaseProductionStation {
 
 
@@ -26,15 +29,19 @@ protected:
     vector<BaseWorkpiece*> * boxSet;
     vector<BaseSensor*> * sensorSet;
     vector<BaseActuator*> * actuatorSet;
+    Direction inputDirection,outputdirection
 
 public:
+
     static const uint32_t sizeOfStation = 100;
     /**
      * New production station
      * @param nextStation next station in chain.nullpointer defines the end of the chain
      * @param stationName name of station
+     * @param inputDirection  from where incoming boxes are received
+     * @param outputDirection from where outgoing boxes are leaving
      */
-    explicit BaseProductionStation(BaseProductionStation * nextStation = nullptr, string stationName = "namelessStation");
+    explicit BaseProductionStation(BaseProductionStation * nextStation = nullptr, string stationName = "namelessStation",Direction inputDirection = left,Direction outputDirection = right);
     string getStationName();
     /**
      * add a Sensor to that station
