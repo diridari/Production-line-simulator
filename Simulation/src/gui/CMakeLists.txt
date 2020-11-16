@@ -7,4 +7,6 @@ set(src_gui
         ${dir}GuiStation.h
         ${dir}GuiBox.cpp
         ${dir}GuiBox.h
+        ${dir}ObjMapper.cpp
+        ${dir}ObjMapper.h
         PARENT_SCOPE )

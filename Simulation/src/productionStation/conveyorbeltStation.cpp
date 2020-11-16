@@ -6,7 +6,9 @@
 #include "conveyorbeltStation.h"
 
 void conveyorbeltStation::runSimulationStep() {
-    BaseProductionStation::runSimulationStep();
+    if(nextStation != nullptr){
+        nextStation->runSimulationStep();
+    }
     Log::log("run sim step for conveyorbeltStation:"+stationName ,DebugL2)
     conv->runActuator(boxSet,this);
     lb->checkSensor(boxSet);
@@ -16,6 +18,7 @@ conveyorbeltStation::conveyorbeltStation(BaseProductionStation *next, string nam
     conv = new conveyorbelt("Band1");
     lb = new lightBarrier(80);
     addActuator(conv);
+    addSensor(lb);
 }
 
 void conveyorbeltStation::setConveyorbeltState(actuatorState toSet) {

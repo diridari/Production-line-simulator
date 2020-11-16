@@ -4,7 +4,7 @@
 #include <src/main.h>
 #include "MainWindow.h"
 #include "GuiStation.h"
-
+#include <QPushButton>
 
 void GuiStation::setPosition(int posX_, int posY_) {
     Log::log("gui: set Position of " + connectedStation->getStationName() + " to x:" + to_string(posX_) + " , y:"+ to_string(posY_),Info);
@@ -26,6 +26,22 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
     l->setPixmap(QPixmap("../img/BaseStation.png").scaled(MinStationSize,MinStationSize,Qt::KeepAspectRatio));
     setMinimumSize(MinStationSize,MinStationSize);
     l->setScaledContents(true);
+    // Change actuator State Button
+    QPushButton *stationActuator = new QPushButton(this);
+    stationActuator->setText("set Actuator State ");
+    stationActuator->move(this->size().width()-stationActuator->size().width(), 0);
+    stationActuator->show();
+    connect(stationActuator, SIGNAL(clicked()), this, SLOT(GuiStation::updateActuatorState()));
+    connect(stationActuator, SIGNAL(clicked()), this, SLOT(whenButtonIsClicked()));
+
+
+    // PrintState Text
+    stationState = new QLabel(this);
+    stationState->setScaledContents(true);
+    stationState->setText("station State gets updated on first Frame");
+    stationState->adjustSize();
+    stationState->show();
+
 }
 
 void GuiStation::handleBoxes() {
@@ -35,6 +51,7 @@ void GuiStation::handleBoxes() {
         BaseWorkpiece *wp = boxes->at(i);
         GuiBox *gb = objectMapper->getGuiBox(wp);
         if(gb == nullptr){
+            Log::log("found no matching gui box --> create new one ",Info);
             gb = new GuiBox(wp,this->parentWidget());
             gb->show();
             objectMapper->addBox(wp,gb);
@@ -44,8 +61,32 @@ void GuiStation::handleBoxes() {
         posX = this->pos().x() + (widgetSize/100)*wp->getPosition();
         posY = this->pos().y() +widgetSize/2;
         gb->move(posX,posY);
-
     }
+
+    // Update State text
+    Log::log("update Station Sates on Gui",DebugL2);
+    string stationStateText = "station State :\r\n";
+    vector<BaseActuator *>* actators = connectedStation->getActuators();
+    vector<BaseSensor *>* sensors = connectedStation->getSensors();
+    for(int i = 0; i <actators->size();i++){
+        stationStateText += actators->at(i)->getActuatorName() + " :" +  to_string(actators->at(i)->getActuatorState()) +"\r\n";
+    }
+    for(int i = 0; i <sensors->size();i++){
+        stationStateText += sensors->at(i)->getSensorState() + " :" +  to_string(sensors->at(i)->getSensorState()) +"\r\n";
+    }
+    Log::log("current station state: " + stationStateText, DebugL3)
+    stationState->setText(stationStateText.c_str());
+    stationState->adjustSize();
+    stationState->show();
+
+}
+
+void GuiStation::updateActuatorState() {
+    Log::log("gui change actuator state for "+connectedStation->getStationName(),Info);
+    connectedStation->getActuators()->at(0)->toogleState();
+}
+
+void GuiStation::whenButtonIsClicked() {
 
 }
 

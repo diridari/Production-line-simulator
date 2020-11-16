@@ -15,7 +15,7 @@ class GuiStation : public QWidget{
     uint32_t posX, posY;
     QLabel *l;
     Direction inputDirection,outputDirection;
-
+    QLabel * stationState;
 
 public:
     GuiStation(BaseProductionStation *connectedStation, Direction inputDirection, Direction outputDirection,  QWidget *parent = nullptr);
@@ -34,6 +34,9 @@ public:
          return posY;
      }
     void handleBoxes();
+public slots:
+    void updateActuatorState();
+    void whenButtonIsClicked();
 
 
 };

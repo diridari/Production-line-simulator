@@ -15,3 +15,5 @@ _deps
 cmake-build-debug/
 
 Simulation/cmake-build-qt/
+
+Simulation/cmake-build-test/

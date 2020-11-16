@@ -7,7 +7,7 @@
 #include <src/productionStation/conveyorbeltStation.h>
 #include <QtWidgets/QApplication>
 #include "version.h"
-#include "ObjMapper.h"
+#include "src/gui/ObjMapper.h"
 ObjMapper *objectMapper;
 
 
@@ -19,28 +19,31 @@ int main(int argc, char *argv[])
     Log::log("run event Loop",Info);
     Log:log("start simulation version: " + to_string(VERSION_MAJOR) + "."+ to_string(VERSION_MINOR) + "."+ to_string(VERSION_REVISION) +"\r\n",Message);
 
-    conveyorbeltStation *c5 = new conveyorbeltStation(nullptr,"band 5");
-    conveyorbeltStation *c4 = new conveyorbeltStation(c5,"band 4");
-    conveyorbeltStation *c3 = new conveyorbeltStation(c4,"band 3");
-    conveyorbeltStation *c2 = new conveyorbeltStation(c3,"band 2");
-    conveyorbeltStation *c1 = new conveyorbeltStation(c2,"band 1");
+    conveyorbeltStation *c5 = new conveyorbeltStation(nullptr,"band5");
+    conveyorbeltStation *c4 = new conveyorbeltStation(c5,"band4");
+    conveyorbeltStation *c3 = new conveyorbeltStation(c4,"band3");
+    conveyorbeltStation *c2 = new conveyorbeltStation(c3,"band2");
+    conveyorbeltStation *c1 = new conveyorbeltStation(c2,"band1");
 
 
     c1->setConveyorbeltState(ACTUATOR_ON);
     c2->setConveyorbeltState(ACTUATOR_ON);
-    //c3->setConveyorbeltState(ACTUATOR_ON);
+    c3->setConveyorbeltState(ACTUATOR_ON);
     c4->setConveyorbeltState(ACTUATOR_ON);
     c5->setConveyorbeltState(ACTUATOR_ON);
+
 
     c1->setOutputDirection(Direction::directionDown);
     c4->setOutputDirection(Direction::directionDown);
     BaseWorkpiece *wp1 = new BaseWorkpiece(0,"test-workpiece1");
-    BaseWorkpiece *wp2 = new BaseWorkpiece(50,"test-workpiece2");
-    BaseWorkpiece *wp3 = new BaseWorkpiece(0,"test-workpiece3");
+    BaseWorkpiece *wp2 = new BaseWorkpiece(31,"test-workpiece1");
+    BaseWorkpiece *wp3 = new BaseWorkpiece(62,"test-workpiece2");
+    BaseWorkpiece *wp4 = new BaseWorkpiece(95,"test-workpiece3");
 
     c1->insertBox(wp1);
     c1->insertBox(wp2);
-    c2->insertBox(wp3);
+    c1->insertBox(wp3);
+    c1->insertBox(wp4);
     // simulation steps
     /**
      * 1. Operate all Workpieces

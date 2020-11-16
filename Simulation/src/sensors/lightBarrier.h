@@ -11,7 +11,7 @@
 class lightBarrier: public BaseSensor {
     uint32_t placedAt;
 public:
-    lightBarrier(uint32_t placedAt);;
+    lightBarrier(uint32_t placedAt);
     /**
     * run this actuator for each Workpiece.
     * Workpieces can move to the next station if thex reach the end of the station

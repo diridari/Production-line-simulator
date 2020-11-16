@@ -8,7 +8,7 @@ conveyorbelt::conveyorbelt(string name) : BaseActuator("conveyorbelt:"+ name){}
 
 void conveyorbelt::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation *station) {
     if(getActuatorState() == ACTUATOR_ON){
-        Log::log(station->getStationName() + ": move boxes on "+ getActuatorName() ,Debug)
+        Log::log(station->getStationName() + ": run conveyorbelt: move boxes on "+ getActuatorName() ,Debug)
         // move each box
         for(int i = boxSet->size()-1; i>= 0; i--){
             BaseWorkpiece * wp = boxSet->at(i);

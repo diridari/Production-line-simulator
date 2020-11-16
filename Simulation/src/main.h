@@ -5,7 +5,7 @@
 #ifndef PRODUCTION_LINE_SIMULATOR_MAIN_H
 #define PRODUCTION_LINE_SIMULATOR_MAIN_H
 
-#include "ObjMapper.h"
+#include "src/gui/ObjMapper.h"
 
 extern ObjMapper *objectMapper;
 

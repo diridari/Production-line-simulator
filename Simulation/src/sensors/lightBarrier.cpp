@@ -23,4 +23,4 @@ void lightBarrier::checkSensor(vector<BaseWorkpiece *> *boxSet) {
 
 }
 
-lightBarrier::lightBarrier(uint32_t placedAt) :placedAt(placedAt){}
+lightBarrier::lightBarrier(uint32_t placedAt) :placedAt(placedAt), BaseSensor("LichtSensor"){}

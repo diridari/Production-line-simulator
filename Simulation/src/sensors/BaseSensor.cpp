@@ -14,6 +14,12 @@ std::ostream &operator<<(ostream &strm, BaseSensor a) {
     return strm << " ";
 }
 
+string BaseSensor::getSensorName() {
+    return sensorName;
+}
+
+BaseSensor::BaseSensor(string sensorName) :sensorName(sensorName){}
+
 std::ostream &operator<<(ostream &strm, sensorState a) {
     switch (a) {
         case SENSOR_OFF :

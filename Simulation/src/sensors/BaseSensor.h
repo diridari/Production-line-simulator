@@ -21,7 +21,10 @@ std::ostream &operator<<(ostream &strm, sensorState a);
 class BaseSensor {
 protected:
     sensorState sensorState = SENSOR_OFF;
+    string sensorName;
 public:
+    BaseSensor(string sensorName = "baseSensor");
+    string getSensorName();
     uint8_t getSensorState();
     /**
     * run this actuator for each Workpiece.

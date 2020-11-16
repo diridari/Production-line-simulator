@@ -40,6 +40,7 @@ public:
      */
     virtual void runActuator( vector<BaseWorkpiece*> * boxSet, BaseProductionStation *station) {};
     friend std::ostream &operator<<(std::ostream &strm, BaseActuator &a);
+    void toogleState();
 };
 
 

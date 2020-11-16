@@ -37,7 +37,7 @@ BaseProductionStation::BaseProductionStation(BaseProductionStation *nextStation,
 bool BaseProductionStation::canReceiveNewWorkpiece(uint8_t sizeOfBox ) {
 
     // get left box
-    if(boxSet->size() >0){ // has boxes
+    if(boxSet->size() > 0){ // has boxes
         BaseWorkpiece *box = boxSet->at(0);
         if(box->getPosition() <=  (sizeOfBox/2 + sizeOfBox%2)){
             return false;
@@ -52,14 +52,17 @@ void BaseProductionStation::runSimulationStep() {
     if(nextStation != nullptr){
         nextStation->runSimulationStep();
     }
-    Log::log("run sim step for BaseProductionStation" + stationName,DebugL2)
+   // Log::log("run sim step for BaseProductionStation" + stationName,DebugL2)
 }
 
 bool BaseProductionStation::insertBox(BaseWorkpiece *wp) {
-    if(canReceiveNewWorkpiece()){
+    Log::log("insertBox on station " + getStationName() + " boxName: "+wp->getName(),DebugL2);
+    if(wp->canWorkpieceBePlacedAt(wp->getPosition(),this)){
         boxSet->insert(boxSet->begin(),wp);
+        //boxSet->push_back(wp);
         return true;
     }
+    Log::log(getStationName() + " should insert box but can not place new box",Error);
     return false;
 }
 

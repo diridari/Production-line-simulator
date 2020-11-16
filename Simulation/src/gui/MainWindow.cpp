@@ -63,7 +63,7 @@ MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : s
 
 
 void MainWindow::update() {
-    Log::log("update gui",Message);
+    Log::log("update gui",Debug);
     BaseProductionStation *station = startStation;
     station->runSimulationStep(); // update simulation
     while (station != nullptr){
