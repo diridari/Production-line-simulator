@@ -1,0 +1,16 @@
+//
+// Created by basti on 16.11.2020.
+//
+
+#ifndef PRODUCTION_LINE_SIMULATOR_GUISENSOR_H
+#define PRODUCTION_LINE_SIMULATOR_GUISENSOR_H
+
+
+
+class GuiSensor {
+
+};
+
+
+
+#endif //PRODUCTION_LINE_SIMULATOR_GUISENSOR_H
