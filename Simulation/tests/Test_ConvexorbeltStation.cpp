@@ -56,13 +56,11 @@ TEST(ConveyorbeltStation,RunOverStation){
     ASSERT_EQ(wp1.getPosition(),98);
     ASSERT_EQ(s1.getBoxesOnStation()->size(),1);
     ASSERT_EQ(s2.getBoxesOnStation()->size(),0);
-    s2.runSimulationStep();
     s1.runSimulationStep();
     ASSERT_EQ(wp1.getPosition(),0);
     ASSERT_EQ(s1.getBoxesOnStation()->size(),0);
     ASSERT_EQ(s2.getBoxesOnStation()->size(),1);
     s1.runSimulationStep();
-    s2.runSimulationStep();
     ASSERT_EQ(wp1.getPosition(),2);
     ASSERT_EQ(s1.getBoxesOnStation()->size(),0);
     ASSERT_EQ(s2.getBoxesOnStation()->size(),1);
@@ -79,19 +77,16 @@ TEST(ConveyorbeltStation,RunTOWPOverStation){
     s1.insertBox(&wp2);
     s1.insertBox(&wp3);
     for(int i = 0; i<4;i++){
-        s2.runSimulationStep();
         s1.runSimulationStep();
         ASSERT_EQ(s1.getBoxesOnStation()->size(),3);
         ASSERT_EQ(s2.getBoxesOnStation()->size(),0);
     }
     for(int i = 0; i<5;i++){
-        s2.runSimulationStep();
         s1.runSimulationStep();
         ASSERT_EQ(s1.getBoxesOnStation()->size(),2);
         ASSERT_EQ(s2.getBoxesOnStation()->size(),1);
     }
     for(int i = 0; i<6;i++){
-        s2.runSimulationStep();
         s1.runSimulationStep();
     }
     ASSERT_EQ(s1.getBoxesOnStation()->size(),1);
@@ -112,9 +107,8 @@ TEST(ConveyorbeltStation,RunTOWPOverStationAndBumpIntoEachother) {
     s1.insertBox(&wp1);
     s1.insertBox(&wp2);
     s1.insertBox(&wp3);
-
+    ASSERT_EQ(s1.getBoxesOnStation()->size(),3);
     for(int i = 0;i<5;i++){
-        s2.runSimulationStep();
         s1.runSimulationStep();
 
     }
@@ -149,7 +143,6 @@ TEST(ConveyorbeltStation,RunTOWPOverStationAndBumpIntoEachother) {
     s2.setConveyorbeltState(ACTUATOR_ON);
 
     for(int i = 0;i<5;i++){
-        s2.runSimulationStep();
         s1.runSimulationStep();
 
     }
@@ -157,9 +150,7 @@ TEST(ConveyorbeltStation,RunTOWPOverStationAndBumpIntoEachother) {
     ASSERT_EQ(wp2.getPosition(),98);
     ASSERT_EQ(wp3.getPosition(),86);
     for(int i = 0;i<5;i++){
-        s2.runSimulationStep();
         s1.runSimulationStep();
-
     }
     ASSERT_EQ(wp1.getPosition(),20);
     ASSERT_EQ(wp2.getPosition(),8);

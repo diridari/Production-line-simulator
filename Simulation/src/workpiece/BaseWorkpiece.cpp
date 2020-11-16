@@ -25,7 +25,7 @@ BaseWorkpiece::BaseWorkpiece(): BaseWorkpiece(0,"BaseWorkpiece"){
 }
 
 
-BaseWorkpiece::BaseWorkpiece(uint32_t position_, string name): position(position_),workpieceName(name),size(size) {
+BaseWorkpiece::BaseWorkpiece(uint32_t position_, string name,uint32_t size ): position(position_),workpieceName(name),size(size) {
 
     if(size > maxUsedSize){
         maxUsedSize = size;

@@ -37,8 +37,8 @@ BaseProductionStation::BaseProductionStation(BaseProductionStation *nextStation,
 bool BaseProductionStation::canReceiveNewWorkpiece(uint8_t sizeOfBox ) {
 
     // get left box
-    if(boxSet->size() > 0){ // has boxes
-        BaseWorkpiece *box = boxSet->at(0);
+   for(int i = 0; i<boxSet->size();i++){ // has boxes
+        BaseWorkpiece *box = boxSet->at(i);
         if(box->getPosition() <=  (sizeOfBox/2 + sizeOfBox%2)){
             return false;
         }
