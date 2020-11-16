@@ -21,6 +21,7 @@ Direction GuiStation::getOutputDirection() {
 
 GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputDirection, Direction outputDirection,
                        QWidget *parent): QWidget(parent),outputDirection(outputDirection),inputDirection(inputDirection),connectedStation(connectedStation) {
+    Log::log("create new Gui Station for "+ connectedStation->getStationName(),Info);
     l = new QLabel(this);
     l->setPixmap(QPixmap("../img/BaseStation.png").scaled(MinStationSize,MinStationSize,Qt::KeepAspectRatio));
     setMinimumSize(MinStationSize,MinStationSize);
@@ -34,12 +35,15 @@ void GuiStation::handleBoxes() {
         BaseWorkpiece *wp = boxes->at(i);
         GuiBox *gb = objectMapper->getGuiBox(wp);
         if(gb == nullptr){
-            gb = new GuiBox(wp,this);
+            gb = new GuiBox(wp,this->parentWidget());
+            gb->show();
             objectMapper->addBox(wp,gb);
         }
-        gb->setParent(this); // forece take ownership
         uint32_t widgetSize = this->size().height();
-        gb->move((widgetSize/100)*wp->getPosition(),widgetSize/2);
+        uint32_t posX,posY;
+        posX = this->pos().x() + (widgetSize/100)*wp->getPosition();
+        posY = this->pos().y() +widgetSize/2;
+        gb->move(posX,posY);
 
     }
 

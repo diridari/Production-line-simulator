@@ -12,14 +12,14 @@
 typedef struct StationMapper{
     BaseProductionStation *station;
     GuiStation * gui;
-    StationMapper(BaseProductionStation *wp,GuiStation * gui):station(station),gui(gui){ };
+    StationMapper(BaseProductionStation *wp_,GuiStation * gui_):station(wp_),gui(gui_){ };
 
 }StationMapper;
 
 typedef struct BoxMapper{
     BaseWorkpiece *wp;
     GuiBox * gui;
-    BoxMapper(BaseWorkpiece *wp,GuiBox * gui):wp(wp),gui(gui){ };
+    BoxMapper(BaseWorkpiece *wp_,GuiBox * gui_):wp(wp_),gui(gui_){ };
 }BoxMapper;
 
 

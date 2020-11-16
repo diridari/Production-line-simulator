@@ -24,7 +24,6 @@ MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : s
     int nextY = 0;
     while(station != nullptr){
 
-        Log::log("create new Gui Station",Info);
         GuiStation *guiStation = new  GuiStation(station,station->getInputDirection(),station->getOutputDirection(),this);
         stationSet->push_back(guiStation); //generate all stations
         objectMapper->addStation(station,guiStation);
@@ -51,8 +50,14 @@ MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : s
             case directionLeft  : currentX--; break;
             case directionRight : currentX++; break;
         }
-        station->move(station->getPositionX()*MinStationSize,station->getPositionY()*MinStationSize);
+        station->move(station->getGridPositionX() * MinStationSize, station->getGridPositionY() * MinStationSize);
     }
+    Log::log("Start Timer",Info);
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &MainWindow::update);
+    timer->start(100);
+    Log::log("Main window Done",Info);
+
 
 }
 

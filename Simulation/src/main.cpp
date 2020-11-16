@@ -28,14 +28,19 @@ int main(int argc, char *argv[])
 
     c1->setConveyorbeltState(ACTUATOR_ON);
     c2->setConveyorbeltState(ACTUATOR_ON);
-    c3->setConveyorbeltState(ACTUATOR_ON);
+    //c3->setConveyorbeltState(ACTUATOR_ON);
     c4->setConveyorbeltState(ACTUATOR_ON);
     c5->setConveyorbeltState(ACTUATOR_ON);
 
     c1->setOutputDirection(Direction::directionDown);
     c4->setOutputDirection(Direction::directionDown);
-    BaseWorkpiece *wp1 = new BaseWorkpiece;
+    BaseWorkpiece *wp1 = new BaseWorkpiece(0,"test-workpiece1");
+    BaseWorkpiece *wp2 = new BaseWorkpiece(50,"test-workpiece2");
+    BaseWorkpiece *wp3 = new BaseWorkpiece(0,"test-workpiece3");
+
     c1->insertBox(wp1);
+    c1->insertBox(wp2);
+    c2->insertBox(wp3);
     // simulation steps
     /**
      * 1. Operate all Workpieces
@@ -55,19 +60,6 @@ int main(int argc, char *argv[])
     QApplication app(argc,argv);
     MainWindow w(c1);
 
-    void run (BaseProductionStation *c1,MainWindow *w);
-    new thread(run,c1,&w);
     w.show();
     return app.exec();
-}
-
-void run (BaseProductionStation *c1,MainWindow *w) {
-
-    while (1) {
-        usleep(100000);
-        Log::log("run simulation step", Info);
-        w->update(); // update gui
-
-    }
-
 }

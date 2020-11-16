@@ -7,7 +7,7 @@
 
 GuiBox::GuiBox( BaseWorkpiece *connectedWorkpiece, QWidget *parent):
         QWidget(parent),connectedWorkpiece(connectedWorkpiece) {
-    Log::log("new gui Station",Error);
+    Log::log("new gui Box for " + connectedWorkpiece->getName(),Info);
     l = new QLabel(this);
     uint32_t size = MinStationSize/100*connectedWorkpiece->getWorkpieceSize();
     l->setPixmap(QPixmap("../img/box.png").scaled(size,size,Qt::KeepAspectRatio));

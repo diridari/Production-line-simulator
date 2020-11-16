@@ -27,10 +27,10 @@ public:
      * @return
      */
      void setPosition(int posX, int posY);
-     uint32_t getPositionX(){
+     uint32_t getGridPositionX(){
          return posX;
      }
-    uint32_t getPositionY(){
+    uint32_t getGridPositionY(){
          return posY;
      }
     void handleBoxes();
