@@ -32,9 +32,12 @@ int main(int argc, char *argv[])
     c4->setConveyorbeltState(ACTUATOR_ON);
     c5->setConveyorbeltState(ACTUATOR_ON);
 
+    c1->setDirection(directionUp,directionDown);
+    c2->setDirection(directionUp,directionLeft);
+    c3->setDirection(directionRight,directionDown);
+    c4->setDirection(directionUp,directionLeft);
+    c5->setDirection(directionRight,directionLeft);
 
-    c1->setOutputDirection(Direction::directionDown);
-    c4->setOutputDirection(Direction::directionDown);
     BaseWorkpiece *wp1 = new BaseWorkpiece(0,"test-workpiece1");
     BaseWorkpiece *wp2 = new BaseWorkpiece(31,"test-workpiece1");
     BaseWorkpiece *wp3 = new BaseWorkpiece(62,"test-workpiece2");

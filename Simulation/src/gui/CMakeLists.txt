@@ -9,4 +9,6 @@ set(src_gui
         ${dir}GuiBox.h
         ${dir}ObjMapper.cpp
         ${dir}ObjMapper.h
+        ${dir}GuiSensor.h
+        ${dir}GuiSensor.cpp
         PARENT_SCOPE )

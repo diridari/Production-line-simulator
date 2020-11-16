@@ -2,13 +2,10 @@
 // Created by basti on 11.11.2020.
 //
 
-#include <QtWidgets/QGridLayout>
 #include "MainWindow.h"
 #include <QTimer>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QGridLayout>
+
 #include <QtWidgets/QApplication>
-#include <lib/SimpleLogging/include/logging.h>
 #include <src/main.h>
 
 
@@ -43,7 +40,7 @@ MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : s
     for(int i = 0; i<stationSet->size();i++){
 
         GuiStation * station = stationSet->at(i);
-        station->setPosition(currentX  + (-MinX),currentY + (-MinY)); // add the minimum size to the position to get the total position
+        station->setGridPosition(currentX + (-MinX), currentY + (-MinY)); // add the minimum size to the position to get the total position
         switch (station->getOutputDirection()) {
             case directionDown  : currentY++; break;
             case directionUp    : currentY--; break;

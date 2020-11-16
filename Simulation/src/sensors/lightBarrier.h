@@ -6,10 +6,9 @@
 #define PRODUCTION_LINE_SIMULATOR_LIGHTBARRIER_H
 
 
+#include <src/workpiece/BaseWorkpiece.h>
 #include "BaseSensor.h"
-
 class lightBarrier: public BaseSensor {
-    uint32_t placedAt;
 public:
     lightBarrier(uint32_t placedAt);
     /**

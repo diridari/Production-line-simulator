@@ -7,12 +7,10 @@
 #include <stdint.h>
 #include <string>
 #include <iostream>
-#include <src/productionStation/BaseProductionStation.h>
 
 #define WORKPIECE_MAX_INCREASE 10000
 #define MAXPOSITION 1000000
 using namespace std;
-class BaseProductionStation;
 class BaseWorkpiece {
 private:
     uint32_t position;

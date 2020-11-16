@@ -9,13 +9,17 @@
 #include <QtWidgets/QWidget>
 #include <src/productionStation/BaseProductionStation.h>
 #include <QLabel>
-
+#include "GuiSensor.h"
 class GuiStation : public QWidget{
+Q_OBJECT
     BaseProductionStation *connectedStation;
-    uint32_t posX, posY;
+    uint32_t gridPosX, gridPosY;
     QLabel *l;
     Direction inputDirection,outputDirection;
     QLabel * stationState;
+    uint32_t widgetSizeX,widgetSizeY;
+    string imagePath;
+    vector<GuiSensor *> * guiSensors;
 
 public:
     GuiStation(BaseProductionStation *connectedStation, Direction inputDirection, Direction outputDirection,  QWidget *parent = nullptr);
@@ -26,17 +30,20 @@ public:
      * return gui psoition
      * @return
      */
-     void setPosition(int posX, int posY);
+     void setGridPosition(int posX, int posY);
      uint32_t getGridPositionX(){
-         return posX;
+         return gridPosX;
      }
     uint32_t getGridPositionY(){
-         return posY;
+         return gridPosY;
      }
-    void handleBoxes();
+     void handleBoxes();
+
+     void setWidetSize(uint32_t widgetSizeX_, uint32_t widgetSizeY_);
+
+
 public slots:
     void updateActuatorState();
-    void whenButtonIsClicked();
 
 
 };

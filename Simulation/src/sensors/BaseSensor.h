@@ -5,27 +5,28 @@
 #ifndef PRODUCTION_LINE_SIMULATOR_BASESENSOR_H
 #define PRODUCTION_LINE_SIMULATOR_BASESENSOR_H
 
-#include <stdint.h>
 #include <iostream>
-#include <src/workpiece/BaseWorkpiece.h>
-
+#include <vector>
 using namespace std;
-
-typedef enum sensorState{
+class BaseWorkpiece;
+enum sensorState{
     SENSOR_OFF, // no sensor Signal
     SENSOR_ON  // sensor Signal
 
-} sensorState;
+};
 std::ostream &operator<<(ostream &strm, sensorState a);
 
 class BaseSensor {
 protected:
-    sensorState sensorState = SENSOR_OFF;
+    sensorState sensorState_ = SENSOR_OFF;
     string sensorName;
+    uint32_t placedAt;
+
 public:
-    BaseSensor(string sensorName = "baseSensor");
+    uint32_t getSensorPos();
+    explicit BaseSensor(uint32_t placedAt, string sensorName = "baseSensor");
     string getSensorName();
-    uint8_t getSensorState();
+    sensorState getSensorState();
     /**
     * run this actuator for each Workpiece.
     * Workpieces can move to the next station if thex reach the end of the station

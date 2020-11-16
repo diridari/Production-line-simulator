@@ -90,3 +90,23 @@ Direction BaseProductionStation::getOutputDirection() {
     return outputDirection;
 }
 
+void BaseProductionStation::setDirection(Direction inputDirection_, Direction outputDirection_) {
+    outputDirection = outputDirection_;
+    inputDirection = inputDirection_;
+}
+
+void BaseProductionStation::setInputDirection(Direction inputDirection_) {
+    inputDirection = inputDirection_;
+}
+
+void BaseProductionStation::setOutputDirection(Direction outputDirection_) {
+    outputDirection = outputDirection_;
+}
+
+void BaseProductionStation::checkAllSensors() {
+    for(int i = 0; i<sensorSet->size();i++){
+        sensorSet->at(i)->checkSensor(boxSet);
+    }
+
+}
+

@@ -10,18 +10,14 @@
 #include <lib/SimpleLogging/include/logging.h>
 #include <src/workpiece/BaseWorkpiece.h>
 #include <src/actuators/BaseActuator.h>
-#include <src/sensors/BaseSensor.h>
-
-
+#include "../sensors/BaseSensor.h"
 using namespace std;
-class BaseWorkpiece; // beak circular dependencies
-class BaseActuator;
-class BaseSensor;
+
 typedef enum Direction{
     directionUp,directionDown,directionLeft,directionRight
 }Direction;
-class BaseProductionStation {
 
+class BaseProductionStation {
 
 protected:
     BaseProductionStation *nextStation = nullptr; // next station in Chain   nullpntr = last station
@@ -45,12 +41,9 @@ public:
                                    Direction inputDirection = directionLeft,Direction outputDirection = directionRight);
     string getStationName();
 
-    void setOutputDirection(Direction outputDirection_){
-        outputDirection = outputDirection_;
-    }
-    void setInputDirection(Direction inputDirection_){
-        inputDirection = inputDirection_;
-    }
+    void setOutputDirection(Direction outputDirection_);
+    void setInputDirection(Direction inputDirection_);
+    void setDirection(Direction inputDirection_,Direction outputDirection_);
     /**
      * add a Sensor to that station
      * needed for defining the station
@@ -102,7 +95,8 @@ public:
     BaseProductionStation * getNextStationInChain();
     Direction getInputDirection();
     Direction getOutputDirection();
-   friend std::ostream &operator<<(std::ostream &strm, BaseProductionStation a);
+    friend std::ostream &operator<<(std::ostream &strm, BaseProductionStation a);
+    void checkAllSensors();
 
 
 };

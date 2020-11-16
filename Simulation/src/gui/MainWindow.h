@@ -13,6 +13,7 @@
 
 #define MinStationSize 300
 class MainWindow :public QWidget{
+Q_OBJECT
     BaseProductionStation * startStation;
     vector<GuiBox*> *boxSet;
     vector<GuiStation*> *stationSet;
@@ -21,7 +22,6 @@ public:
 
 
 public slots:
-
     void update();
 };
 

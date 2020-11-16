@@ -8,13 +8,12 @@
 #include <string>
 #include <iostream>
 #include <lib/SimpleLogging/include/logging.h>
-#include <src/productionStation/BaseProductionStation.h>
 #include <src/workpiece/BaseWorkpiece.h>
+#include <vector>
 
 using namespace std;
 
-class BaseProductionStation;
-class BaseWorkpiece;
+
 enum actuatorState{
     ACTUATOR_OFF,
     ACTUATOR_ON

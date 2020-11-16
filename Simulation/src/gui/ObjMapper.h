@@ -9,6 +9,8 @@
 #include "src/gui/GuiStation.h"
 #include "src/gui/GuiBox.h"
 #include "src/gui/MainWindow.h"
+
+class GuiBox;
 typedef struct StationMapper{
     BaseProductionStation *station;
     GuiStation * gui;

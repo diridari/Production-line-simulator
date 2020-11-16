@@ -11,7 +11,8 @@ void conveyorbeltStation::runSimulationStep() {
     }
     Log::log("run sim step for conveyorbeltStation:"+stationName ,DebugL2)
     conv->runActuator(boxSet,this);
-    lb->checkSensor(boxSet);
+    checkAllSensors();
+
 }
 
 conveyorbeltStation::conveyorbeltStation(BaseProductionStation *next, string name) :BaseProductionStation(next,"conveyorbeltStation:"+name ){
@@ -19,6 +20,7 @@ conveyorbeltStation::conveyorbeltStation(BaseProductionStation *next, string nam
     lb = new lightBarrier(80);
     addActuator(conv);
     addSensor(lb);
+    addSensor(new lightBarrier(50));
 }
 
 void conveyorbeltStation::setConveyorbeltState(actuatorState toSet) {

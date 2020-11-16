@@ -13,13 +13,10 @@ add_subdirectory(lib/SimpleLogging)
 include_directories(lib/SimpleLogging/include)
 
 add_subdirectory(src)
-
 # QT 5
-find_package(Qt5Widgets)
-
-
+find_package(Qt5Widgets REQUIRED)
 if(Qt5Widgets_FOUND)
-    message("found QT Lib at" Qt5Widgets_INCLUDE_DIRS)
+    message("found QT Lib at" ${Qt5Widgets_INCLUDE_DIRS})
     set(CMAKE_AUTOMOC ON)
     set(CMAKE_AUTOUIC ON)
     set(CMAKE_AUTORCC ON)

@@ -13,3 +13,7 @@ set(src_files
 
         ${dir}main.h
         PARENT_SCOPE )
+
+set(src_gui
+        ${src_gui}
+        PARENT_SCOPE )
