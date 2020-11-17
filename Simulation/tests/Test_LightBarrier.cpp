@@ -35,8 +35,8 @@ TEST(lightBarrier,BoxesOnInLight1){
     conveyorbeltStation s1(nullptr);
     BaseWorkpiece wp1 = BaseWorkpiece(40);
     BaseWorkpiece wp2 = BaseWorkpiece(10);
-    s1.insertBox(&wp2);
-    s1.insertBox(&wp1);
+    s1.insertBox(&wp2,wp2.getPosition());
+    s1.insertBox(&wp1,wp1.getPosition());
     l1.checkSensor(s1.getBoxesOnStation());
     ASSERT_EQ(l1.getSensorState(),SENSOR_ON);
 
@@ -44,10 +44,10 @@ TEST(lightBarrier,BoxesOnInLight1){
 TEST(lightBarrier,BoxesOnInLight2){
     lightBarrier l1(10);
     conveyorbeltStation s1(nullptr);
-    BaseWorkpiece wp1 = BaseWorkpiece(40);
-    BaseWorkpiece wp2 = BaseWorkpiece(10);
-    s1.insertBox(&wp2);
-    s1.insertBox(&wp1);
+    BaseWorkpiece wp1 = BaseWorkpiece(10);
+    BaseWorkpiece wp2 = BaseWorkpiece(40);
+    s1.insertBox(&wp2,wp2.getPosition());
+    s1.insertBox(&wp1,wp1.getPosition());
     l1.checkSensor(s1.getBoxesOnStation());
     ASSERT_EQ(l1.getSensorState(),SENSOR_ON);
 }
@@ -56,8 +56,8 @@ TEST(lightBarrier,BoxesOnInLight3){
     conveyorbeltStation s1(nullptr);
     BaseWorkpiece wp1 = BaseWorkpiece(40);
     BaseWorkpiece wp2 = BaseWorkpiece(10);
-    s1.insertBox(&wp2);
-    s1.insertBox(&wp1);
+    s1.insertBox(&wp2,wp2.getPosition());
+    s1.insertBox(&wp1,wp1.getPosition());
     l1.checkSensor(s1.getBoxesOnStation());
     ASSERT_EQ(l1.getSensorState(),SENSOR_ON);
 }
@@ -76,8 +76,8 @@ TEST(lightBarrier,BoxesOnInLight5){
     conveyorbeltStation s1(nullptr);
     BaseWorkpiece wp1 = BaseWorkpiece(40);
     BaseWorkpiece wp2 = BaseWorkpiece(10);
-    s1.insertBox(&wp2);
-    s1.insertBox(&wp1);
+    s1.insertBox(&wp2,10);
+    s1.insertBox(&wp1,40);
     l1.checkSensor(s1.getBoxesOnStation());
     ASSERT_EQ(l1.getSensorState(),SENSOR_ON);
 }
@@ -86,8 +86,8 @@ TEST(lightBarrier,BoxesOnInLight6){
     conveyorbeltStation s1(nullptr);
     BaseWorkpiece wp1 = BaseWorkpiece(40);
     BaseWorkpiece wp2 = BaseWorkpiece(10);
-    s1.insertBox(&wp2);
-    s1.insertBox(&wp1);
+    s1.insertBox(&wp2,40);
+    s1.insertBox(&wp1,10);
     l1.checkSensor(s1.getBoxesOnStation());
     ASSERT_EQ(l1.getSensorState(),SENSOR_OFF);
 }
@@ -96,8 +96,8 @@ TEST(lightBarrier,BoxesOnInLight7){
     conveyorbeltStation s1(nullptr);
     BaseWorkpiece wp1 = BaseWorkpiece(40);
     BaseWorkpiece wp2 = BaseWorkpiece(10);
-    s1.insertBox(&wp2);
-    s1.insertBox(&wp1);
+    s1.insertBox(&wp2,10);
+    s1.insertBox(&wp1,40);
     l1.checkSensor(s1.getBoxesOnStation());
     ASSERT_EQ(l1.getSensorState(),SENSOR_ON);
 }
@@ -106,8 +106,8 @@ TEST(lightBarrier,BoxesOnInLight8){
     conveyorbeltStation s1(nullptr);
     BaseWorkpiece wp1 = BaseWorkpiece(40);
     BaseWorkpiece wp2 = BaseWorkpiece(10);
-    s1.insertBox(&wp2);
-    s1.insertBox(&wp1);
+    s1.insertBox(&wp1,40);
+    s1.insertBox(&wp2,10);
     l1.checkSensor(s1.getBoxesOnStation());
     ASSERT_EQ(l1.getSensorState(),SENSOR_OFF);
 }

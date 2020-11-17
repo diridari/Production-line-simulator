@@ -30,7 +30,7 @@ TEST(ConveyorbeltStation,RunFull){
     conveyorbeltStation s1(nullptr);
     s1.setConveyorbeltState(ACTUATOR_ON);
     BaseWorkpiece wp1 = BaseWorkpiece(90);
-    s1.insertBox(&wp1);
+    s1.insertBox(&wp1,wp1.getPosition());
     s1.runSimulationStep();
     ASSERT_EQ(wp1.getPosition(),92);
     s1.runSimulationStep();
@@ -45,7 +45,7 @@ TEST(ConveyorbeltStation,RunOverStation){
     s1.setConveyorbeltState(ACTUATOR_ON);
     s2.setConveyorbeltState(ACTUATOR_ON);
     BaseWorkpiece wp1 = BaseWorkpiece(90);
-    s1.insertBox(&wp1);
+    s1.insertBox(&wp1,wp1.getPosition());
     s1.runSimulationStep();
     ASSERT_EQ(wp1.getPosition(),92);
     s1.runSimulationStep();
@@ -73,9 +73,9 @@ TEST(ConveyorbeltStation,RunTOWPOverStation){
     BaseWorkpiece wp1 = BaseWorkpiece(90);
     BaseWorkpiece wp2 = BaseWorkpiece(78);
     BaseWorkpiece wp3 = BaseWorkpiece(45);
-    s1.insertBox(&wp1);
-    s1.insertBox(&wp2);
-    s1.insertBox(&wp3);
+    s1.insertBox(&wp1,wp1.getPosition());
+    s1.insertBox(&wp2,wp2.getPosition());
+    s1.insertBox(&wp3,wp3.getPosition());
     for(int i = 0; i<4;i++){
         s1.runSimulationStep();
         ASSERT_EQ(s1.getBoxesOnStation()->size(),3);
@@ -104,9 +104,9 @@ TEST(ConveyorbeltStation,RunTOWPOverStationAndBumpIntoEachother) {
     BaseWorkpiece wp1 = BaseWorkpiece(90);
     BaseWorkpiece wp2 = BaseWorkpiece(70);
     BaseWorkpiece wp3 = BaseWorkpiece(40);
-    s1.insertBox(&wp1);
-    s1.insertBox(&wp2);
-    s1.insertBox(&wp3);
+    s1.insertBox(&wp1,wp1.getPosition());
+    s1.insertBox(&wp2,wp2.getPosition());
+    s1.insertBox(&wp3,wp3.getPosition());
     ASSERT_EQ(s1.getBoxesOnStation()->size(),3);
     for(int i = 0;i<5;i++){
         s1.runSimulationStep();
@@ -161,8 +161,8 @@ TEST(ConveyorbeltStation,moveTwoBoxes){
     conveyorbeltStation s1(nullptr);
     BaseWorkpiece wp1 = BaseWorkpiece(40);
     BaseWorkpiece wp2 = BaseWorkpiece(0);
-    ASSERT_TRUE(s1.insertBox(&wp1));
-    ASSERT_TRUE(s1.insertBox(&wp2));
+    ASSERT_TRUE(s1.insertBox(&wp1,wp1.getPosition()));
+    ASSERT_TRUE(s1.insertBox(&wp2,wp2.getPosition()));
     for(int i = 0; i<10; i++){
         s1.runSimulationStep();
     }

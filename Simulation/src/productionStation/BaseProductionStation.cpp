@@ -5,6 +5,7 @@
 #include <lib/SimpleLogging/include/logging.h>
 #include "BaseProductionStation.h"
 #include <string>
+#include <src/workpiece/Placing.h>
 
 
 std::ostream &operator<<(ostream &strm, BaseProductionStation a) {
@@ -34,18 +35,6 @@ BaseProductionStation::BaseProductionStation(BaseProductionStation *nextStation,
     actuatorSet = new vector<BaseActuator*>();
 }
 
-bool BaseProductionStation::canReceiveNewWorkpiece(uint8_t sizeOfBox ) {
-
-    // get left box
-   for(int i = 0; i<boxSet->size();i++){ // has boxes
-        BaseWorkpiece *box = boxSet->at(i);
-        if(box->getPosition() <=  (sizeOfBox/2 + sizeOfBox%2)){
-            return false;
-        }
-    }
-
-    return true;
-}
 
 
 void BaseProductionStation::runSimulationStep() {
@@ -55,10 +44,11 @@ void BaseProductionStation::runSimulationStep() {
    // Log::log("run sim step for BaseProductionStation" + stationName,DebugL2)
 }
 
-bool BaseProductionStation::insertBox(BaseWorkpiece *wp) {
+bool BaseProductionStation::insertBox(BaseWorkpiece *wp,uint32_t posToInsert) {
     Log::log("insertBox on station " + getStationName() + " boxName: "+wp->getName(),DebugL2);
-    if(wp->canWorkpieceBePlacedAt(wp->getPosition(),this)){
+    if(Placing::canWorkpieceBePlacedAt(this, wp, posToInsert)){
         boxSet->insert(boxSet->begin(),wp);
+        wp->setPosition(posToInsert);
         //boxSet->push_back(wp);
         return true;
     }

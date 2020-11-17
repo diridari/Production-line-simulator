@@ -54,13 +54,6 @@ public:
      */
     string getName() const;
 
-    /**
-     * can a box be plased on a position whitout bumping into on other box
-     * @param posToPlace  base position to be placed. Can be negative to determine that the base position is on the prev station
-     * @param toPlace box to be placed
-     * @return can be placed on posToPlace
-     */
-    bool canWorkpieceBePlacedAt(int32_t posToPlace,BaseProductionStation *stationToPlace);
 
     /**
      * increase or decrease position by the paramter
@@ -72,8 +65,10 @@ public:
     uint8_t getWorkpieceSize();
 
     friend std::ostream &operator<<(std::ostream &strm, BaseWorkpiece a);
-
-
+    /**
+     * get the size of the biggest box
+     */
+    static uint32_t getMaxUsedSize();
 };
 
 #endif //PRODUCTION_LINE_SIMULATOR_BASEWORKPIECE_H

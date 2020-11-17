@@ -10,6 +10,7 @@
 #include <lib/SimpleLogging/include/logging.h>
 #include <src/workpiece/BaseWorkpiece.h>
 #include <vector>
+#include <src/productionStation/BaseProductionStation.h>
 
 using namespace std;
 
@@ -20,7 +21,7 @@ enum actuatorState{
 
 };
 std::ostream &operator<<(std::ostream &strm, actuatorState a);
-
+class BaseProductionStation;
 class BaseActuator {
 private:
     string  actuatorName;

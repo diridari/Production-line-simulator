@@ -3,6 +3,7 @@
 //
 
 #include "conveyorbelt.h"
+#include <src/workpiece/Placing.h>
 
 conveyorbelt::conveyorbelt(string name) : BaseActuator("conveyorbelt:"+ name){}
 
@@ -12,7 +13,7 @@ void conveyorbelt::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionSt
         // move each box
         for(int i = boxSet->size()-1; i>= 0; i--){
             BaseWorkpiece * wp = boxSet->at(i);
-            if(wp->canWorkpieceBePlacedAt(wp->getPosition()+2,station)){
+            if(Placing::canWorkpieceBePlacedAt(station, wp, wp->getPosition() + 2)){
 
                 if(wp->getPosition()+2 < BaseProductionStation::sizeOfStation) { // Move Box
                    wp->moveBy(2);

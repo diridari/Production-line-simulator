@@ -26,14 +26,14 @@ public:
      * @param baseWidgetSizeY size of station widget
      * @return new abs pos
      */
-    QPoint getNewPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY, Direction inputDirection = directionUp,Direction outputDirection = directionDown );
+    QPoint getNewPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY, BaseProductionStation *station );
     /**
      * move to new position
      * @param BaseOffset base offset
      * @param baseWidgetSizeX size of station widget
      * @param baseWidgetSizeY size of station widget
      */
-    void moveToNewPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY,Direction inputDirection = directionUp,Direction outputDirection = directionDown );
+    void moveToNewPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY,BaseProductionStation * station);
 
 
 };

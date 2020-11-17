@@ -3,6 +3,7 @@
 //
 
 #include "lightBarrier.h"
+#include <lib/SimpleLogging/include/logging.h>
 
 void lightBarrier::checkSensor(vector<BaseWorkpiece *> *boxSet) {
     if(boxSet == nullptr){

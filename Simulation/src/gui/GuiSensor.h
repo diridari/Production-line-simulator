@@ -7,6 +7,7 @@
 
 
 #include <src/sensors/BaseSensor.h>
+#include <src/productionStation/BaseProductionStation.h>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QLabel>
 #define SensorOFFIMG "../img/lightSensIdle.png"
@@ -15,9 +16,9 @@ class GuiSensor : public QWidget{
     BaseSensor * connectedSensor;
     QLabel *l;
     sensorState lastState = SENSOR_OFF;
+    BaseProductionStation *station;
 public:
-    GuiSensor(BaseSensor *connectedSensor_, QWidget *parent, Direction inputDirection,
-              Direction outPutDirection);
+    GuiSensor(BaseSensor *connectedSensor_, BaseProductionStation *station, QWidget *parent);
     /**
      * calculate the new positio based on the widget pos
      * @param BaseOffset base offset
@@ -25,7 +26,7 @@ public:
      * @param baseWidgetSizeY size of station widget
      * @return new abs pos
      */
-    QPoint getPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY, Direction inputDirection = directionUp,Direction outputDirection = directionDown );
+    QPoint getPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY);
 
     void update();
 };

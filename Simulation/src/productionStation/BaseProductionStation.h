@@ -8,7 +8,6 @@
 #include <string>
 #include <queue>
 #include <lib/SimpleLogging/include/logging.h>
-#include <src/workpiece/BaseWorkpiece.h>
 #include <src/actuators/BaseActuator.h>
 #include "../sensors/BaseSensor.h"
 using namespace std;
@@ -16,7 +15,7 @@ using namespace std;
 typedef enum Direction{
     directionUp,directionDown,directionLeft,directionRight
 }Direction;
-
+class BaseActuator;
 class BaseProductionStation {
 
 protected:
@@ -64,7 +63,7 @@ public:
      * @param wp
      * @return true on success
      */
-    bool insertBox(BaseWorkpiece *wp);
+    bool insertBox(BaseWorkpiece *wp, uint32_t posToInsert = 0);
 
     /**
      * run one simulation step for this station:
@@ -82,12 +81,7 @@ public:
      *
      */
     virtual void runSimulationStep();
-    /**
-     * check whether a box can be placed at the front of the station
-     * @param sizeOfBox
-     * @return true if can be placed
-     */
-    bool canReceiveNewWorkpiece(uint8_t sizeOfBox = 1);
+
 
     vector<BaseWorkpiece*> *getBoxesOnStation();
     vector<BaseSensor*> * getSensors();

@@ -29,7 +29,7 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
     setMinimumSize(MinStationSize,MinStationSize);
     l->setScaledContents(true);
 
-
+    Log::log("create station Info lable for"+ connectedStation->getStationName(),DebugL3);
     // PrintState Text
     stationState = new QLabel(this);
     stationState->setScaledContents(true);
@@ -38,10 +38,13 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
     stationState->show();
 
     // Display  Sensors
+    Log::log("create station Sensors on "+ connectedStation->getStationName(),DebugL3);
     guiSensors = new  vector<GuiSensor *>();
     vector<BaseSensor *> * sensors = connectedStation->getSensors();
     for(int i = 0; i<sensors->size();i++){
-        guiSensors->push_back(new GuiSensor(sensors->at(i), this, inputDirection,outputDirection ));
+        GuiSensor *sen = new GuiSensor(sensors->at(i), connectedStation, this );
+        guiSensors->push_back(sen);
+
     }
     // Change actuator State Button
     QPushButton *stationActuator = new QPushButton(this);
@@ -68,8 +71,7 @@ void GuiStation::handleBoxes() {
             objectMapper->addBox(wp,gb);
         }
         // move box
-        gb->moveToNewPos(this->pos(),this->width(),this->height(),
-                         connectedStation->getInputDirection(),connectedStation->getOutputDirection());
+        gb->moveToNewPos(this->pos(),this->width(),this->height(), connectedStation);
     }
 
     // Update State text
@@ -87,6 +89,7 @@ void GuiStation::handleBoxes() {
     stationState->setText(stationStateText.c_str());
     stationState->adjustSize();
     stationState->show();
+    show();
     for(int i = 0; i<guiSensors->size();i++){
         guiSensors->at(i)->update();
 

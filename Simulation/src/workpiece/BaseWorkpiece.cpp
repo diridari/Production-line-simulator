@@ -63,35 +63,7 @@ uint8_t BaseWorkpiece::getWorkpieceSize() {
     return size;
 }
 
-bool BaseWorkpiece::canWorkpieceBePlacedAt(int32_t posToPlace ,BaseProductionStation *stationToPlace) {
-    if(stationToPlace == nullptr){ // end of Chain
-        uint8_t radius = (getWorkpieceSize()/2 + getWorkpieceSize()%2);
-        return posToPlace <-radius; // Prevent that a box can be moved over the end of the last Station
-    }
-
-    uint8_t radius = (getWorkpieceSize()/2 + getWorkpieceSize()%2);
-    int32_t box_min = posToPlace-radius;
-    int32_t box_max = posToPlace+radius;
-    vector<BaseWorkpiece*> *boxSet = stationToPlace->getBoxesOnStation();
-    if(boxSet->size() >0){ // has boxes
-        for(int i = 0; i<boxSet->size();i++){ // check each box
-
-            BaseWorkpiece *box = boxSet->at(i);
-            if(box != this) { // do not check with itself
-                uint8_t radius = (box->getWorkpieceSize() / 2 + box->getWorkpieceSize() % 2);
-                int32_t tmp_min = box->getPosition() - radius;
-                int32_t tmp_max = box->getPosition() + radius;
-                if (box_min >= tmp_min && box_min <= tmp_max || box_max >= tmp_min && box_min <= tmp_max) {
-                    return false;
-                }
-            }
-        }
-    }
-    if(box_max >= BaseProductionStation::sizeOfStation - (maxUsedSize/2+maxUsedSize%2)){ // box hung into the next station
-        int32_t posOnNextStation = posToPlace-BaseProductionStation::sizeOfStation;
-        return canWorkpieceBePlacedAt(posOnNextStation,stationToPlace->getNextStationInChain());
-    }
-
-    return true;
+uint32_t BaseWorkpiece::getMaxUsedSize() {
+    return maxUsedSize;
 }
 
