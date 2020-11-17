@@ -3,13 +3,14 @@
 //
 
 #include "lightBarrier.h"
+#include <lib/SimpleLogging/include/logging.h>
 
 void lightBarrier::checkSensor(vector<BaseWorkpiece *> *boxSet) {
     if(boxSet == nullptr){
         Log:log("lightBarrier received nullptr",Error);
         return;
     }
-    sensorState = SENSOR_OFF;
+    sensorState_ = SENSOR_OFF;
     for(int i = boxSet->size()-1; i>= 0; i--){
         BaseWorkpiece *wp = boxSet->at(i);
         uint8_t radius = (wp->getWorkpieceSize()/2 + wp->getWorkpieceSize()%2);
@@ -17,10 +18,13 @@ void lightBarrier::checkSensor(vector<BaseWorkpiece *> *boxSet) {
         int32_t box_max = wp->getPosition()+radius;
 
         if(box_min <= placedAt && box_max >= placedAt){
-            sensorState = SENSOR_ON;
+            sensorState_ = SENSOR_ON;
         }
     }
 
 }
 
-lightBarrier::lightBarrier(uint32_t placedAt) :placedAt(placedAt){}
+lightBarrier::lightBarrier(uint32_t placedAt):BaseSensor(placedAt,"lightBarrier") {
+
+}
+

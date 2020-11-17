@@ -30,7 +30,7 @@ TEST(ConveyorbeltStation,RunFull){
     conveyorbeltStation s1(nullptr);
     s1.setConveyorbeltState(ACTUATOR_ON);
     BaseWorkpiece wp1 = BaseWorkpiece(90);
-    s1.insertBox(&wp1);
+    s1.insertBox(&wp1,wp1.getPosition());
     s1.runSimulationStep();
     ASSERT_EQ(wp1.getPosition(),92);
     s1.runSimulationStep();
@@ -45,7 +45,7 @@ TEST(ConveyorbeltStation,RunOverStation){
     s1.setConveyorbeltState(ACTUATOR_ON);
     s2.setConveyorbeltState(ACTUATOR_ON);
     BaseWorkpiece wp1 = BaseWorkpiece(90);
-    s1.insertBox(&wp1);
+    s1.insertBox(&wp1,wp1.getPosition());
     s1.runSimulationStep();
     ASSERT_EQ(wp1.getPosition(),92);
     s1.runSimulationStep();
@@ -56,13 +56,11 @@ TEST(ConveyorbeltStation,RunOverStation){
     ASSERT_EQ(wp1.getPosition(),98);
     ASSERT_EQ(s1.getBoxesOnStation()->size(),1);
     ASSERT_EQ(s2.getBoxesOnStation()->size(),0);
-    s2.runSimulationStep();
     s1.runSimulationStep();
     ASSERT_EQ(wp1.getPosition(),0);
     ASSERT_EQ(s1.getBoxesOnStation()->size(),0);
     ASSERT_EQ(s2.getBoxesOnStation()->size(),1);
     s1.runSimulationStep();
-    s2.runSimulationStep();
     ASSERT_EQ(wp1.getPosition(),2);
     ASSERT_EQ(s1.getBoxesOnStation()->size(),0);
     ASSERT_EQ(s2.getBoxesOnStation()->size(),1);
@@ -75,23 +73,20 @@ TEST(ConveyorbeltStation,RunTOWPOverStation){
     BaseWorkpiece wp1 = BaseWorkpiece(90);
     BaseWorkpiece wp2 = BaseWorkpiece(78);
     BaseWorkpiece wp3 = BaseWorkpiece(45);
-    s1.insertBox(&wp1);
-    s1.insertBox(&wp2);
-    s1.insertBox(&wp3);
+    s1.insertBox(&wp1,wp1.getPosition());
+    s1.insertBox(&wp2,wp2.getPosition());
+    s1.insertBox(&wp3,wp3.getPosition());
     for(int i = 0; i<4;i++){
-        s2.runSimulationStep();
         s1.runSimulationStep();
         ASSERT_EQ(s1.getBoxesOnStation()->size(),3);
         ASSERT_EQ(s2.getBoxesOnStation()->size(),0);
     }
     for(int i = 0; i<5;i++){
-        s2.runSimulationStep();
         s1.runSimulationStep();
         ASSERT_EQ(s1.getBoxesOnStation()->size(),2);
         ASSERT_EQ(s2.getBoxesOnStation()->size(),1);
     }
     for(int i = 0; i<6;i++){
-        s2.runSimulationStep();
         s1.runSimulationStep();
     }
     ASSERT_EQ(s1.getBoxesOnStation()->size(),1);
@@ -109,12 +104,11 @@ TEST(ConveyorbeltStation,RunTOWPOverStationAndBumpIntoEachother) {
     BaseWorkpiece wp1 = BaseWorkpiece(90);
     BaseWorkpiece wp2 = BaseWorkpiece(70);
     BaseWorkpiece wp3 = BaseWorkpiece(40);
-    s1.insertBox(&wp1);
-    s1.insertBox(&wp2);
-    s1.insertBox(&wp3);
-
+    s1.insertBox(&wp1,wp1.getPosition());
+    s1.insertBox(&wp2,wp2.getPosition());
+    s1.insertBox(&wp3,wp3.getPosition());
+    ASSERT_EQ(s1.getBoxesOnStation()->size(),3);
     for(int i = 0;i<5;i++){
-        s2.runSimulationStep();
         s1.runSimulationStep();
 
     }
@@ -149,7 +143,6 @@ TEST(ConveyorbeltStation,RunTOWPOverStationAndBumpIntoEachother) {
     s2.setConveyorbeltState(ACTUATOR_ON);
 
     for(int i = 0;i<5;i++){
-        s2.runSimulationStep();
         s1.runSimulationStep();
 
     }
@@ -157,9 +150,7 @@ TEST(ConveyorbeltStation,RunTOWPOverStationAndBumpIntoEachother) {
     ASSERT_EQ(wp2.getPosition(),98);
     ASSERT_EQ(wp3.getPosition(),86);
     for(int i = 0;i<5;i++){
-        s2.runSimulationStep();
         s1.runSimulationStep();
-
     }
     ASSERT_EQ(wp1.getPosition(),20);
     ASSERT_EQ(wp2.getPosition(),8);
@@ -170,8 +161,8 @@ TEST(ConveyorbeltStation,moveTwoBoxes){
     conveyorbeltStation s1(nullptr);
     BaseWorkpiece wp1 = BaseWorkpiece(40);
     BaseWorkpiece wp2 = BaseWorkpiece(0);
-    ASSERT_TRUE(s1.insertBox(&wp1));
-    ASSERT_TRUE(s1.insertBox(&wp2));
+    ASSERT_TRUE(s1.insertBox(&wp1,wp1.getPosition()));
+    ASSERT_TRUE(s1.insertBox(&wp2,wp2.getPosition()));
     for(int i = 0; i<10; i++){
         s1.runSimulationStep();
     }

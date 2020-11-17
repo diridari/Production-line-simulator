@@ -8,17 +8,15 @@
 #include <string>
 #include <queue>
 #include <lib/SimpleLogging/include/logging.h>
-#include <src/workpiece/BaseWorkpiece.h>
 #include <src/actuators/BaseActuator.h>
-#include <src/sensors/BaseSensor.h>
-
-
+#include "../sensors/BaseSensor.h"
 using namespace std;
-class BaseWorkpiece; // beak circular dependencies
-class BaseActuator;
-class BaseSensor;
-class BaseProductionStation {
 
+typedef enum Direction{
+    directionUp,directionDown,directionLeft,directionRight
+}Direction;
+class BaseActuator;
+class BaseProductionStation {
 
 protected:
     BaseProductionStation *nextStation = nullptr; // next station in Chain   nullpntr = last station
@@ -26,16 +24,25 @@ protected:
     vector<BaseWorkpiece*> * boxSet;
     vector<BaseSensor*> * sensorSet;
     vector<BaseActuator*> * actuatorSet;
+    Direction inputDirection,outputDirection;
 
 public:
+
     static const uint32_t sizeOfStation = 100;
     /**
      * New production station
      * @param nextStation next station in chain.nullpointer defines the end of the chain
      * @param stationName name of station
+     * @param inputDirection  from where incoming boxes are received
+     * @param outputDirection from where outgoing boxes are leaving
      */
-    explicit BaseProductionStation(BaseProductionStation * nextStation = nullptr, string stationName = "namelessStation");
+    explicit BaseProductionStation(BaseProductionStation * nextStation = nullptr, string stationName = "namelessStation",
+                                   Direction inputDirection = directionLeft,Direction outputDirection = directionRight);
     string getStationName();
+
+    void setOutputDirection(Direction outputDirection_);
+    void setInputDirection(Direction inputDirection_);
+    void setDirection(Direction inputDirection_,Direction outputDirection_);
     /**
      * add a Sensor to that station
      * needed for defining the station
@@ -48,13 +55,15 @@ public:
      * @param toAadd actuator to add
      */
     void addActuator(BaseActuator * toAadd);
+
+
     /**
      * insert box at the begin of the station
      * Just possible if there is space check canReceiveNewWorkpiece
      * @param wp
      * @return true on success
      */
-    bool insertBox(BaseWorkpiece *wp);
+    bool insertBox(BaseWorkpiece *wp, uint32_t posToInsert = 0);
 
     /**
      * run one simulation step for this station:
@@ -72,19 +81,16 @@ public:
      *
      */
     virtual void runSimulationStep();
-    /**
-     * check whether a box can be placed at the front of the station
-     * @param sizeOfBox
-     * @return true if can be placed
-     */
-    bool canReceiveNewWorkpiece(uint8_t sizeOfBox = 1);
+
 
     vector<BaseWorkpiece*> *getBoxesOnStation();
     vector<BaseSensor*> * getSensors();
     vector<BaseActuator*> * getActuators();
     BaseProductionStation * getNextStationInChain();
-
-   friend std::ostream &operator<<(std::ostream &strm, BaseProductionStation a);
+    Direction getInputDirection();
+    Direction getOutputDirection();
+    friend std::ostream &operator<<(std::ostream &strm, BaseProductionStation a);
+    void checkAllSensors();
 
 
 };

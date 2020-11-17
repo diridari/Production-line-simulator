@@ -21,6 +21,15 @@ void BaseActuator::setActuatorState(actuatorState toSet) {
     actuatorState_ = toSet;
 }
 
+void BaseActuator::toogleState() {
+    if(actuatorState_ == ACTUATOR_ON){
+        actuatorState_ =ACTUATOR_OFF;
+    }else{
+        actuatorState_ = ACTUATOR_ON;
+    }
+
+}
+
 
 std::ostream &operator<<(ostream &strm, actuatorState a) {
     switch (a) {

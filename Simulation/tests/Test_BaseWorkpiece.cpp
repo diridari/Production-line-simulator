@@ -5,6 +5,7 @@
 #include <src/productionStation/conveyorbeltStation.h>
 #include "gtest/gtest.h"
 #include "../src/workpiece/BaseWorkpiece.h"
+#include <src/workpiece/Placing.h>
 
 
 TEST(BaseWorkPiece,CreateObj){
@@ -43,54 +44,54 @@ TEST(BaseWorkPiece,maxPos) {
     ASSERT_FALSE(b1.moveBy(1));
 
 }
-TEST(BaseWorkPiece, canBoxBePlacedOnEmptyStationWithNoNext){
+TEST(BoxPlacing, canBoxBePlacedOnEmptyStationWithNoNext){
     conveyorbeltStation s1(nullptr);
     BaseWorkpiece wp1 = BaseWorkpiece(40);
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(0,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(10,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(90,&s1));
-    ASSERT_FALSE(wp1.canWorkpieceBePlacedAt(95,&s1));
-    ASSERT_FALSE(wp1.canWorkpieceBePlacedAt(100,&s1));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 0));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 10));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 90));
+    ASSERT_FALSE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 95));
+    ASSERT_FALSE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 100));
 }
 
-TEST(BaseWorkPiece, canBoxBePlacedOnEmptyStationWithNext){
+TEST(BoxPlacing, canBoxBePlacedOnEmptyStationWithNext){
     conveyorbeltStation s2(nullptr);
     conveyorbeltStation s1(&s2);
     BaseWorkpiece wp1 = BaseWorkpiece(40);
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(0,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(10,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(90,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(95,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(100,&s1));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 0));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 10));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 90));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 95));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 100));
 }
 
-TEST(BaseWorkPiece, canBoxBePlacedOnEmptyStationWithNextBlockedAt5){
+TEST(BoxPlacing, canBoxBePlacedOnEmptyStationWithNextBlockedAt5){
     conveyorbeltStation s2(nullptr);
     conveyorbeltStation s1(&s2);
     BaseWorkpiece wp1 = BaseWorkpiece(40);
     BaseWorkpiece wp2 = BaseWorkpiece(5);
-    s2.insertBox(&wp2);
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(0,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(10,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(90,&s1));
-    ASSERT_FALSE(wp1.canWorkpieceBePlacedAt(95,&s1));
-    ASSERT_FALSE(wp1.canWorkpieceBePlacedAt(100,&s1));
-    ASSERT_FALSE(wp1.canWorkpieceBePlacedAt(-5,&s2));
+    s2.insertBox(&wp2,5);
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 0));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 10));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 90));
+    ASSERT_FALSE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 95));
+    ASSERT_FALSE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 100));
+    ASSERT_FALSE(Placing::canWorkpieceBePlacedAt(&s2, &wp1, -5));
 }
-TEST(BaseWorkPiece, canBoxBePlacedOnEmptyStationWithNextBlockedAt10){
+TEST(BoxPlacing, canBoxBePlacedOnEmptyStationWithNextBlockedAt10){
     conveyorbeltStation s2(nullptr);
     conveyorbeltStation s1(&s2);
     BaseWorkpiece wp1 = BaseWorkpiece(40);
     BaseWorkpiece wp2 = BaseWorkpiece(10);
-    s2.insertBox(&wp2);
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(0,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(10,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(90,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(95,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(99,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(-1,&s2));
-    ASSERT_FALSE(wp1.canWorkpieceBePlacedAt(101,&s1));
-    ASSERT_FALSE(wp1.canWorkpieceBePlacedAt(0,&s2));
+    s2.insertBox(&wp2,10);
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 0));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 10));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 90));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 95));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 99));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s2, &wp1, -1));
+    ASSERT_FALSE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 101));
+    ASSERT_FALSE(Placing::canWorkpieceBePlacedAt(&s2, &wp1, 0));
 
 }
 
@@ -98,28 +99,28 @@ TEST(BaseWorkPiece, canBoxBePlacedOnitSelf){
     conveyorbeltStation s1(nullptr);
     BaseWorkpiece wp1 = BaseWorkpiece(10);
     BaseWorkpiece wp2 = BaseWorkpiece(50);
-    s1.insertBox(&wp1);
-    s1.insertBox(&wp2);
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(0,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(5,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(6,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(10,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(15,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(16,&s1));
+    s1.insertBox(&wp1,10);
+    s1.insertBox(&wp2,50);
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 0));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 5));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 6));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 10));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 15));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 16));
 
 
 }
 
-TEST(BaseWorkPiece, canBoxBePlacedOnStationWithOneOtherBox){
+TEST(BoxPlacing, canBoxBePlacedOnStationWithOneOtherBox){
     conveyorbeltStation s1(nullptr);
     BaseWorkpiece wp1 = BaseWorkpiece(10);
     BaseWorkpiece wp2 = BaseWorkpiece(50);
-    s1.insertBox(&wp1);
-    s1.insertBox(&wp2);
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(39,&s1));
-    ASSERT_FALSE(wp1.canWorkpieceBePlacedAt(45,&s1));
-    ASSERT_FALSE(wp1.canWorkpieceBePlacedAt(50,&s1));
-    ASSERT_FALSE(wp1.canWorkpieceBePlacedAt(54,&s1));
-    ASSERT_FALSE(wp1.canWorkpieceBePlacedAt(60,&s1));
-    ASSERT_TRUE(wp1.canWorkpieceBePlacedAt(61,&s1));
+    s1.insertBox(&wp1,10);
+    s1.insertBox(&wp2,50);
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 39));
+    ASSERT_FALSE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 45));
+    ASSERT_FALSE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 50));
+    ASSERT_FALSE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 54));
+    ASSERT_FALSE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 60));
+    ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 61));
 }

@@ -8,20 +8,20 @@
 #include <string>
 #include <iostream>
 #include <lib/SimpleLogging/include/logging.h>
-#include <src/productionStation/BaseProductionStation.h>
 #include <src/workpiece/BaseWorkpiece.h>
+#include <vector>
+#include <src/productionStation/BaseProductionStation.h>
 
 using namespace std;
 
-class BaseProductionStation;
-class BaseWorkpiece;
+
 enum actuatorState{
     ACTUATOR_OFF,
     ACTUATOR_ON
 
 };
 std::ostream &operator<<(std::ostream &strm, actuatorState a);
-
+class BaseProductionStation;
 class BaseActuator {
 private:
     string  actuatorName;
@@ -40,6 +40,7 @@ public:
      */
     virtual void runActuator( vector<BaseWorkpiece*> * boxSet, BaseProductionStation *station) {};
     friend std::ostream &operator<<(std::ostream &strm, BaseActuator &a);
+    void toogleState();
 };
 
 

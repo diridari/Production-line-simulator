@@ -9,7 +9,6 @@
 #include <src/sensors/lightBarrier.h>
 #include "BaseProductionStation.h"
 #include "../actuators/conveyorbelt.h"
-
 class conveyorbeltStation: public BaseProductionStation {
     conveyorbelt *conv;
     lightBarrier *lb;

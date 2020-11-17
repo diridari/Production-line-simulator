@@ -5,6 +5,7 @@
 #include <lib/SimpleLogging/include/logging.h>
 #include "BaseProductionStation.h"
 #include <string>
+#include <src/workpiece/Placing.h>
 
 
 std::ostream &operator<<(ostream &strm, BaseProductionStation a) {
@@ -27,35 +28,31 @@ string BaseProductionStation::getStationName() {
     return stationName;
 }
 
-BaseProductionStation::BaseProductionStation(BaseProductionStation *nextStation, string stationName) : nextStation(nextStation), stationName(stationName){
+BaseProductionStation::BaseProductionStation(BaseProductionStation *nextStation, string stationName,Direction inputDirection,Direction outputDirection) :
+        nextStation(nextStation), stationName(stationName), outputDirection(outputDirection),inputDirection(inputDirection){
     boxSet = new vector<BaseWorkpiece*>();
     sensorSet = new  vector<BaseSensor*>();
     actuatorSet = new vector<BaseActuator*>();
 }
 
-bool BaseProductionStation::canReceiveNewWorkpiece(uint8_t sizeOfBox ) {
-
-    // get left box
-    if(boxSet->size() >0){ // has boxes
-        BaseWorkpiece *box = boxSet->at(0);
-        if(box->getPosition() <=  (sizeOfBox/2 + sizeOfBox%2)){
-            return false;
-        }
-    }
-
-    return true;
-}
 
 
 void BaseProductionStation::runSimulationStep() {
-
+    if(nextStation != nullptr){
+        nextStation->runSimulationStep();
+    }
+   // Log::log("run sim step for BaseProductionStation" + stationName,DebugL2)
 }
 
-bool BaseProductionStation::insertBox(BaseWorkpiece *wp) {
-    if(canReceiveNewWorkpiece()){
+bool BaseProductionStation::insertBox(BaseWorkpiece *wp,uint32_t posToInsert) {
+    Log::log("insertBox on station " + getStationName() + " boxName: "+wp->getName(),DebugL2);
+    if(Placing::canWorkpieceBePlacedAt(this, wp, posToInsert)){
         boxSet->insert(boxSet->begin(),wp);
+        wp->setPosition(posToInsert);
+        //boxSet->push_back(wp);
         return true;
     }
+    Log::log(getStationName() + " should insert box but can not place new box",Error);
     return false;
 }
 
@@ -73,5 +70,33 @@ vector<BaseSensor *> *BaseProductionStation::getSensors() {
 
 BaseProductionStation *BaseProductionStation::getNextStationInChain() {
     return nextStation;
+}
+
+Direction BaseProductionStation::getInputDirection() {
+    return inputDirection;
+}
+
+Direction BaseProductionStation::getOutputDirection() {
+    return outputDirection;
+}
+
+void BaseProductionStation::setDirection(Direction inputDirection_, Direction outputDirection_) {
+    outputDirection = outputDirection_;
+    inputDirection = inputDirection_;
+}
+
+void BaseProductionStation::setInputDirection(Direction inputDirection_) {
+    inputDirection = inputDirection_;
+}
+
+void BaseProductionStation::setOutputDirection(Direction outputDirection_) {
+    outputDirection = outputDirection_;
+}
+
+void BaseProductionStation::checkAllSensors() {
+    for(int i = 0; i<sensorSet->size();i++){
+        sensorSet->at(i)->checkSensor(boxSet);
+    }
+
 }
 

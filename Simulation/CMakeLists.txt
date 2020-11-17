@@ -13,11 +13,18 @@ add_subdirectory(lib/SimpleLogging)
 include_directories(lib/SimpleLogging/include)
 
 add_subdirectory(src)
+# QT 5
+find_package(Qt5Widgets)
+if(Qt5Widgets_FOUND)
+    message("found QT Lib at" ${Qt5Widgets_INCLUDE_DIRS})
+    set(CMAKE_AUTOMOC ON)
+    set(CMAKE_AUTOUIC ON)
+    set(CMAKE_AUTORCC ON)
+    add_executable(Production_line_simulator ${src_files}  ${src_gui} src/main.cpp )
+    target_link_libraries(Production_line_simulator pthread CPPArgvParsLib SimpleLoggingLib  Qt5::Widgets)
+    #message( "src: " ${src_files} )
+endif()
 
-add_executable(Production_line_simulator ${src_files}  src/main.cpp )
-
-target_link_libraries(Production_line_simulator  CPPArgvParsLib SimpleLoggingLib)
-#message( "src: " ${src_files} )
 find_package(GTest)
 if (GTest_FOUND)
     message(" -- gtest found at " ${GTEST_INCLUDE_DIRS})
