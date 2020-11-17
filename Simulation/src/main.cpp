@@ -39,12 +39,6 @@ int main(int argc, char *argv[])
     c5->setDirection(directionRight,directionLeft);
 
 
-       c1->setDirection(directionUp,directionDown);
-       c2->setDirection(directionUp,directionRight);
-       c3->setDirection(directionLeft,directionRight);
-       c4->setDirection(directionLeft,directionUp);
-       c5->setDirection(directionDown,directionUp);
-
 
     BaseWorkpiece *wp1 = new BaseWorkpiece(0,"test-workpiece1");
     BaseWorkpiece *wp2 = new BaseWorkpiece(31,"test-workpiece1");

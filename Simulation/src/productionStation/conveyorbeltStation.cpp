@@ -21,6 +21,7 @@ conveyorbeltStation::conveyorbeltStation(BaseProductionStation *next, string nam
     addActuator(conv);
     addSensor(lb);
     addSensor(new lightBarrier(50));
+    addSensor(new lightBarrier(20));
 }
 
 void conveyorbeltStation::setConveyorbeltState(actuatorState toSet) {

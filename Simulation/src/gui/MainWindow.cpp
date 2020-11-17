@@ -7,7 +7,7 @@
 
 #include <QtWidgets/QApplication>
 #include <src/main.h>
-
+#include <QMenuBar>
 
 MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : startStation(startStation), QWidget(parent){
     Log::log("generate Main window",Info);
@@ -54,6 +54,7 @@ MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : s
     connect(timer, &QTimer::timeout, this, &MainWindow::update);
     timer->start(100);
     Log::log("Main window Done",Info);
+
 
 
 }
