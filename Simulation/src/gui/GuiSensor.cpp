@@ -28,7 +28,6 @@ GuiSensor::GuiSensor(BaseSensor *connectedSensor_, BaseProductionStation *statio
     l = new QLabel(this);
     l->setPixmap(QPixmap(SensorOFFIMG).scaled(parent->height()/5,parent->width()/5,Qt::KeepAspectRatio));
     l->move(getPos(QPoint(0,0),parent->width(),parent->height()));
-    show();
 }
 
 void GuiSensor::update() {
