@@ -30,6 +30,10 @@ void BaseActuator::toogleState() {
 
 }
 
+actuatorKind BaseActuator::getActuatorKind() {
+    return kindOfAktuator;
+}
+
 
 std::ostream &operator<<(ostream &strm, actuatorState a) {
     switch (a) {

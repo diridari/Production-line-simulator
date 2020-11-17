@@ -5,7 +5,9 @@
 #include "conveyorbelt.h"
 #include <src/workpiece/Placing.h>
 
-conveyorbelt::conveyorbelt(string name) : BaseActuator("conveyorbelt:"+ name){}
+conveyorbelt::conveyorbelt(string name) : BaseActuator("conveyorbelt:"+ name){
+    kindOfAktuator = actuatorKind::Conveyorbelt;
+}
 
 void conveyorbelt::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation *station) {
     if(getActuatorState() == ACTUATOR_ON){

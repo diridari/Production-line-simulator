@@ -18,7 +18,15 @@ using namespace std;
 enum actuatorState{
     ACTUATOR_OFF,
     ACTUATOR_ON
+};
 
+enum actuatorKind{
+    BaseActuator,
+    Conveyorbelt,
+    PusherFront,
+    PusherBack,
+    Miller,
+    Driller
 };
 std::ostream &operator<<(std::ostream &strm, actuatorState a);
 class BaseProductionStation;
@@ -26,7 +34,11 @@ class BaseActuator {
 private:
     string  actuatorName;
     actuatorState actuatorState_ = ACTUATOR_OFF;
+protected:
+    actuatorKind kindOfAktuator = BaseActuator ;
+
 public:
+    actuatorKind getActuatorKind();
     BaseActuator(string name): actuatorName(name){};
     string getActuatorName();
     actuatorState getActuatorState();
@@ -34,7 +46,7 @@ public:
 
     /**
      * run this actuator for each Workpiece.
-     * Workpieces can move to the next station if thex reach the end of the station
+     * Workpieces can move to the next station if they reach the end of the station
      * @param boxSet set of boxes to run
      * @param nextStation
      */

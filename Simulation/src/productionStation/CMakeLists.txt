@@ -6,4 +6,6 @@ set(src_productionStation
         ${dir}BaseProductionStation.cpp
         ${dir}conveyorbeltStation.cpp
         ${dir}conveyorbeltStation.h
+        ${dir}PushStation.cpp
+        ${dir}PushStation.h
         PARENT_SCOPE )
