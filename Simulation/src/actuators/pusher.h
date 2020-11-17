@@ -8,11 +8,18 @@
 
 #include "BaseActuator.h"
 
+enum PushDirection{
+    Idle,Forward,Backward
+};
+
 class pusher: public BaseActuator {
-    uint8_t pusherPosition;
+    int32_t pusherPosition;
+    PushDirection direction = PushDirection::Idle;
 public:
-    pusher(string name,bool moveForward = true);
+    pusher(string name = "pusher");
     void runActuator( vector<BaseWorkpiece*> * boxSet, BaseProductionStation *station);
+    void setDirection(PushDirection direction);
+
 };
 
 

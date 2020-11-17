@@ -11,4 +11,6 @@ set(src_gui
         ${dir}ObjMapper.h
         ${dir}GuiSensor.h
         ${dir}GuiSensor.cpp
+        ${dir}GuiActuator.cpp
+        ${dir}GuiActuator.h
         PARENT_SCOPE )

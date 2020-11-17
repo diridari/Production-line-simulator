@@ -21,10 +21,9 @@ enum actuatorState{
 };
 
 enum actuatorKind{
-    BaseActuator,
-    Conveyorbelt,
-    PusherFront,
-    PusherBack,
+    BaseActuator_,
+    Conveyorbelt_,
+    Pusher,
     Miller,
     Driller
 };
@@ -34,10 +33,15 @@ class BaseActuator {
 private:
     string  actuatorName;
     actuatorState actuatorState_ = ACTUATOR_OFF;
-protected:
-    actuatorKind kindOfAktuator = BaseActuator ;
 
+protected:
+    int32_t position;
+    actuatorKind kindOfAktuator = actuatorKind::BaseActuator_;
+
+    string  actuatorImage = "";
 public:
+    int32_t getPosition();
+    string getActuatorImage();
     actuatorKind getActuatorKind();
     BaseActuator(string name): actuatorName(name){};
     string getActuatorName();

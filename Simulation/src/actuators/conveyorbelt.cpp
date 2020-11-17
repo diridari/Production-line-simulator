@@ -6,7 +6,8 @@
 #include <src/workpiece/Placing.h>
 
 conveyorbelt::conveyorbelt(string name) : BaseActuator("conveyorbelt:"+ name){
-    kindOfAktuator = actuatorKind::Conveyorbelt;
+    kindOfAktuator = actuatorKind::Conveyorbelt_;
+    actuatorImage = "../img/convorbelt.png";
 }
 
 void conveyorbelt::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation *station) {

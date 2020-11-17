@@ -82,7 +82,11 @@ public:
      */
     virtual void runSimulationStep();
 
-
+    /**
+     * is the station able (independent from the boxes) to receive a new box (e.g. the pusher can not allways receive boxes)
+     * @return true if station is capable to receive a new box
+     */
+    virtual bool stationCanReceiveNewBoxes();
     vector<BaseWorkpiece*> *getBoxesOnStation();
     vector<BaseSensor*> * getSensors();
     vector<BaseActuator*> * getActuators();

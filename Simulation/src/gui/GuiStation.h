@@ -10,6 +10,8 @@
 #include <src/productionStation/BaseProductionStation.h>
 #include <QLabel>
 #include "GuiSensor.h"
+#include "GuiActuator.h"
+
 class GuiStation : public QWidget{
 Q_OBJECT
     BaseProductionStation *connectedStation;
@@ -20,6 +22,7 @@ Q_OBJECT
     uint32_t widgetSizeX,widgetSizeY;
     string imagePath;
     vector<GuiSensor *> * guiSensors;
+    vector<GuiActuator*> *guiActuators;
 
 public:
     GuiStation(BaseProductionStation *connectedStation, Direction inputDirection, Direction outputDirection,  QWidget *parent = nullptr);

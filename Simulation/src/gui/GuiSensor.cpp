@@ -6,8 +6,7 @@
 #include <QLabel>
 #include <src/workpiece/Placing.h>
 
-QPoint
-GuiSensor::getPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY) {
+QPoint GuiSensor::getPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY) {
     // Calculate the pos depending of station direction
     guiPos p = Placing::calculateGuiPosition(connectedSensor->getSensorPos(), station);
     uint32_t posX,posY;

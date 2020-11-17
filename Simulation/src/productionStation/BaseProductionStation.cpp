@@ -100,3 +100,7 @@ void BaseProductionStation::checkAllSensors() {
 
 }
 
+bool BaseProductionStation::stationCanReceiveNewBoxes() {
+    return true;
+}
+

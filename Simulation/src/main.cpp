@@ -6,6 +6,7 @@
 #include <zconf.h>
 #include <src/productionStation/conveyorbeltStation.h>
 #include <QtWidgets/QApplication>
+#include <src/productionStation/PushStation.h>
 #include "version.h"
 #include "src/gui/ObjMapper.h"
 ObjMapper *objectMapper;
@@ -21,14 +22,13 @@ int main(int argc, char *argv[])
 
     conveyorbeltStation *c5 = new conveyorbeltStation(nullptr,"band5");
     conveyorbeltStation *c4 = new conveyorbeltStation(c5,"band4");
-    conveyorbeltStation *c3 = new conveyorbeltStation(c4,"band3");
+    PushStation *c3 = new PushStation(c4,"band3");
     conveyorbeltStation *c2 = new conveyorbeltStation(c3,"band2");
     conveyorbeltStation *c1 = new conveyorbeltStation(c2,"band1");
 
 
     c1->setConveyorbeltState(ACTUATOR_ON);
     c2->setConveyorbeltState(ACTUATOR_ON);
-    c3->setConveyorbeltState(ACTUATOR_ON);
     c4->setConveyorbeltState(ACTUATOR_ON);
     c5->setConveyorbeltState(ACTUATOR_ON);
 

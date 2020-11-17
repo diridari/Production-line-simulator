@@ -9,6 +9,9 @@ bool Placing::canWorkpieceBePlacedAt(BaseProductionStation *stationToPlace, Base
         uint8_t radius = (wp->getWorkpieceSize()/2 + wp->getWorkpieceSize()%2);
         return posToPlace <-radius; // Prevent that a box can be moved over the end of the last Station
     }
+    if(!stationToPlace->stationCanReceiveNewBoxes()){
+        Log::log("box can not be placed because station is blocked",Info);
+    }
 
     uint8_t radius = (wp->getWorkpieceSize()/2 + wp->getWorkpieceSize()%2);
     int32_t box_min = posToPlace-radius;

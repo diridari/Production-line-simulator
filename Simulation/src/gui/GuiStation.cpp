@@ -38,7 +38,7 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
     stationState->show();
 
     // Display  Sensors
-    Log::log("create station Sensors on "+ connectedStation->getStationName(),DebugL3);
+    Log::log("create station Sensors  ",DebugL3);
     guiSensors = new  vector<GuiSensor *>();
     vector<BaseSensor *> * sensors = connectedStation->getSensors();
     for(int i = 0; i<sensors->size();i++){
@@ -46,6 +46,14 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
         guiSensors->push_back(sen);
 
     }
+    // Discplay Actuaotrs
+    Log::log("create station Actuator",DebugL3);
+    guiActuators = new vector<GuiActuator*>();
+    for(int i = 0; i<connectedStation->getActuators()->size();i++){
+        GuiActuator *guiActuator = new GuiActuator(connectedStation->getActuators()->at(i),connectedStation,this);
+        guiActuators->push_back(guiActuator);
+    }
+
     // Change actuator State Button
     QPushButton *stationActuator = new QPushButton(this);
     stationActuator->setText("set Actuator State ");
@@ -91,11 +99,16 @@ void GuiStation::handleBoxes() {
     stationState->show();
     show();
 
-    // update sensprs
+    // update senspos
     for(int i = 0; i<guiSensors->size();i++){
         guiSensors->at(i)->update();
-
     }
+    // update actuators
+    for(int i = 0; i<guiActuators->size();i++){
+        guiActuators->at(i)->update();
+    }
+
+
 
 }
 

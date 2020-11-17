@@ -34,6 +34,14 @@ actuatorKind BaseActuator::getActuatorKind() {
     return kindOfAktuator;
 }
 
+string BaseActuator::getActuatorImage() {
+    return actuatorImage;
+}
+
+int32_t BaseActuator::getPosition() {
+    return position;
+}
+
 
 std::ostream &operator<<(ostream &strm, actuatorState a) {
     switch (a) {
