@@ -90,6 +90,8 @@ void GuiStation::handleBoxes() {
     stationState->adjustSize();
     stationState->show();
     show();
+
+    // update sensprs
     for(int i = 0; i<guiSensors->size();i++){
         guiSensors->at(i)->update();
 

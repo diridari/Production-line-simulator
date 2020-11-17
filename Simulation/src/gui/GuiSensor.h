@@ -17,16 +17,17 @@ class GuiSensor : public QWidget{
     QLabel *l;
     sensorState lastState = SENSOR_OFF;
     BaseProductionStation *station;
+    /**
+   * calculate the new positio based on the widget pos
+   * @param BaseOffset base offset
+   * @param baseWidgetSizeX size of station widget
+   * @param baseWidgetSizeY size of station widget
+   * @return new abs pos
+   */
+    QPoint getPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY);
+
 public:
     GuiSensor(BaseSensor *connectedSensor_, BaseProductionStation *station, QWidget *parent);
-    /**
-     * calculate the new positio based on the widget pos
-     * @param BaseOffset base offset
-     * @param baseWidgetSizeX size of station widget
-     * @param baseWidgetSizeY size of station widget
-     * @return new abs pos
-     */
-    QPoint getPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY);
 
     void update();
 };

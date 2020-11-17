@@ -14,10 +14,6 @@ GuiSensor::getPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidg
     posX = BaseOffset.x() + (baseWidgetSizeX/100) * p.posX;
     posY = BaseOffset.y() +(baseWidgetSizeY/100) * p.posY;
 
-
-
-    posX = BaseOffset.x() + (baseWidgetSizeX/100) * posX;
-    posY = BaseOffset.y() +(baseWidgetSizeY/100) * posY;
     return QPoint(posX,posY);
 }
 
@@ -28,6 +24,7 @@ GuiSensor::GuiSensor(BaseSensor *connectedSensor_, BaseProductionStation *statio
     l = new QLabel(this);
     l->setPixmap(QPixmap(SensorOFFIMG).scaled(parent->height()/5,parent->width()/5,Qt::KeepAspectRatio));
     l->move(getPos(QPoint(0,0),parent->width(),parent->height()));
+    l->show();
 }
 
 void GuiSensor::update() {
