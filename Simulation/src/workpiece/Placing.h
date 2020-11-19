@@ -38,7 +38,7 @@ public:
 
     /**
     * calculate dependent to the station direction the position
-    * range 0-100
+    * range x,y: 0-100
     * @return
     */
     static guiPos calculateGuiPosition(uint32_t pos, BaseProductionStation *station );

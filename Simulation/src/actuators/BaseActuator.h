@@ -35,7 +35,11 @@ private:
     actuatorState actuatorState_ = ACTUATOR_OFF;
 
 protected:
-    int32_t position;
+    /**
+     * the postion of the actuator
+     * this value can change if the avtuator is moving
+     */
+    int32_t position = 0;
     actuatorKind kindOfAktuator = actuatorKind::BaseActuator_;
 
     string  actuatorImage = "";
@@ -56,7 +60,7 @@ public:
      */
     virtual void runActuator( vector<BaseWorkpiece*> * boxSet, BaseProductionStation *station) {};
     friend std::ostream &operator<<(std::ostream &strm, BaseActuator &a);
-    void toogleState();
+    virtual void toogleState();
 };
 
 

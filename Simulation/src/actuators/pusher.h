@@ -13,13 +13,13 @@ enum PushDirection{
 };
 
 class pusher: public BaseActuator {
-    int32_t pusherPosition;
     PushDirection direction = PushDirection::Idle;
+
 public:
     pusher(string name = "pusher");
     void runActuator( vector<BaseWorkpiece*> * boxSet, BaseProductionStation *station);
     void setDirection(PushDirection direction);
-
+    void toogleState();
 };
 
 

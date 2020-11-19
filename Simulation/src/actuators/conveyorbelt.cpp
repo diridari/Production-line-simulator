@@ -8,6 +8,7 @@
 conveyorbelt::conveyorbelt(string name) : BaseActuator("conveyorbelt:"+ name){
     kindOfAktuator = actuatorKind::Conveyorbelt_;
     actuatorImage = "../img/convorbelt.png";
+    position = 50;
 }
 
 void conveyorbelt::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation *station) {

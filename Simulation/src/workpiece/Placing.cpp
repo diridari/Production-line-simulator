@@ -10,7 +10,7 @@ bool Placing::canWorkpieceBePlacedAt(BaseProductionStation *stationToPlace, Base
         return posToPlace <-radius; // Prevent that a box can be moved over the end of the last Station
     }
     if(!stationToPlace->stationCanReceiveNewBoxes()){
-        Log::log("box can not be placed because station is blocked",Info);
+        Log::log("box can not be placed because station is blocked",Debug);
     }
 
     uint8_t radius = (wp->getWorkpieceSize()/2 + wp->getWorkpieceSize()%2);
@@ -40,7 +40,10 @@ bool Placing::canWorkpieceBePlacedAt(BaseProductionStation *stationToPlace, Base
 }
 
 bool Placing::canStationReceiveNewWorkpiece(BaseProductionStation * station, uint8_t sizeOfBox) {
-
+    if(station == nullptr){
+        Log::log("Placing canStationReceiveNewWorkpiece",Error);
+        return false;
+    }
     // get left box
     for(int i = 0; i<station->getBoxesOnStation()->size();i++){ // has boxes
         BaseWorkpiece *box = station->getBoxesOnStation()->at(i);
@@ -53,10 +56,18 @@ bool Placing::canStationReceiveNewWorkpiece(BaseProductionStation * station, uin
 }
 
 guiPos Placing::calculateGuiPosition(BaseWorkpiece *wp, BaseProductionStation *station) {
+    if(wp == nullptr){
+        Log::log("Placing calculateGuiPosition received nullpointer",Error);
+        return guiPos(0,0);
+    }
     return calculateGuiPosition(wp->getPosition(),station);
 }
 
 guiPos Placing::calculateGuiPosition(uint32_t pos, BaseProductionStation *station) {
+    if(station == nullptr){
+        Log::log("Placing calculateGuiPosition received nullpointer",Error);
+        return guiPos(0,0);
+    }
     uint32_t posX,posY;
     // Calculate the pos depending of station direction
     if(pos <= 50){
