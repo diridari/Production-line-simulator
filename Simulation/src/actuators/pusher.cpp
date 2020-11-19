@@ -7,7 +7,9 @@
 
 pusher::pusher(string name) : BaseActuator("pusher:"+name) {
     position = 0;
-    actuatorImage = "../img/pusher.png";
+    actuatorImageActiv = "../img/pusherForward.png";
+    actuatorImageInactiv = "../img/pusherInactiv.png";
+    kindOfAktuator = actuatorKind::Pusher;
 }
 
 void pusher::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation *station) {
@@ -17,7 +19,7 @@ void pusher::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation 
         case PushDirection::Idle :  newPos = position;          break;
         case PushDirection::Forward :  newPos = position +2;    break;
     }
-    if(newPos <= 110 && newPos >= -10 ) {
+    if(newPos <= 100 && newPos >= 0 ) {
         position = newPos;
         // process all boxes if moving forward
         if (direction == PushDirection::Forward){
@@ -26,8 +28,9 @@ void pusher::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation 
             for (int i = boxSet->size() - 1; i >= 0; i--) {
                 BaseWorkpiece *wp = boxSet->at(i);
                 if (Placing::canWorkpieceBePlacedAt(station, wp, newPos)) {
-                    if (newPos < BaseProductionStation::sizeOfStation) { // Move Box
-                        wp->setPosition(newPos);
+                    if (newPos < BaseProductionStation::sizeOfStation ) { // Move Box
+                        if(wp->getPosition() < newPos)
+                            wp->setPosition(newPos);
                     } else { // moved out of station
                         Log::log(station->getStationName() + ": element has moved out of Station --> move to next",
                                  Info);
@@ -43,6 +46,7 @@ void pusher::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation 
             }
         }
     }
+    Log::log(" pusher pos: "+to_string(position),DebugL3);
 }
 
 void pusher::setDirection(PushDirection direction_) {
@@ -53,9 +57,9 @@ void pusher::setDirection(PushDirection direction_) {
 void pusher::toogleState() {
 
     switch (direction) {
-        case Idle:     setDirection(Forward); break;
-        case Forward:  setDirection(Backward); break;
-        case Backward: setDirection(Idle); break;
+        case Idle:     setDirection(Forward); setActuatorState(actuatorState::ACTUATOR_ON); actuatorImageActiv = "../img/pusherForward.png"  ;break;
+        case Forward:  setDirection(Backward);  setActuatorState(actuatorState::ACTUATOR_ON); actuatorImageActiv = "../img/pusherBackward.png";break;
+        case Backward: setDirection(Idle); setActuatorState(actuatorState::ACTUATOR_OFF); break;
     }
 
 }

@@ -9,9 +9,6 @@ bool Placing::canWorkpieceBePlacedAt(BaseProductionStation *stationToPlace, Base
         uint8_t radius = (wp->getWorkpieceSize()/2 + wp->getWorkpieceSize()%2);
         return posToPlace <-radius; // Prevent that a box can be moved over the end of the last Station
     }
-    if(!stationToPlace->stationCanReceiveNewBoxes()){
-        Log::log("box can not be placed because station is blocked",Debug);
-    }
 
     uint8_t radius = (wp->getWorkpieceSize()/2 + wp->getWorkpieceSize()%2);
     int32_t box_min = posToPlace-radius;
@@ -33,7 +30,7 @@ bool Placing::canWorkpieceBePlacedAt(BaseProductionStation *stationToPlace, Base
     }
     if(box_max >= BaseProductionStation::sizeOfStation - (BaseWorkpiece::getMaxUsedSize()/2+BaseWorkpiece::getMaxUsedSize()%2)){ // box hung into the next station
         int32_t posOnNextStation = posToPlace-BaseProductionStation::sizeOfStation;
-        return Placing::canWorkpieceBePlacedAt(stationToPlace->getNextStationInChain(), wp, posOnNextStation);
+        return  Placing::canWorkpieceBePlacedAt(stationToPlace->getNextStationInChain(), wp, posOnNextStation);
     }
 
     return true;
@@ -42,6 +39,12 @@ bool Placing::canWorkpieceBePlacedAt(BaseProductionStation *stationToPlace, Base
 bool Placing::canStationReceiveNewWorkpiece(BaseProductionStation * station, uint8_t sizeOfBox) {
     if(station == nullptr){
         Log::log("Placing canStationReceiveNewWorkpiece",Error);
+        return false;
+    }
+    if(!station->stationCanReceiveNewBoxes()){
+        return false;
+    }
+    if(!station->stationCanReceiveNewBoxes()){
         return false;
     }
     // get left box

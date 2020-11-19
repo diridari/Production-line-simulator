@@ -35,7 +35,13 @@ actuatorKind BaseActuator::getActuatorKind() {
 }
 
 string BaseActuator::getActuatorImage() {
-    return actuatorImage;
+    if(actuatorState_ == ACTUATOR_ON){
+        return actuatorImageActiv;
+
+    }else{
+        return actuatorImageInactiv;
+
+    }
 }
 
 int32_t BaseActuator::getPosition() {

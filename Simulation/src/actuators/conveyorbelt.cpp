@@ -7,7 +7,9 @@
 
 conveyorbelt::conveyorbelt(string name) : BaseActuator("conveyorbelt:"+ name){
     kindOfAktuator = actuatorKind::Conveyorbelt_;
-    actuatorImage = "../img/convorbelt.png";
+    actuatorImageActiv = "../img/convorbelt.png";
+    actuatorImageInactiv = "../img/convorbeltInactiv.png";
+
     position = 50;
 }
 
@@ -22,10 +24,12 @@ void conveyorbelt::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionSt
                 if(wp->getPosition()+2 < BaseProductionStation::sizeOfStation) { // Move Box
                    wp->moveBy(2);
                 }else{ // moved out of station
-                    Log::log(station->getStationName() + ": element has moved out of Station --> move to next",Info);
-                    boxSet->erase(boxSet->begin()+i); // drop element
-                    wp->setPosition(0); //reset pos information
-                    station->getNextStationInChain()->insertBox(wp); // insert in next chain
+                    if(Placing::canStationReceiveNewWorkpiece(station->getNextStationInChain(),wp->getWorkpieceSize())) {
+                        Log::log(station->getStationName() + ": element has moved out of Station --> move to next",
+                                 Info);
+                        boxSet->erase(boxSet->begin() + i); // drop element
+                        station->getNextStationInChain()->insertBox(wp); // insert in next chain
+                    }
                 }
             }
         }

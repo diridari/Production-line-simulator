@@ -48,12 +48,14 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
     }
     // Discplay Actuaotrs
     Log::log("create station Actuator",DebugL3);
+    vector<BaseActuator *> * actuators = connectedStation->getActuators();
     guiActuators = new vector<GuiActuator*>();
-    for(int i = 0; i<connectedStation->getActuators()->size();i++){
-        GuiActuator *guiActuator = new GuiActuator(connectedStation->getActuators()->at(i),connectedStation,this);
+    for(int i = 0; i<actuators->size();i++){
+        GuiActuator *guiActuator = new GuiActuator(actuators->at(i),connectedStation,this);
+        guiActuator->raise();
         guiActuators->push_back(guiActuator);
     }
-
+    Log::log("created all actuators",Info);
     // Change actuator State Button
     QPushButton *stationActuator = new QPushButton(this);
     stationActuator->setText("set Actuator State ");
@@ -61,6 +63,7 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
     stationActuator->show();
     connect(stationActuator, SIGNAL(clicked()), this, SLOT(updateActuatorState()));
     stationActuator->activateWindow();
+    stationActuator->raise();
     stationActuator->raise();
 
 
@@ -79,7 +82,7 @@ void GuiStation::handleBoxes() {
             objectMapper->addBox(wp,gb);
         }
         // move box
-        gb->moveToNewPos(this->pos(),this->width(),this->height(), connectedStation);
+        gb->moveToNewPos(pos(),width(),height(), connectedStation);
     }
 
     // Update State text

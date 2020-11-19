@@ -10,8 +10,8 @@ QPoint GuiSensor::getPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t b
     // Calculate the pos depending of station direction
     guiPos p = Placing::calculateGuiPosition(connectedSensor->getSensorPos(), station);
     uint32_t posX,posY;
-    posX = BaseOffset.x() + (baseWidgetSizeX/100) * p.posX;
-    posY = BaseOffset.y() +(baseWidgetSizeY/100) * p.posY;
+    posX = BaseOffset.x() + (baseWidgetSizeX/100) * p.posX - width()/2;
+    posY = BaseOffset.y() +(baseWidgetSizeY/100) * p.posY - height()/2;
 
     return QPoint(posX,posY);
 }
@@ -21,6 +21,7 @@ GuiSensor::GuiSensor(BaseSensor *connectedSensor_, BaseProductionStation *statio
     station = station_;
     Log::log("create gui sensor "+ connectedSensor->getSensorName() + " on station " + station_->getStationName(),Info);
     l = new QLabel(this);
+    setMinimumSize(parent->height()/5,parent->width()/5);
     l->setPixmap(QPixmap(SensorOFFIMG).scaled(parent->height()/5,parent->width()/5,Qt::KeepAspectRatio));
     l->move(getPos(QPoint(0,0),parent->width(),parent->height()));
     l->show();

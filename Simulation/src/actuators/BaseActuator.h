@@ -42,7 +42,9 @@ protected:
     int32_t position = 0;
     actuatorKind kindOfAktuator = actuatorKind::BaseActuator_;
 
-    string  actuatorImage = "";
+    string  actuatorImageActiv = "";
+    string  actuatorImageInactiv = "";
+
 public:
     int32_t getPosition();
     string getActuatorImage();

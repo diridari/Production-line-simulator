@@ -11,9 +11,11 @@
 #include <QLabel>
 
 class GuiActuator: public QWidget {
+    QPoint BaseOffset;
     BaseActuator * connectedActuator;
     QLabel *l;
     BaseProductionStation *station;
+    string lastImg = "";
     /**
    * calculate the new position based on the widget pos
    * @param BaseOffset base offset

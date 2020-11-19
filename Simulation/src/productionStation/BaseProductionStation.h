@@ -63,7 +63,7 @@ public:
      * @param wp
      * @return true on success
      */
-    bool insertBox(BaseWorkpiece *wp, uint32_t posToInsert = 0);
+    virtual bool insertBox(BaseWorkpiece *wp, uint32_t posToInsert = 0);
 
     /**
      * run one simulation step for this station:
