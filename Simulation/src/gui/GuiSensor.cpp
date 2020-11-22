@@ -21,13 +21,14 @@ GuiSensor::GuiSensor(BaseSensor *connectedSensor_, BaseProductionStation *statio
     station = station_;
     Log::log("create gui sensor "+ connectedSensor->getSensorName() + " on station " + station_->getStationName(),Info);
     l = new QLabel(this);
-    setMinimumSize(parent->height()/5,parent->width()/5);
+   // setMinimumSize(parent->height()/5,parent->width()/5);
     l->setPixmap(QPixmap(SensorOFFIMG).scaled(parent->height()/5,parent->width()/5,Qt::KeepAspectRatio));
     l->move(getPos(QPoint(0,0),parent->width(),parent->height()));
     l->show();
 }
 
 void GuiSensor::update() {
+
     if(connectedSensor->getSensorState() != lastState){
         lastState = connectedSensor->getSensorState();
         QWidget *parrent = (QWidget*)this->parent();

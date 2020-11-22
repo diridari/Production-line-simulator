@@ -9,6 +9,7 @@
 #include <QtWidgets/QWidget>
 #include <src/productionStation/BaseProductionStation.h>
 #include <QLabel>
+#include <QtWidgets/QPushButton>
 #include "GuiSensor.h"
 #include "GuiActuator.h"
 
@@ -23,6 +24,7 @@ Q_OBJECT
     string imagePath;
     vector<GuiSensor *> * guiSensors;
     vector<GuiActuator*> *guiActuators;
+    QPushButton *stationActuator;
 
 public:
     GuiStation(BaseProductionStation *connectedStation, Direction inputDirection, Direction outputDirection,  QWidget *parent = nullptr);

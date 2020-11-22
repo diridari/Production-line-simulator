@@ -23,9 +23,31 @@ Direction GuiStation::getOutputDirection() {
 GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputDirection, Direction outputDirection,
                        QWidget *parent): QWidget(parent),outputDirection(outputDirection),inputDirection(inputDirection),connectedStation(connectedStation) {
     Log::log("create new Gui Station for "+ connectedStation->getStationName(),Info);
-    imagePath = "../img/BaseStation.png";
+    QPixmap p;
+    QTransform rot;
+    // get station direction to termine picmap and rotation matrix
+    if(inputDirection == directionUp && outputDirection == directionDown || inputDirection == directionDown && outputDirection ==  directionUp) {
+        imagePath = "../img/BaseStation.png";
+    }else if (inputDirection == directionLeft && outputDirection == directionRight || inputDirection == directionRight && outputDirection ==  directionLeft){
+        imagePath = "../img/BaseStation.png";
+        rot = QTransform().rotate(90);
+    }else if(inputDirection == directionUp && outputDirection == directionRight || inputDirection == directionRight && outputDirection == directionUp){
+        imagePath = "../img/BaseStationEdge.png";
+    }else if(inputDirection == directionRight && outputDirection == directionDown || inputDirection == directionDown && outputDirection == directionRight){
+        imagePath = "../img/BaseStationEdge.png";
+        rot = QTransform().rotate(90);
+    }else if(inputDirection == directionDown && outputDirection == directionLeft || inputDirection == directionLeft && outputDirection == directionDown){
+        imagePath = "../img/BaseStationEdge.png";
+        rot = QTransform().rotate(180);
+    }
+    else if(inputDirection == directionLeft && outputDirection == directionUp || inputDirection == directionUp && outputDirection == directionLeft){
+        imagePath = "../img/BaseStationEdge.png";
+        rot = QTransform().rotate(270);
+    }else{
+        Log::log("Gui station could not find rotation matrix to determine station image: inputdir" + to_string(inputDirection) + " outputdir: "+ to_string(outputDirection),Error);
+    }
     l = new QLabel(this);
-    l->setPixmap(QPixmap(imagePath.c_str()).scaled(MinStationSize,MinStationSize,Qt::KeepAspectRatio));
+    l->setPixmap(QPixmap(imagePath.c_str()).scaled(MinStationSize,MinStationSize,Qt::KeepAspectRatio).transformed(rot));
     setMinimumSize(MinStationSize,MinStationSize);
     l->setScaledContents(true);
 
@@ -46,7 +68,7 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
         guiSensors->push_back(sen);
 
     }
-    // Discplay Actuaotrs
+    // Display actuators
     Log::log("create station Actuator",DebugL3);
     vector<BaseActuator *> * actuators = connectedStation->getActuators();
     guiActuators = new vector<GuiActuator*>();
@@ -57,14 +79,12 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
     }
     Log::log("created all actuators",Info);
     // Change actuator State Button
-    QPushButton *stationActuator = new QPushButton(this);
+    stationActuator = new QPushButton(this);
     stationActuator->setText("set Actuator State ");
-    stationActuator->move(this->size().width()-stationActuator->size().width(), 0);
+    stationActuator->raise();
+    stationActuator->move(this->size().width()-stationActuator->size().width(), 1);
     stationActuator->show();
     connect(stationActuator, SIGNAL(clicked()), this, SLOT(updateActuatorState()));
-    stationActuator->activateWindow();
-    stationActuator->raise();
-    stationActuator->raise();
 
 
 }
@@ -118,6 +138,8 @@ void GuiStation::handleBoxes() {
 void GuiStation::updateActuatorState() {
     Log::log("gui change actuator state for "+connectedStation->getStationName(),Info);
     connectedStation->getActuators()->at(0)->toogleState();
+    stationActuator->raise();
+
 }
 
 void GuiStation::setWidetSize(uint32_t widgetSizeX_, uint32_t widgetSizeY_){

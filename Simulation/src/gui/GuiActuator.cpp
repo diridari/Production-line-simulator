@@ -19,9 +19,8 @@ GuiActuator::GuiActuator(BaseActuator *connectedActuator_, BaseProductionStation
     station = station_;
     l = new QLabel(this);
     l->setScaledContents(true);
-    setMinimumSize(parent->height()/5,parent->width()/5);
     l->setPixmap(QPixmap(connectedActuator->getActuatorImage().c_str()).scaled(parent->height()/5,parent->width()/5,Qt::KeepAspectRatio));
-
+    setMinimumSize(parent->height()/5,parent->width()/5);
     move(getPos(BaseOffset,parent->width(),parent->height()));
     show();
 
@@ -45,6 +44,6 @@ QPoint GuiActuator::getPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t
     guiPos p = Placing::calculateGuiPosition(connectedActuator->getPosition(), station);
     uint32_t posX,posY;
     posX = BaseOffset.x() + (baseWidgetSizeX/100) * p.posX-this->width();
-    posY = BaseOffset.y() +(baseWidgetSizeY/100) * p.posY -this->height()/2 ; // move by widget size to the left
+    posY = BaseOffset.y() +(baseWidgetSizeY/100) * p.posY -this->height() ; // move by widget size to the left
     return QPoint(posX,posY);
 }

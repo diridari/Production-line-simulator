@@ -20,23 +20,20 @@ int main(int argc, char *argv[])
     Log::log("run event Loop",Info);
     Log:log("start simulation version: " + to_string(VERSION_MAJOR) + "."+ to_string(VERSION_MINOR) + "."+ to_string(VERSION_REVISION) +"\r\n",Message);
 
-    conveyorbeltStation *c5 = new conveyorbeltStation(nullptr,"band5");
-    conveyorbeltStation *c4 = new conveyorbeltStation(c5,"band4");
-    PushStation *c3 = new PushStation(c4,"band3");
-    conveyorbeltStation *c2 = new conveyorbeltStation(c3,"band2");
+    conveyorbeltStation *c6 = new conveyorbeltStation(nullptr,"band5");
+    PushStation *c5 = new PushStation(c6,"band4");
+    conveyorbeltStation *c4 = new conveyorbeltStation(c5,"band3");
+    conveyorbeltStation *c3 = new conveyorbeltStation(c4,"band3");
+    PushStation *c2 = new PushStation(c3,"band3");
     conveyorbeltStation *c1 = new conveyorbeltStation(c2,"band1");
 
 
-    c1->setConveyorbeltState(ACTUATOR_ON);
-    c2->setConveyorbeltState(ACTUATOR_ON);
-    c4->setConveyorbeltState(ACTUATOR_ON);
-    c5->setConveyorbeltState(ACTUATOR_ON);
-
-    c1->setDirection(directionUp,directionDown);
-    c2->setDirection(directionUp,directionLeft);
-    c3->setDirection(directionRight,directionDown);
-    c4->setDirection(directionUp,directionLeft);
-    c5->setDirection(directionRight,directionLeft);
+    c1->setDirection(directionDown,directionUp);
+    c2->setDirection(directionDown,directionRight);
+    c3->setDirection(directionLeft,directionRight);
+    c4->setDirection(directionLeft,directionRight);
+    c5->setDirection(directionLeft,directionDown);
+    c6->setDirection(directionUp,directionDown);
 
 
 
