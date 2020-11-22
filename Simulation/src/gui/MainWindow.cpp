@@ -55,8 +55,6 @@ MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : s
     timer->start(100);
     Log::log("Main window Done",Info);
 
-
-
 }
 
 

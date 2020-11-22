@@ -9,6 +9,7 @@
 #include <src/productionStation/BaseProductionStation.h>
 #include "GuiBox.h"
 #include <QtWidgets/QGridLayout>
+#include <QMouseEvent>
 
 
 #define MinStationSize 300
@@ -17,6 +18,7 @@ Q_OBJECT
     BaseProductionStation * startStation;
     vector<GuiBox*> *boxSet;
     vector<GuiStation*> *stationSet;
+
 public:
     MainWindow(BaseProductionStation *startStation, QWidget *parent = nullptr);
 

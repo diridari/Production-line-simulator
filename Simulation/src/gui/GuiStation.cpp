@@ -6,6 +6,7 @@
 #include "GuiStation.h"
 #include "GuiSensor.h"
 #include <QPushButton>
+#include <src/workpiece/Placing.h>
 
 void GuiStation::setGridPosition(int posX_, int posY_) {
     Log::log("gui: set Position of " + connectedStation->getStationName() + " to x:" + to_string(posX_) + " , y:" + to_string(posY_), Info);
@@ -147,4 +148,27 @@ void GuiStation::setWidetSize(uint32_t widgetSizeX_, uint32_t widgetSizeY_){
     widgetSizeY = widgetSizeY_;
     l->setPixmap(QPixmap(imagePath.c_str()).scaled(widgetSizeX,widgetSizeY,Qt::KeepAspectRatio));
 
+}
+
+BaseProductionStation *GuiStation::getConnectedStation() {
+    return connectedStation;
+}
+
+void GuiStation::mousePressEvent(QMouseEvent *event) {
+    guiPos p(0,0);
+    uint8_t proc;
+    switch (event->button()) {
+        case Qt::LeftButton :
+            Log::log("clicked on Station  with left" ,Message);
+            p = guiPos( event->x()*100 /width() ,event->y() *100 / height());
+            proc = Placing::calculateProcessFromGuiPos(p,connectedStation);
+            connectedStation->insertBox(new BaseWorkpiece(proc,"clickedWP"),proc);
+            Log::log("click pos "+ to_string(event->x())+ "," + to_string( event->y()),Info);
+            Log::log("place obj at: "+ to_string(p.posX)+ "," + to_string(p.posY) + "that is : " + to_string(proc),Info);
+            break;
+        case Qt::RightButton :
+                Log::log("clicked on Station  with right",Message); break;
+        default:
+            Log::log("clicked on Main  with "+ to_string(event->button()),Message);break;
+    }
 }

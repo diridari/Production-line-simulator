@@ -91,3 +91,24 @@ guiPos Placing::calculateGuiPosition(uint32_t pos, BaseProductionStation *statio
     }
     return  guiPos(posX,posY);
 }
+
+uint8_t Placing::calculateProcessFromGuiPos(guiPos pos, BaseProductionStation *station) {
+    int32_t proc = -1;
+    uint32_t posX = pos.posX;
+    uint32_t posY = pos.posY;
+    switch (station->getInputDirection()) {
+        case directionUp    : if(posY <= 50) proc = posY;       break;
+        case directionDown  : if(posY >= 50) proc = 100-posY;   break;
+        case directionLeft  : if(posX <= 50) proc = posX;       break;
+        case directionRight : if(posX >= 50) proc = 100-posX;   break;
+    }
+    if(proc == -1) {
+        switch (station->getOutputDirection()) {
+            case directionUp    : proc = 100-posY;       break;
+            case directionDown  : proc = posY;   break;
+            case directionLeft  : proc =  100-posX;       break;
+            case directionRight : proc =posX;   break;
+        }
+    }
+    return proc;
+}

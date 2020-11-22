@@ -48,3 +48,12 @@ void ObjMapper::addBox(BaseWorkpiece *wp, GuiBox *gb) {
     boxMapper->push_back(new BoxMapper(wp,gb));
 }
 
+void ObjMapper::dropBox(BaseWorkpiece *wp) {
+    for(int i = 0; i<boxMapper->size();i++){
+        if(boxMapper->at(i)->wp == wp){
+            boxMapper->erase(boxMapper->begin()+i);
+            return;
+        }
+    }
+}
+

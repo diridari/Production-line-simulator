@@ -7,7 +7,10 @@
 
 
 #include <src/productionStation/BaseProductionStation.h>
-
+/**
+ * position on Gui
+ * Range : 0-100
+ */
 struct guiPos{
     uint8_t posX,posY;
     guiPos(uint8_t posX, uint8_t posY): posX(posX),posY(posY){};
@@ -42,6 +45,13 @@ public:
     * @return
     */
     static guiPos calculateGuiPosition(uint32_t pos, BaseProductionStation *station );
+
+    /**
+     * calculate the processing state dependent to the gui pos
+     * @param pos range 0-100
+     * @return process staste
+     */
+    static uint8_t calculateProcessFromGuiPos(guiPos pos,BaseProductionStation *station);
 
 };
 

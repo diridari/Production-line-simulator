@@ -14,11 +14,12 @@
 class GuiBox : public QWidget{
 Q_OBJECT
     BaseWorkpiece *connectedWorkpiece;
-    GuiStation *currentStation; // determine abs pos + direction of movement
     uint32_t AbsPosX,AbsPosY;
     QLabel *l;
+protected:
+    void mousePressEvent(QMouseEvent * event);
 public:
-    GuiBox(BaseWorkpiece *connectedWorkpiece, QWidget *parent = nullptr);
+    GuiBox(BaseWorkpiece *connectedWorkpiece, QWidget *parent_ = nullptr);
     /**
      * calculate the new positio based on the widget pos
      * @param BaseOffset base offset

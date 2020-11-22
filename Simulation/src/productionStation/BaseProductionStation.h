@@ -95,6 +95,12 @@ public:
     Direction getOutputDirection();
     friend std::ostream &operator<<(std::ostream &strm, BaseProductionStation a);
     void checkAllSensors();
+    /**
+     * remove a box on that station
+     * @param wpToDrop box to drop
+     * @return true if box has been found and droped
+     */
+    bool dropBox(BaseWorkpiece *wpToDrop);
 
 
 };

@@ -16,7 +16,6 @@ private:
     uint32_t position;
     uint8_t size;
     const string workpieceName;
-
 public:
     BaseWorkpiece();
     /**

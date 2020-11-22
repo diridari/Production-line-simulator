@@ -104,3 +104,17 @@ bool BaseProductionStation::stationCanReceiveNewBoxes() {
     return true;
 }
 
+bool BaseProductionStation::dropBox(BaseWorkpiece *wpToDrop) {
+    Log::log("drop box on station "+ getStationName(),Info);
+    for(int i = 0; i<boxSet->size();i++){
+        if(boxSet->at(i) == wpToDrop){
+            boxSet->erase(boxSet->begin()+i);
+            return true;
+        }
+
+    }
+    Log::log("no such box to drop"+ getStationName(),Error);
+    return false;
+
+}
+
