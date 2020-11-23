@@ -47,7 +47,7 @@ public:
      }
      void handleBoxes();
 
-     void setWidetSize(uint32_t widgetSizeX_, uint32_t widgetSizeY_);
+     void setWidgetSize(uint32_t widgetSizeX_, uint32_t widgetSizeY_);
 
 public slots:
     void updateActuatorState();

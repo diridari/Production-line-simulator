@@ -26,7 +26,7 @@ void conveyorbelt::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionSt
                 }else{ // moved out of station
                     if(Placing::canStationReceiveNewWorkpiece(station->getNextStationInChain(),wp->getWorkpieceSize())) {
                         Log::log(station->getStationName() + ": element has moved out of Station --> move to next",
-                                 Info);
+                                 Debug);
                         boxSet->erase(boxSet->begin() + i); // drop element
                         station->getNextStationInChain()->insertBox(wp); // insert in next chain
                     }

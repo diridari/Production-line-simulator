@@ -23,7 +23,7 @@ Direction GuiStation::getOutputDirection() {
 
 GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputDirection, Direction outputDirection,
                        QWidget *parent): QWidget(parent),outputDirection(outputDirection),inputDirection(inputDirection),connectedStation(connectedStation) {
-    Log::log("create new Gui Station for "+ connectedStation->getStationName(),Info);
+    Log::log("create new Gui Station for "+ connectedStation->getStationName(),Debug);
     QPixmap p;
     QTransform rot;
     // get station direction to termine picmap and rotation matrix
@@ -78,7 +78,7 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
         guiActuator->raise();
         guiActuators->push_back(guiActuator);
     }
-    Log::log("created all actuators",Info);
+    Log::log("created all actuators",Debug);
     // Change actuator State Button
     stationActuator = new QPushButton(this);
     stationActuator->setText("set Actuator State ");
@@ -97,7 +97,8 @@ void GuiStation::handleBoxes() {
         BaseWorkpiece *wp = boxes->at(i);
         GuiBox *gb = objectMapper->getGuiBox(wp);
         if(gb == nullptr){
-            Log::log("found no matching gui box --> create new one ",Info);
+            Log::log("found no matching gui box --> create new one ",Debug);
+            // Boxes habe the parent widget as parent because otherwise the box gets cut on the station edges
             gb = new GuiBox(wp,this->parentWidget());
             gb->show();
             objectMapper->addBox(wp,gb);
@@ -137,13 +138,13 @@ void GuiStation::handleBoxes() {
 }
 
 void GuiStation::updateActuatorState() {
-    Log::log("gui change actuator state for "+connectedStation->getStationName(),Info);
+    Log::log("gui change actuator state for "+connectedStation->getStationName(),Debug);
     connectedStation->getActuators()->at(0)->toogleState();
     stationActuator->raise();
 
 }
 
-void GuiStation::setWidetSize(uint32_t widgetSizeX_, uint32_t widgetSizeY_){
+void GuiStation::setWidgetSize(uint32_t widgetSizeX_, uint32_t widgetSizeY_){
     widgetSizeX = widgetSizeX_;
     widgetSizeY = widgetSizeY_;
     l->setPixmap(QPixmap(imagePath.c_str()).scaled(widgetSizeX,widgetSizeY,Qt::KeepAspectRatio));
@@ -159,16 +160,16 @@ void GuiStation::mousePressEvent(QMouseEvent *event) {
     uint8_t proc;
     switch (event->button()) {
         case Qt::LeftButton :
-            Log::log("clicked on Station  with left" ,Message);
+            Log::log("clicked on Station"+connectedStation->getStationName() + "  with left --> try to insert box" ,Info);
             p = guiPos( event->x()*100 /width() ,event->y() *100 / height());
             proc = Placing::calculateProcessFromGuiPos(p,connectedStation);
             connectedStation->insertBox(new BaseWorkpiece(proc,"clickedWP"),proc);
-            Log::log("click pos "+ to_string(event->x())+ "," + to_string( event->y()),Info);
-            Log::log("place obj at: "+ to_string(p.posX)+ "," + to_string(p.posY) + "that is : " + to_string(proc),Info);
+            Log::log("click pos "+ to_string(event->x())+ "," + to_string( event->y()),Debug);
+            Log::log("place obj at: "+ to_string(p.posX)+ "," + to_string(p.posY) + "that is : " + to_string(proc),Debug);
             break;
         case Qt::RightButton :
-                Log::log("clicked on Station  with right",Message); break;
+                Log::log("clicked on Station  with right --> no box here --> ignore",Debug); break;
         default:
-            Log::log("clicked on Main  with "+ to_string(event->button()),Message);break;
+            Log::log("clicked on Main  with "+ to_string(event->button())+ "  --> ignore" ,Info);break;
     }
 }

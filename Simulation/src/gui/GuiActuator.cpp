@@ -14,12 +14,14 @@ GuiActuator::GuiActuator(BaseActuator *connectedActuator_, BaseProductionStation
     if(station_ == nullptr)
         Log::log("received nullpntr",Error);
     Log::log("create Gui Actuator: "+ connectedActuator_->getActuatorName(),Info);
+
     BaseOffset = QPoint(0,0);
+
     connectedActuator = connectedActuator_;
     station = station_;
     l = new QLabel(this);
     l->setScaledContents(true);
-    l->setPixmap(QPixmap(connectedActuator->getActuatorImage().c_str()).scaled(parent->height()/5,parent->width()/5,Qt::KeepAspectRatio));
+    l->setPixmap(QPixmap(connectedActuator->getActuatorImage().c_str()).scaled(parent->height()/5,parent->width()/5,Qt::KeepAspectRatio).transformed(rot));
     setMinimumSize(parent->height()/5,parent->width()/5);
     move(getPos(BaseOffset,parent->width(),parent->height()));
     show();
@@ -31,9 +33,9 @@ void GuiActuator::update() {
 
     if(connectedActuator->getActuatorImage() != lastImg){
         lastImg =  connectedActuator->getActuatorState();
-        l->setPixmap(QPixmap(connectedActuator->getActuatorImage().c_str()).scaled(parent->height()/5,parent->width()/5,Qt::IgnoreAspectRatio));
+        l->setPixmap(QPixmap(connectedActuator->getActuatorImage().c_str()).scaled(parent->height()/5,parent->width()/5,Qt::IgnoreAspectRatio).transformed(rot));
     }
-    move(getPos(BaseOffset,parent->height(),parent->width()));
+    move(getPos(BaseOffset,parent->width(),parent->height()));
     show();
 
 
@@ -42,8 +44,23 @@ void GuiActuator::update() {
 QPoint GuiActuator::getPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY) {
     // Calculate the pos depending of station direction
     guiPos p = Placing::calculateGuiPosition(connectedActuator->getPosition(), station);
+    if(connectedActuator->getPosition() <= 50){
+        switch (station->getInputDirection()) {
+            case directionUp:         rot = QTransform().rotate(270); BaseOffset = QPoint(-this->width()/2,+ this->height()*1);      break;
+            case directionDown:       rot = QTransform().rotate(90);  BaseOffset = QPoint(-this->width()/2,- this->height()*2);      break;
+            case directionRight:      rot = QTransform().rotate(0);   BaseOffset = QPoint(-this->width()*1,-this->height()/2);      break;
+            case directionLeft:       rot = QTransform().rotate(180); BaseOffset = QPoint(this->width()/2,-this->height()/2);      break;
+        }
+    }else{
+        switch (station->getOutputDirection()) {
+            case directionUp:         rot = QTransform().rotate(270); BaseOffset = QPoint(-this->width()/2,+ this->height()*1);      break;
+            case directionDown:       rot = QTransform().rotate(90);  BaseOffset = QPoint(-this->width()/2,- this->height()*2);      break;
+            case directionRight:      rot = QTransform().rotate(0);   BaseOffset = QPoint(-this->width()*1,-this->height()/2);      break;
+            case directionLeft:       rot = QTransform().rotate(180); BaseOffset = QPoint(this->width()/2,-this->height()/2);      break;
+        }
+    }
     uint32_t posX,posY;
-    posX = BaseOffset.x() + (baseWidgetSizeX/100) * p.posX-this->width();
-    posY = BaseOffset.y() +(baseWidgetSizeY/100) * p.posY -this->height() ; // move by widget size to the left
+    posX = BaseOffset.x() + (baseWidgetSizeX/100) * p.posX;
+    posY = BaseOffset.y() +(baseWidgetSizeY/100) * p.posY; // move by widget size to the left
     return QPoint(posX,posY);
 }

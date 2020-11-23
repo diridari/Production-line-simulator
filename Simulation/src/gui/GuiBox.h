@@ -14,7 +14,6 @@
 class GuiBox : public QWidget{
 Q_OBJECT
     BaseWorkpiece *connectedWorkpiece;
-    uint32_t AbsPosX,AbsPosY;
     QLabel *l;
 protected:
     void mousePressEvent(QMouseEvent * event);

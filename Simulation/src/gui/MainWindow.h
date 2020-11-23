@@ -21,6 +21,7 @@ Q_OBJECT
 
 public:
     MainWindow(BaseProductionStation *startStation, QWidget *parent = nullptr);
+    bool dropBox(BaseWorkpiece *wp);
 
 
 public slots:

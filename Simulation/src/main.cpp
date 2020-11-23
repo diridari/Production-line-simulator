@@ -34,19 +34,7 @@ int main(int argc, char *argv[])
     c4->setDirection(directionLeft,directionRight);
     c5->setDirection(directionLeft,directionDown);
     c6->setDirection(directionUp,directionDown);
-
-
-
-    BaseWorkpiece *wp1 = new BaseWorkpiece(0,"test-workpiece1");
-    BaseWorkpiece *wp2 = new BaseWorkpiece(31,"test-workpiece1");
-    BaseWorkpiece *wp3 = new BaseWorkpiece(62,"test-workpiece2");
-    BaseWorkpiece *wp4 = new BaseWorkpiece(95,"test-workpiece3");
-
-
-    c1->insertBox(wp1, wp1->getPosition());
-    c1->insertBox(wp2, wp2->getPosition());
-    c1->insertBox(wp3, wp3->getPosition());
-    c1->insertBox(wp4, wp4->getPosition());
+    
     // simulation steps
     /**
      * 1. Operate all Workpieces

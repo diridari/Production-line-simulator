@@ -10,7 +10,7 @@
 #include <QMenuBar>
 
 MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : startStation(startStation), QWidget(parent){
-    Log::log("generate Main window",Info);
+    Log::log("generate Main window",Message);
     stationSet = new vector<GuiStation*>;
     BaseProductionStation *station = startStation;
     int MinX = 0;
@@ -34,7 +34,7 @@ MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : s
         station = station->getNextStationInChain();
     }
     //setMinimumSize((-MinX+MaxX)*MinStationSize,(-MinY+MaxY)*MinStationSize);
-    Log::log("added all Gui Station: grid size {x:" + to_string((-MinX)+MaxX) +" , y:" +to_string((-MinY)+MaxY)+ "}",Message);
+    Log::log("added all Gui Station: grid size {x:" + to_string((-MinX)+MaxX) +" , y:" +to_string((-MinY)+MaxY)+ "}",Info);
     int currentX = 0;
     int currentY = 0;
     for(int i = 0; i<stationSet->size();i++){
@@ -53,7 +53,7 @@ MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : s
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::update);
     timer->start(100);
-    Log::log("Main window Done",Info);
+    Log::log("Main window Done",Message);
 
 }
 
@@ -67,5 +67,22 @@ void MainWindow::update() {
         station = station->getNextStationInChain();
     }
 
+}
+
+bool MainWindow::dropBox(BaseWorkpiece *wp) {
+    if(wp == nullptr){
+        Log::log("Gui: dropbox recevied nullptr",Error);
+        return false;
+    }
+    BaseProductionStation *station = startStation;
+    while(startStation != nullptr){
+                if(station->hasBox(wp)){
+                    station->dropBox(wp);
+                    return true;
+                }
+                station = station->getNextStationInChain();
+    }
+    Log::log("cound not find a box wit the name: "+ wp->getName(),Message);
+    return false;
 }
 

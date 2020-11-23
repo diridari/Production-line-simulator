@@ -30,7 +30,7 @@ public:
     * @param name name of obj
     * @param position_ pos of obj
     */
-    explicit BaseWorkpiece(uint32_t position_, string name = "Baseworkpiece", uint32_t size = 30);
+    explicit BaseWorkpiece(uint32_t position_ = 0, string name = "Baseworkpiece", uint32_t size = 30);
 
     /**
      * get to current position of the obj

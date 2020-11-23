@@ -22,8 +22,20 @@ GuiSensor::GuiSensor(BaseSensor *connectedSensor_, BaseProductionStation *statio
     Log::log("create gui sensor "+ connectedSensor->getSensorName() + " on station " + station_->getStationName(),Info);
     l = new QLabel(this);
    // setMinimumSize(parent->height()/5,parent->width()/5);
+   QPoint BaseOffset;
+   Direction direction;
+   if(connectedSensor_->getSensorPos() <50)
+       direction = station_->getInputDirection();
+   else
+       direction = station_->getOutputDirection();
+    switch (direction) {
+        case directionUp:         BaseOffset = QPoint(this->width(),- this->height()/2);      break;
+        case directionDown:       BaseOffset = QPoint(-this->width(),- this->height()/2);      break;
+        case directionRight:      BaseOffset = QPoint(0,+this->height()*2);      break;
+        case directionLeft:       BaseOffset = QPoint(- this->width()/2,-this->height());      break;
+    }
     l->setPixmap(QPixmap(SensorOFFIMG).scaled(parent->height()/5,parent->width()/5,Qt::KeepAspectRatio));
-    l->move(getPos(QPoint(0,0),parent->width(),parent->height()));
+    l->move(getPos(BaseOffset,parent->width(),parent->height()));
     l->show();
 }
 

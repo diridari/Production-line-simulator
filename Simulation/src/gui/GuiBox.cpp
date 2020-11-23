@@ -21,7 +21,7 @@ QPoint GuiBox::getNewPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t b
     guiPos p = Placing::calculateGuiPosition(connectedWorkpiece, station);
     uint32_t posX,posY;
     posX = BaseOffset.x() + (baseWidgetSizeX/100) * p.posX - width()/2;
-    posY = BaseOffset.y() +(baseWidgetSizeY/100) * p.posY-height()/2;
+    posY = BaseOffset.y() +(baseWidgetSizeY/100) * p.posY -height()/2;
     return QPoint(posX,posY);
 
 }
@@ -34,8 +34,10 @@ void GuiBox::mousePressEvent(QMouseEvent *event) {
     switch (event->button()) {
         case Qt::LeftButton :         Log::log("clicked on Box "+connectedWorkpiece->getName()+"  with left",Debug);break;
         case Qt::RightButton :         Log::log("clicked on Box"+connectedWorkpiece->getName()+"  with right --> erase box",Debug);
-           // connectedWorkpiece-> ;dropBox(connectedWorkpiece);
             objectMapper->dropBox(connectedWorkpiece);
+            if(!((MainWindow *)parent())->dropBox(connectedWorkpiece)){
+                Log::log("Gui Box failed to delete Box",Error);
+            }
             delete this;
             break;
         default:

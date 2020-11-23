@@ -101,6 +101,7 @@ public:
      * @return true if box has been found and droped
      */
     bool dropBox(BaseWorkpiece *wpToDrop);
+    bool hasBox(BaseWorkpiece *wpToDrop);
 
 
 };

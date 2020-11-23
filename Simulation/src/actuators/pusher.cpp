@@ -19,8 +19,9 @@ void pusher::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation 
         case PushDirection::Idle :  newPos = position;          break;
         case PushDirection::Forward :  newPos = position +2;    break;
     }
+    bool couldPlaceAllBoxes = true;
     if(newPos <= 100 && newPos >= 0 ) {
-        position = newPos;
+
         // process all boxes if moving forward
         if (direction == PushDirection::Forward){
             Log::log("set pusher to position: " + to_string(position), DebugL3);
@@ -42,8 +43,12 @@ void pusher::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation 
                     Log::log("can not place box on shifter at pos: " + to_string(newPos) + ""
                                  " the reason is that there is already a box. It is not allowed to move several boxes on the pusher at the same time!",
                              Error);
+                    couldPlaceAllBoxes = false;
                 }
             }
+        }
+        if(couldPlaceAllBoxes){
+            position = newPos; // increase the pusheractuator just if all boxes could be placed
         }
     }
     Log::log(" pusher pos: "+to_string(position),DebugL3);
