@@ -24,8 +24,8 @@ enum actuatorKind{
     BaseActuator_,
     Conveyorbelt_,
     Pusher,
-    Miller,
-    Driller
+    MillerDrill,
+
 };
 std::ostream &operator<<(std::ostream &strm, actuatorState a);
 class BaseProductionStation;

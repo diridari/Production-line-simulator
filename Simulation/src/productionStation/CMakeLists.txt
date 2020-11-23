@@ -8,4 +8,6 @@ set(src_productionStation
         ${dir}conveyorbeltStation.h
         ${dir}PushStation.cpp
         ${dir}PushStation.h
+        ${dir}MillAndDrillStation.cpp
+        ${dir}MillAndDrillStation.h
         PARENT_SCOPE )

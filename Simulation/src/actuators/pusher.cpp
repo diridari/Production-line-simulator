@@ -55,7 +55,7 @@ void pusher::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation 
 }
 
 void pusher::setDirection(PushDirection direction_) {
-    Log::log("set pusher state to "+to_string(direction_),Info);
+    Log::log("set pusher state to "+to_string(direction_),Debug);
     direction = direction_;
 }
 
