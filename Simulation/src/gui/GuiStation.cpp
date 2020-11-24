@@ -48,9 +48,13 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
         Log::log("Gui station could not find rotation matrix to determine station image: inputdir" + to_string(inputDirection) + " outputdir: "+ to_string(outputDirection),Error);
     }
     l = new QLabel(this);
-    l->setPixmap(QPixmap(imagePath.c_str()).scaled(MinStationSize,MinStationSize,Qt::KeepAspectRatio).transformed(rot));
-    setMinimumSize(MinStationSize,MinStationSize);
+    QPixmap *pix = new  QPixmap(imagePath.c_str());
     l->setScaledContents(true);
+    *pix =  pix->scaled(MinStationSize/2,MinStationSize);
+    *pix = pix->transformed(rot);
+    l->setPixmap(*pix);
+    setMinimumSize(pix->size());
+
 
     Log::log("create station Info lable for"+ connectedStation->getStationName(),DebugL3);
     // PrintState Text

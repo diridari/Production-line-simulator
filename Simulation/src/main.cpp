@@ -112,7 +112,6 @@ void runOnTime(){
             sleep(1);
             c4->getActuators()->at(0)->setActuatorState(actuatorState::ACTUATOR_ON);
             c4->getActuators()->at(1)->setActuatorState(actuatorState::ACTUATOR_OFF);
-
         }
 
     }

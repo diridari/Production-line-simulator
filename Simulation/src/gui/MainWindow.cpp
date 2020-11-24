@@ -19,6 +19,7 @@ MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : s
     int MaxY = 0;
     int nextX = 0;
     int nextY = 0;
+    Direction lastDir = startStation->getOutputDirection();
     while(station != nullptr){
 
         GuiStation *guiStation = new  GuiStation(station,station->getInputDirection(),station->getOutputDirection(),this);
@@ -26,29 +27,43 @@ MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : s
         objectMapper->addStation(station,guiStation);
         // calculate the needed grid
         switch (station->getOutputDirection()) {
-            case directionDown  : nextY++;    if(nextY > MaxX) MaxY = nextY; break;
-            case directionUp    : nextY--;    if(nextY < MinX) MinY = nextY; break;
-            case directionLeft  : nextX--;    if(nextX < MinY) MinX = nextX; break;
-            case directionRight : nextX++;    if(nextX > MaxY) MaxX = nextX; break;
+            case directionDown  : if(lastDir ==directionLeft){ nextX--; nextY+=2;} else if(lastDir == directionRight){ nextX++; nextY+=2;}   else{nextY+=2;}     break;
+            case directionUp    : if(lastDir ==directionLeft){ nextX--; nextY-=2;} else if(lastDir == directionRight){ nextX++; nextY-=2;}   else{nextY-=2;}     break;
+            case directionLeft  : if(lastDir ==directionUp)  { nextX+=2; nextY--;} else if(lastDir == directionDown) { nextX+=2; nextY--;}   else{nextX-=2;}     break;
+            case directionRight : if(lastDir ==directionUp)  { nextX-=2; nextY++;} else if(lastDir == directionDown) { nextX+=2; nextY++;}   else{nextX+=2;}     break;
         }
+        /*
+        if(nextY > MaxY) MaxY = nextY;
+        if(nextY < MinY) MinY = nextY;
+        if(nextX < MinX) MinX = nextX;
+        if(nextX > MaxX) MaxX = nextX;
+         */
+        if(nextY > MaxX) MaxY = nextY;
+        if(nextY < MinX) MinY = nextY;
+        if(nextX < MinY) MinX = nextX;
+        if(nextX > MaxY) MaxX = nextX;
+        lastDir = startStation->getOutputDirection();
         station = station->getNextStationInChain();
     }
     //setMinimumSize((-MinX+MaxX)*MinStationSize,(-MinY+MaxY)*MinStationSize);
-    Log::log("added all Gui Station: grid size {x:" + to_string((-MinX)+MaxX) +" , y:" +to_string((-MinY)+MaxY)+ "}",Info);
     int currentX = 0;
     int currentY = 0;
+    lastDir = startStation->getOutputDirection();
     for(int i = 0; i<stationSet->size();i++){
 
         GuiStation * station = stationSet->at(i);
         station->setGridPosition(currentX + (-MinX), currentY + (-MinY)); // add the minimum size to the position to get the total position
         switch (station->getOutputDirection()) {
-            case directionDown  : currentY++; break;
-            case directionUp    : currentY--; break;
-            case directionLeft  : currentX--; break;
-            case directionRight : currentX++; break;
+            case directionDown  :  if(lastDir ==directionLeft){ currentX--; currentY+=2;} else if(lastDir == directionRight){ currentX++; currentY+=2;}   else{currentY+=2;}  break;
+            case directionUp    :  if(lastDir ==directionLeft){ currentX--; currentY-=2;} else if(lastDir == directionRight){ currentX++; currentY-=2;}   else{currentY-=2;}  break;
+            case directionLeft  :  if(lastDir ==directionUp)  { currentX+=2; currentY--;} else if(lastDir == directionDown) { currentX+=2; currentY--;}   else{currentX-=2;}  break;
+            case directionRight :  if(lastDir ==directionUp)  { currentX-=2; currentY++;} else if(lastDir == directionDown) { currentX+=2; currentY++;}   else{currentX+=2;}  break;
         }
+        lastDir = startStation->getOutputDirection();
         station->move(station->getGridPositionX() * MinStationSize, station->getGridPositionY() * MinStationSize);
     }
+    Log::log("added all Gui Station: grid size {x:" + to_string((-MinX)+MaxX) +" , y:" +to_string((-MinY)+MaxY)+ "}",Info);
+
     Log::log("Start Timer",Info);
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::update);
