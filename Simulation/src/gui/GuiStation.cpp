@@ -26,35 +26,65 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
     Log::log("create new Gui Station for "+ connectedStation->getStationName(),Debug);
     QPixmap p;
     QTransform rot;
+    QSize size;
+
     // get station direction to termine picmap and rotation matrix
     if(inputDirection == directionUp && outputDirection == directionDown || inputDirection == directionDown && outputDirection ==  directionUp) {
         imagePath = "../img/BaseStation.png";
+        size = QSize(MinStationSize,MinStationSize*2);
     }else if (inputDirection == directionLeft && outputDirection == directionRight || inputDirection == directionRight && outputDirection ==  directionLeft){
         imagePath = "../img/BaseStation.png";
         rot = QTransform().rotate(90);
-    }else if(inputDirection == directionUp && outputDirection == directionRight || inputDirection == directionRight && outputDirection == directionUp){
+        size = QSize(MinStationSize*2,MinStationSize);
+    }else if(inputDirection == directionUp && outputDirection == directionRight) {
         imagePath = "../img/BaseStationEdge.png";
-    }else if(inputDirection == directionRight && outputDirection == directionDown || inputDirection == directionDown && outputDirection == directionRight){
+        size = QSize(MinStationSize*2,MinStationSize);
+    }else if(inputDirection == directionRight && outputDirection == directionUp){
+        imagePath = "../img/BaseStationEdge.png";
+        size = QSize(MinStationSize*2,MinStationSize);
+        rot = QTransform().rotate(90);
+        rot = rot.rotate(180,Qt::XAxis);
+    }
+    else if(inputDirection == directionRight && outputDirection == directionDown) {
         imagePath = "../img/BaseStationEdge.png";
         rot = QTransform().rotate(90);
-    }else if(inputDirection == directionDown && outputDirection == directionLeft || inputDirection == directionLeft && outputDirection == directionDown){
+        size = QSize(MinStationSize,MinStationSize*2);
+
+    }
+    else if(inputDirection == directionDown && outputDirection == directionRight){
+        imagePath = "../img/BaseStationEdge.png";
+        rot = rot.rotate(180);
+        rot = rot.rotate(180,Qt::YAxis);
+        size = QSize(MinStationSize*2,MinStationSize);
+    }else if(inputDirection == directionDown && outputDirection == directionLeft) {
         imagePath = "../img/BaseStationEdge.png";
         rot = QTransform().rotate(180);
+        size = QSize(MinStationSize*2,MinStationSize);
+
+    }else if(inputDirection == directionLeft && outputDirection == directionDown){
+        imagePath = "../img/BaseStationEdge.png";
+        size = QSize(MinStationSize,MinStationSize*2);
+        rot = QTransform().rotate(90);
+        rot =rot.rotate(180,Qt::XAxis);
+
+
     }
     else if(inputDirection == directionLeft && outputDirection == directionUp || inputDirection == directionUp && outputDirection == directionLeft){
         imagePath = "../img/BaseStationEdge.png";
         rot = QTransform().rotate(270);
+        size = QSize(MinStationSize,MinStationSize*2);
+
     }else{
         Log::log("Gui station could not find rotation matrix to determine station image: inputdir" + to_string(inputDirection) + " outputdir: "+ to_string(outputDirection),Error);
     }
     l = new QLabel(this);
-    QPixmap *pix = new  QPixmap(imagePath.c_str());
+    QPixmap pix = QPixmap(imagePath.c_str()).scaled(size,Qt::KeepAspectRatio).transformed(rot);
+    l->setPixmap(pix);
     l->setScaledContents(true);
-    *pix =  pix->scaled(MinStationSize/2,MinStationSize);
-    *pix = pix->transformed(rot);
-    l->setPixmap(*pix);
-    setMinimumSize(pix->size());
-
+    l->setMinimumSize(size);
+    setMinimumSize(size);
+    setMaximumSize(size);
+    Log::log("widget size: "+to_string(l->width())+to_string(l->height()) ,Info)
 
     Log::log("create station Info lable for"+ connectedStation->getStationName(),DebugL3);
     // PrintState Text

@@ -33,7 +33,7 @@ void GuiActuator::update() {
 
     if(connectedActuator->getActuatorImage() != lastImg){
         lastImg =  connectedActuator->getActuatorState();
-        l->setPixmap(QPixmap(connectedActuator->getActuatorImage().c_str()).scaled(parent->height()/5,parent->width()/5,Qt::IgnoreAspectRatio).transformed(rot));
+        l->setPixmap(QPixmap(connectedActuator->getActuatorImage().c_str()).scaled(parent->width()/5,parent->height()/5,Qt::IgnoreAspectRatio).transformed(rot));
     }
     move(getPos(BaseOffset,parent->width(),parent->height()));
     show();
@@ -41,44 +41,36 @@ void GuiActuator::update() {
 
 }
 
-QPoint GuiActuator::getPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY) {
+QPoint GuiActuator::getPos(QPoint BaseOffset_, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY) {
     // Calculate the pos depending of station direction
     guiPos p = Placing::calculateGuiPosition(connectedActuator->getPosition(), station);
     switch (connectedActuator->getActuatorKind()) {
         case actuatorKind::Pusher:
-            if(connectedActuator->getPosition() <= 50){
-                switch (station->getInputDirection()) {
+              switch (station->getOutputDirection()) {
                     case directionUp:         rot = QTransform().rotate(270); BaseOffset = QPoint(-this->width()/2,+ this->height()*1);      break;
-                    case directionDown:       rot = QTransform().rotate(90);  BaseOffset = QPoint(-this->width()/2,- this->height()*2);      break;
-                    case directionRight:      rot = QTransform().rotate(0);   BaseOffset = QPoint(-this->width()*1,-this->height()/2);      break;
+                    case directionDown:       rot = QTransform().rotate(90);  BaseOffset = QPoint(this->width()/2,- this->height()/2);      break;
+                    case directionRight:      rot = QTransform().rotate(0);   BaseOffset = QPoint(-this->height()/2,-this->height()/2);      break;
                     case directionLeft:       rot = QTransform().rotate(180); BaseOffset = QPoint(this->width()/2,-this->height()/2);      break;
-                }
-            }else{
-                switch (station->getOutputDirection()) {
-                    case directionUp:         rot = QTransform().rotate(270); BaseOffset = QPoint(-this->width()/2,+ this->height()*1);      break;
-                    case directionDown:       rot = QTransform().rotate(90);  BaseOffset = QPoint(-this->width()/2,- this->height()*2);      break;
-                    case directionRight:      rot = QTransform().rotate(0);   BaseOffset = QPoint(-this->width()*1,-this->height()/2);      break;
-                    case directionLeft:       rot = QTransform().rotate(180); BaseOffset = QPoint(this->width()/2,-this->height()/2);      break;
-                }
-            }break;
+
+                 }break;
         case actuatorKind::MillerDrill :
-            if(connectedActuator->getPosition() < 50){
+            if(connectedActuator->getPosition() < 33){
                 switch (station->getInputDirection()) {
-                    case directionUp:         rot = QTransform().rotate(270); BaseOffset = QPoint(-this->width()*2,-this->height()/2);      break;
-                    case directionDown:       rot = QTransform().rotate(90);  BaseOffset = QPoint(+this->width()*2,-this->height()/2);      break;
-                    case directionRight:      rot = QTransform().rotate(0);   BaseOffset = QPoint(-this->width()/2,-this->height()*2);      break;
-                    case directionLeft:       rot = QTransform().rotate(180); BaseOffset = QPoint(-this->width()/2,+this->height()*2);      break;
+                    case directionUp:         rot = QTransform().rotate(270); BaseOffset = QPoint(-this->width(),-this->height()/2);      break;
+                    case directionDown:       rot = QTransform().rotate(270);  BaseOffset = QPoint(-this->width(),-this->height()/2);      break;
+                    case directionRight:      rot = QTransform().rotate(0);   BaseOffset = QPoint(-this->width()/2,-this->height());      break;
+                    case directionLeft:       rot = QTransform().rotate(180); BaseOffset = QPoint(-this->width()/2,this->height());      break;
                 }
             }else{
                 switch (station->getOutputDirection()) {
-                    case directionUp:         rot = QTransform().rotate(270); BaseOffset = QPoint(-this->width()*2,-this->height()/2);      break;
-                    case directionDown:       rot = QTransform().rotate(90);  BaseOffset = QPoint(+this->width()*2,-this->height()/2);      break;
-                    case directionRight:      rot = QTransform().rotate(0);   BaseOffset = QPoint(-this->width()/2,-this->height()*2);      break;
-                    case directionLeft:       rot = QTransform().rotate(180); BaseOffset = QPoint(-this->width()/2,+this->height()*2);      break;
+                    case directionUp:         rot = QTransform().rotate(270); BaseOffset = QPoint(-this->width(),-this->height()/2);      break;
+                    case directionDown:       rot = QTransform().rotate(90);  BaseOffset = QPoint(+this->width()/2,-this->height()/2);      break;
+                    case directionRight:      rot = QTransform().rotate(0);   BaseOffset = QPoint(-this->width()/2,-this->height());      break;
+                    case directionLeft:       rot = QTransform().rotate(180); BaseOffset = QPoint(-this->width()/2,this->height()/2);      break;
                 }
             }break;
         case actuatorKind::Conveyorbelt_ :
-            if(connectedActuator->getPosition() < 50){
+            if(connectedActuator->getPosition() < 33){
                 switch (station->getInputDirection()) {
                     case directionUp:         rot = QTransform().rotate(270); BaseOffset = QPoint(-this->width()/2,+ this->height()*1);      break;
                     case directionDown:       rot = QTransform().rotate(90);  BaseOffset = QPoint(-this->width()/2,- this->height()*2);      break;
@@ -96,7 +88,7 @@ QPoint GuiActuator::getPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t
     }
 
     uint32_t posX,posY;
-    posX = BaseOffset.x() + (baseWidgetSizeX/100) * p.posX;
-    posY = BaseOffset.y() +(baseWidgetSizeY/100) * p.posY; // move by widget size to the left
+    posX = BaseOffset.x() + (parentWidget()->width()/100) * p.posX;
+    posY = BaseOffset.y() +(parentWidget()->height()/100) * p.posY; // move by widget size to the left
     return QPoint(posX,posY);
 }

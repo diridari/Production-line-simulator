@@ -13,7 +13,7 @@
 using namespace std;
 
 typedef enum Direction{
-    directionUp,directionDown,directionLeft,directionRight
+    directionUp,directionDown,directionLeft,directionRight,noDirection
 }Direction;
 class BaseActuator;
 class BaseProductionStation {

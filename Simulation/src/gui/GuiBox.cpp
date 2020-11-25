@@ -11,23 +11,30 @@ GuiBox::GuiBox( BaseWorkpiece *connectedWorkpiece, QWidget *parent_):
         QWidget(parent_),connectedWorkpiece(connectedWorkpiece) {
     Log::log("new gui Box for " + connectedWorkpiece->getName(),Info);
     l = new QLabel(this);
-    uint32_t size = MinStationSize/100*connectedWorkpiece->getWorkpieceSize();
+    uint32_t size = MinStationSize*2/100*connectedWorkpiece->getWorkpieceSize();
     l->setPixmap(QPixmap("../img/box.png").scaled(size,size,Qt::KeepAspectRatio));
     l->show();
 
 }
 
-QPoint GuiBox::getNewPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY,BaseProductionStation *station  ) {
+QPoint GuiBox::getNewPos(QPoint BaseOffset, uint32_t WidgetSizeX, uint32_t WidgetSizeY,BaseProductionStation *station  ) {
     guiPos p = Placing::calculateGuiPosition(connectedWorkpiece, station);
     uint32_t posX,posY;
-    posX = BaseOffset.x() + (baseWidgetSizeX/100) * p.posX - width()/2;
-    posY = BaseOffset.y() +(baseWidgetSizeY/100) * p.posY -height()/2;
+    posX = BaseOffset.x() + (WidgetSizeX/100) * p.posX - width()/2;
+    posY = BaseOffset.y() +(WidgetSizeY/100) * p.posY -height()/2;
     return QPoint(posX,posY);
 
 }
 
 void GuiBox::moveToNewPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY,BaseProductionStation * station) {
-    move(getNewPos(BaseOffset,baseWidgetSizeX,baseWidgetSizeY,station));
+    QSize size;
+    switch (station->getOutputDirection()) {
+        case directionRight     :   size = QSize(MinStationSize*2,MinStationSize); break;
+        case directionLeft      :   size = QSize(MinStationSize*2,MinStationSize); break;
+        case directionUp        :   size = QSize(MinStationSize,MinStationSize*2); break;
+        case directionDown      :   size = QSize(MinStationSize,MinStationSize*2); break;
+    }
+    move(getNewPos(BaseOffset,size.width(),size.height(),station));
 }
 
 void GuiBox::mousePressEvent(QMouseEvent *event) {

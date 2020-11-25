@@ -11,12 +11,12 @@
 #include "version.h"
 #include "src/gui/ObjMapper.h"
 ObjMapper *objectMapper;
-conveyorbeltStation *c6 = new conveyorbeltStation(nullptr,"band5");
-PushStation *c5 = new PushStation(c6,"band4");
-MillAndDrillStation *c4 = new MillAndDrillStation(c5,"band3");
-MillAndDrillStation *c3 = new MillAndDrillStation(c4,"band3");
-PushStation *c2 = new PushStation(c3,"band3");
-conveyorbeltStation *c1 = new conveyorbeltStation(c2,"band1");
+conveyorbeltStation *c6 = new conveyorbeltStation(nullptr,"End");
+PushStation *c5 = new PushStation(c6,"Push 2");
+MillAndDrillStation *c4 = new MillAndDrillStation(c5,"Drill");
+MillAndDrillStation *c3 = new MillAndDrillStation(c4,"Mill");
+PushStation *c2 = new PushStation(c3,"Push1");
+conveyorbeltStation *c1 = new conveyorbeltStation(c2,"Start");
 
 int main(int argc, char *argv[])
 {
