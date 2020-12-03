@@ -75,10 +75,10 @@ guiPos Placing::calculateGuiPosition(uint32_t pos, BaseProductionStation *statio
     // Calculate the pos depending of station direction
     if(pos <= 33){
         switch (station->getInputDirection()) {
-            case directionUp    : if (station->getOutputDirection() == directionDown ) {posX = 50;} else    {posX= 25+ (float)pos*25/100;};       posY = pos;        break;
-            case directionDown  : if (station->getOutputDirection() == directionUp ) {posX = 50;} else      {posX= 25+ (float)pos*25/100;};       posY = 100-pos;  break;
-            case directionLeft  : posX = pos; if (station->getOutputDirection() == directionRight ) {posY = 50;}     else {posY= 25+ (float)pos*25/100;};         break;
-            case directionRight : posX = 100- pos; if (station->getOutputDirection() == directionLeft ) {posY = 50;} else {posY= 25+ (float)pos*25/100;};         break;
+            case directionUp    : posY = pos;        if (station->getOutputDirection() == directionDown ) {posX = 50;}  else {posX= 25+ (float)pos*25/100;};        break;
+            case directionDown  : posY = 100-pos;    if (station->getOutputDirection() == directionUp ) {posX = 50;}    else {posX= 25+ (float)pos*25/100;};        break;
+            case directionLeft  : posX = pos;        if (station->getOutputDirection() == directionRight ) {posY = 50;} else {posY= 25+ (float)pos*25/100;};         break;
+            case directionRight : posX = 100- pos;   if (station->getOutputDirection() == directionLeft ) {posY = 50;}  else {posY= 25+ (float)pos*25/100;};         break;
         }
     }else {
         switch (station->getOutputDirection()) {

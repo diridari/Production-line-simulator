@@ -47,10 +47,19 @@ QPoint GuiActuator::getPos(QPoint BaseOffset_, uint32_t baseWidgetSizeX, uint32_
     switch (connectedActuator->getActuatorKind()) {
         case actuatorKind::Pusher:
               switch (station->getOutputDirection()) {
-                    case directionUp:         rot = QTransform().rotate(270); BaseOffset = QPoint(-this->width()/2,+ this->height()*1);      break;
-                    case directionDown:       rot = QTransform().rotate(90);  BaseOffset = QPoint(this->width()/2,- this->height()/2);      break;
-                    case directionRight:      rot = QTransform().rotate(0);   BaseOffset = QPoint(-this->height()/2,-this->height()/2);      break;
-                    case directionLeft:       rot = QTransform().rotate(180); BaseOffset = QPoint(this->width()/2,-this->height()/2);      break;
+                    case directionUp:         rot = QTransform().rotate(270); BaseOffset = QPoint(0,- this->height());
+                      p = guiPos(50,100-connectedActuator->getPosition()*100/150);
+                    break;
+                    case directionDown:       rot = QTransform().rotate(90);  BaseOffset = QPoint(0,0);
+                      p = guiPos(50,connectedActuator->getPosition()*100/150);
+                      break;
+                    case directionRight:      rot = QTransform().rotate(0);   BaseOffset = QPoint(0,-this->width());
+                    p = guiPos(connectedActuator->getPosition()*100/150,50);
+                    break;
+                    case directionLeft:       rot = QTransform().rotate(180); BaseOffset = QPoint(-this->width(),0);
+                      p = guiPos(100-connectedActuator->getPosition()*100/150,50);
+
+                      break;
 
                  }break;
         case actuatorKind::MillerDrill :

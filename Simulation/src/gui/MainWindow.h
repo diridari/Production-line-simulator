@@ -12,7 +12,7 @@
 #include <QMouseEvent>
 
 
-#define MinStationSize 300
+#define MinStationSize 200
 class MainWindow :public QWidget{
 Q_OBJECT
     BaseProductionStation * startStation;
