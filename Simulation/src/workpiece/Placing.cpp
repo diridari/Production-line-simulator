@@ -73,12 +73,24 @@ guiPos Placing::calculateGuiPosition(uint32_t pos, BaseProductionStation *statio
     }
     uint32_t posX,posY;
     // Calculate the pos depending of station direction
-    if(pos <= 33){
+    if(pos <= 50){
         switch (station->getInputDirection()) {
-            case directionUp    : posY = pos;        if (station->getOutputDirection() == directionDown ) {posX = 50;}  else {posX= 25+ (float)pos*25/100;};        break;
-            case directionDown  : posY = 100-pos;    if (station->getOutputDirection() == directionUp ) {posX = 50;}    else {posX= 25+ (float)pos*25/100;};        break;
-            case directionLeft  : posX = pos;        if (station->getOutputDirection() == directionRight ) {posY = 50;} else {posY= 25+ (float)pos*25/100;};         break;
-            case directionRight : posX = 100- pos;   if (station->getOutputDirection() == directionLeft ) {posY = 50;}  else {posY= 25+ (float)pos*25/100;};         break;
+            case directionUp    : posY = pos;        if (station->getOutputDirection() == directionDown ) {posX = 50;}
+                else if(station->getOutputDirection() == directionRight) {posX= 25+ (float)pos/2;}
+                else {posX= 75 - (float)pos/2;}
+              break;
+            case directionDown  : posY = 100-pos;    if (station->getOutputDirection() == directionUp ) {posX = 50;}
+                else if (station->getOutputDirection() == directionRight ){posX= 25+ (float)pos/2;}
+                else {posX= 75 - (float)pos/2;}
+              break;
+            case directionLeft  : posX = pos;        if (station->getOutputDirection() == directionRight ) {posY = 50;}
+                else if(station->getOutputDirection() == directionDown) {posY= 25+ (float)pos/2;}
+                else{posY= 75- (float)pos/2;}
+              break;
+            case directionRight : posX = 100- pos;   if (station->getOutputDirection() == directionLeft ) {posY = 50;}
+                else if(station->getOutputDirection() == directionDown) {posY= 25+ (float)pos/2;}
+                else{posY= 75- (float)pos/2;}
+              break;
         }
     }else {
         switch (station->getOutputDirection()) {

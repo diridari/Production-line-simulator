@@ -21,8 +21,25 @@ GuiActuator::GuiActuator(BaseActuator *connectedActuator_, BaseProductionStation
     station = station_;
     l = new QLabel(this);
     l->setScaledContents(true);
-    l->setPixmap(QPixmap(connectedActuator->getActuatorImage().c_str()).scaled(parent->height()/5,parent->width()/5,Qt::KeepAspectRatio).transformed(rot));
-    setMinimumSize(parent->height()/5,parent->width()/5);
+    actuatorSize = QSize(parent->width()/4,parent->height()/4);
+    if(connectedActuator_->getActuatorKind() == actuatorKind::Pusher) {
+        switch (station_->getOutputDirection()) {
+            case directionUp:
+                actuatorSize = QSize(parent->width(),parent->height()/8);
+                break;
+            case directionDown:
+                actuatorSize = QSize(parent->width(),parent->height()/8);
+                break;
+            case directionRight:
+                actuatorSize = QSize( parent->width()/8,parent->height());
+                break;
+            case directionLeft:
+                actuatorSize = QSize( parent->width()/8,parent->height());
+                break;
+        }
+    }
+    setMinimumSize(actuatorSize);
+    l->setPixmap(QPixmap(connectedActuator->getActuatorImage().c_str()).scaled(actuatorSize,Qt::IgnoreAspectRatio).transformed(rot));
     move(getPos(BaseOffset,parent->width(),parent->height()));
     show();
 
@@ -33,7 +50,7 @@ void GuiActuator::update() {
 
     if(connectedActuator->getActuatorImage() != lastImg){
         lastImg =  connectedActuator->getActuatorState();
-        l->setPixmap(QPixmap(connectedActuator->getActuatorImage().c_str()).scaled(parent->width()/5,parent->height()/5,Qt::IgnoreAspectRatio).transformed(rot));
+        l->setPixmap(QPixmap(connectedActuator->getActuatorImage().c_str()).scaled(actuatorSize,Qt::IgnoreAspectRatio).transformed(rot));
     }
     move(getPos(BaseOffset,parent->width(),parent->height()));
     show();
@@ -47,18 +64,21 @@ QPoint GuiActuator::getPos(QPoint BaseOffset_, uint32_t baseWidgetSizeX, uint32_
     switch (connectedActuator->getActuatorKind()) {
         case actuatorKind::Pusher:
               switch (station->getOutputDirection()) {
-                    case directionUp:         rot = QTransform().rotate(270); BaseOffset = QPoint(0,- this->height());
-                      p = guiPos(50,100-connectedActuator->getPosition()*100/150);
+                    case directionUp:         rot = QTransform().rotate(270); BaseOffset = QPoint(0,+this->height());
+                      //p = guiPos(0,100-connectedActuator->getPosition()*0.8);
+                      p.posX = 0;
                     break;
-                    case directionDown:       rot = QTransform().rotate(90);  BaseOffset = QPoint(0,0);
-                      p = guiPos(50,connectedActuator->getPosition()*100/150);
+                    case directionDown:       rot = QTransform().rotate(90);  BaseOffset = QPoint(0,-this->height()*2);
+                      //p = guiPos(0,connectedActuator->getPosition()*0.8);
+                      p.posX = 0;
                       break;
-                    case directionRight:      rot = QTransform().rotate(0);   BaseOffset = QPoint(0,-this->width());
-                    p = guiPos(connectedActuator->getPosition()*100/150,50);
-                    break;
-                    case directionLeft:       rot = QTransform().rotate(180); BaseOffset = QPoint(-this->width(),0);
-                      p = guiPos(100-connectedActuator->getPosition()*100/150,50);
-
+                    case directionRight:      rot = QTransform().rotate(0);   BaseOffset = QPoint(-this->width(),0);
+                     // p = guiPos(connectedActuator->getPosition()*0.8,0);
+                      p.posY = 0;
+                      break;
+                    case directionLeft:       rot = QTransform().rotate(180); BaseOffset = QPoint(this->width(),0);
+                     // p = guiPos(100-connectedActuator->getPosition()*0.8,0);
+                      p.posY = 0;
                       break;
 
                  }break;

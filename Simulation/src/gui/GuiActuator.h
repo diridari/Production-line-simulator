@@ -17,6 +17,7 @@ class GuiActuator: public QWidget {
     BaseProductionStation *station;
     string lastImg = "";
     QTransform rot;
+    QSize actuatorSize;
     /**
    * calculate the new position based on the widget pos
    * @param BaseOffset base offset
