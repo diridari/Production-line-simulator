@@ -1,5 +1,6 @@
 
 
+#include <zmq.h>
 #include <lib/SimpleLogging/include/logging.h>
 #include <thread>
 #include <src/gui/MainWindow.h>
@@ -20,6 +21,7 @@ conveyorbeltStation *c1 = new conveyorbeltStation(c2,"Start");
 
 int main(int argc, char *argv[])
 {
+
 
     Log::advancedConf()->setCliHighLight(false);
     Log::setLogLevel(Info,DebugL3);

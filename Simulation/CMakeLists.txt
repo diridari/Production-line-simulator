@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 project(Production_line_simulator)
-
+message("proj located at: " ${CMAKE_SOURCE_DIR})
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -13,6 +13,29 @@ add_subdirectory(lib/SimpleLogging)
 include_directories(lib/SimpleLogging/include)
 
 add_subdirectory(src)
+
+find_path(ZeroMQ_INCLUDE_DIR
+        NAMES zmq.hpp
+        PATHS ${CMAKE_SOURCE_DIR}\\lib\\zeromq
+        )
+
+## use the hint from about to find the location of libzmq
+find_library(ZeroMQ_LIBRARY
+        NAMES zmq libzmq 0mq zeromq libzmq-v141-mt-s-4_3.lib
+        PATHS ${CMAKE_SOURCE_DIR}\\lib\\zeromq
+        HINTS ${CMAKE_SOURCE_DIR}\\lib\\zeromq
+
+        REQUIRED
+        )
+
+include_directories(ZeroMQ_INCLUDE_DIR)
+add_executable(a1 src/main1.cpp)
+target_link_libraries(a1 ${ZeroMQ_LIBRARY})
+add_executable(a2 src/main2.cpp)
+
+target_link_libraries(a2 ${ZeroMQ_LIBRARY})
+
+
 # QT 5
 find_package(Qt5Widgets)
 if(Qt5Widgets_FOUND)
@@ -21,7 +44,8 @@ if(Qt5Widgets_FOUND)
     set(CMAKE_AUTOUIC ON)
     set(CMAKE_AUTORCC ON)
     add_executable(Production_line_simulator ${src_files}  ${src_gui} src/main.cpp )
-    target_link_libraries(Production_line_simulator pthread CPPArgvParsLib SimpleLoggingLib  Qt5::Widgets)
+    target_link_libraries(Production_line_simulator pthread CPPArgvParsLib SimpleLoggingLib  Qt5::Widgets ${PC_ZeroMQ_LIBRARY_DIRS} )
+
     #message( "src: " ${src_files} )
 endif()
 
