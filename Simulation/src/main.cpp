@@ -6,10 +6,17 @@
 #include <zconf.h>
 #include <src/productionStation/conveyorbeltStation.h>
 #include <QtWidgets/QApplication>
+#include <src/productionStation/PushStation.h>
+#include <src/productionStation/MillAndDrillStation.h>
 #include "version.h"
 #include "src/gui/ObjMapper.h"
 ObjMapper *objectMapper;
-
+conveyorbeltStation *c6 = new conveyorbeltStation(nullptr,"End");
+PushStation *c5 = new PushStation(c6,"Push 2");
+MillAndDrillStation *c4 = new MillAndDrillStation(c5,"Drill");
+MillAndDrillStation *c3 = new MillAndDrillStation(c4,"Mill");
+PushStation *c2 = new PushStation(c3,"Push1");
+conveyorbeltStation *c1 = new conveyorbeltStation(c2,"Start");
 
 int main(int argc, char *argv[])
 {
@@ -19,37 +26,15 @@ int main(int argc, char *argv[])
     Log::log("run event Loop",Info);
     Log:log("start simulation version: " + to_string(VERSION_MAJOR) + "."+ to_string(VERSION_MINOR) + "."+ to_string(VERSION_REVISION) +"\r\n",Message);
 
-    conveyorbeltStation *c5 = new conveyorbeltStation(nullptr,"band5");
-    conveyorbeltStation *c4 = new conveyorbeltStation(c5,"band4");
-    conveyorbeltStation *c3 = new conveyorbeltStation(c4,"band3");
-    conveyorbeltStation *c2 = new conveyorbeltStation(c3,"band2");
-    conveyorbeltStation *c1 = new conveyorbeltStation(c2,"band1");
 
 
-    c1->setConveyorbeltState(ACTUATOR_ON);
-    c2->setConveyorbeltState(ACTUATOR_ON);
-    c3->setConveyorbeltState(ACTUATOR_ON);
-    c4->setConveyorbeltState(ACTUATOR_ON);
-    c5->setConveyorbeltState(ACTUATOR_ON);
-
-    c1->setDirection(directionUp,directionDown);
-    c2->setDirection(directionUp,directionLeft);
-    c3->setDirection(directionRight,directionDown);
-    c4->setDirection(directionUp,directionLeft);
-    c5->setDirection(directionRight,directionLeft);
-
-
-
-    BaseWorkpiece *wp1 = new BaseWorkpiece(0,"test-workpiece1");
-    BaseWorkpiece *wp2 = new BaseWorkpiece(31,"test-workpiece1");
-    BaseWorkpiece *wp3 = new BaseWorkpiece(62,"test-workpiece2");
-    BaseWorkpiece *wp4 = new BaseWorkpiece(95,"test-workpiece3");
-
-
-    c1->insertBox(wp1, wp1->getPosition());
-    c1->insertBox(wp2, wp2->getPosition());
-    c1->insertBox(wp3, wp3->getPosition());
-    c1->insertBox(wp4, wp4->getPosition());
+    c1->setDirection(directionDown,directionUp);
+    c2->setDirection(directionDown,directionRight);
+    c3->setDirection(directionLeft,directionRight);
+    c4->setDirection(directionLeft,directionRight);
+    c5->setDirection(directionLeft,directionDown);
+    c6->setDirection(directionUp,directionDown);
+    
     // simulation steps
     /**
      * 1. Operate all Workpieces
@@ -68,7 +53,75 @@ int main(int argc, char *argv[])
     objectMapper = new ObjMapper;
     QApplication app(argc,argv);
     MainWindow w(c1);
-
+    void userLoop();
+    new thread(userLoop);
     w.show();
     return app.exec();
+}
+
+void runOnTime(){
+    sleep(2);
+    bool detectBox = false;
+    c1->setConveyorbeltState(actuatorState::ACTUATOR_ON);
+    for(int i = 0; i<70;i++){
+        usleep(100000);
+        if(c1->getSensors()->at(0)->getSensorState() == sensorState::SENSOR_ON)
+            detectBox = true;
+    }
+    if(!detectBox)
+        return;
+    sleep(1);
+    c1->setConveyorbeltState(actuatorState::ACTUATOR_OFF);
+
+    // Push 1
+    c2->getActuators()->at(0)->toogleState(); // Push on
+    sleep(7);
+    c2->getActuators()->at(0)->toogleState(); // Push back
+    sleep(7);
+    c2->getActuators()->at(0)->toogleState(); // Push off
+
+    // Mill
+    detectBox = false;
+    c3->getActuators()->at(0)->setActuatorState(actuatorState::ACTUATOR_ON);
+    for(int i = 0; i<60;i++){
+        usleep(100000);
+        if(c3->getSensors()->at(0)->getSensorState() == sensorState::SENSOR_ON && !detectBox){
+            detectBox = true;
+            c3->getActuators()->at(0)->setActuatorState(actuatorState::ACTUATOR_OFF);
+            c3->getActuators()->at(1)->setActuatorState(actuatorState::ACTUATOR_ON);
+
+            sleep(1);
+            c3->getActuators()->at(0)->setActuatorState(actuatorState::ACTUATOR_ON);
+            c3->getActuators()->at(1)->setActuatorState(actuatorState::ACTUATOR_OFF);
+
+        }
+    }
+    c3->getActuators()->at(0)->setActuatorState(actuatorState::ACTUATOR_OFF);
+    if(!detectBox)
+        return;
+    // Drill
+    detectBox = false;
+    c4->getActuators()->at(0)->setActuatorState(actuatorState::ACTUATOR_ON);
+    for(int i = 0; i<60;i++){
+        usleep(100000);
+        if(c4->getSensors()->at(0)->getSensorState() == sensorState::SENSOR_ON && !detectBox){
+            detectBox = true;
+            c4->getActuators()->at(0)->setActuatorState(actuatorState::ACTUATOR_OFF);
+            c4->getActuators()->at(1)->setActuatorState(actuatorState::ACTUATOR_ON);
+
+            sleep(1);
+            c4->getActuators()->at(0)->setActuatorState(actuatorState::ACTUATOR_ON);
+            c4->getActuators()->at(1)->setActuatorState(actuatorState::ACTUATOR_OFF);
+        }
+
+    }
+    c4->getActuators()->at(0)->setActuatorState(actuatorState::ACTUATOR_OFF);
+    if(!detectBox)
+        return;
+
+}
+void userLoop(){
+    while(1){
+       runOnTime();
+    }
 }

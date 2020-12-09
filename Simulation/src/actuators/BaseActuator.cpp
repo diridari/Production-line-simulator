@@ -30,6 +30,24 @@ void BaseActuator::toogleState() {
 
 }
 
+actuatorKind BaseActuator::getActuatorKind() {
+    return kindOfAktuator;
+}
+
+string BaseActuator::getActuatorImage() {
+    if(actuatorState_ == ACTUATOR_ON){
+        return actuatorImageActiv;
+
+    }else{
+        return actuatorImageInactiv;
+
+    }
+}
+
+int32_t BaseActuator::getPosition() {
+    return position;
+}
+
 
 std::ostream &operator<<(ostream &strm, actuatorState a) {
     switch (a) {

@@ -30,14 +30,23 @@ bool Placing::canWorkpieceBePlacedAt(BaseProductionStation *stationToPlace, Base
     }
     if(box_max >= BaseProductionStation::sizeOfStation - (BaseWorkpiece::getMaxUsedSize()/2+BaseWorkpiece::getMaxUsedSize()%2)){ // box hung into the next station
         int32_t posOnNextStation = posToPlace-BaseProductionStation::sizeOfStation;
-        return Placing::canWorkpieceBePlacedAt(stationToPlace->getNextStationInChain(), wp, posOnNextStation);
+        return  Placing::canWorkpieceBePlacedAt(stationToPlace->getNextStationInChain(), wp, posOnNextStation);
     }
 
     return true;
 }
 
 bool Placing::canStationReceiveNewWorkpiece(BaseProductionStation * station, uint8_t sizeOfBox) {
-
+    if(station == nullptr){
+        Log::log("Placing canStationReceiveNewWorkpiece",Error);
+        return false;
+    }
+    if(!station->stationCanReceiveNewBoxes()){
+        return false;
+    }
+    if(!station->stationCanReceiveNewBoxes()){
+        return false;
+    }
     // get left box
     for(int i = 0; i<station->getBoxesOnStation()->size();i++){ // has boxes
         BaseWorkpiece *box = station->getBoxesOnStation()->at(i);
@@ -50,27 +59,68 @@ bool Placing::canStationReceiveNewWorkpiece(BaseProductionStation * station, uin
 }
 
 guiPos Placing::calculateGuiPosition(BaseWorkpiece *wp, BaseProductionStation *station) {
+    if(wp == nullptr){
+        Log::log("Placing calculateGuiPosition received nullpointer",Error);
+        return guiPos(0,0);
+    }
     return calculateGuiPosition(wp->getPosition(),station);
 }
 
 guiPos Placing::calculateGuiPosition(uint32_t pos, BaseProductionStation *station) {
+    if(station == nullptr){
+        Log::log("Placing calculateGuiPosition received nullpointer",Error);
+        return guiPos(0,0);
+    }
     uint32_t posX,posY;
     // Calculate the pos depending of station direction
     if(pos <= 50){
         switch (station->getInputDirection()) {
-            case directionUp    : posX = 50; posY = pos;        break;
-            case directionDown  : posX = 50; posY = 100-pos;    break;
-            case directionLeft  : posX = pos; posY = 50;        break;
-            case directionRight : posX = 100- pos; posY = 50;   break;
+            case directionUp    : posY = pos;        if (station->getOutputDirection() == directionDown ) {posX = 50;}
+                else if(station->getOutputDirection() == directionRight) {posX= 25+ (float)pos/2;}
+                else {posX= 75 - (float)pos/2;}
+              break;
+            case directionDown  : posY = 100-pos;    if (station->getOutputDirection() == directionUp ) {posX = 50;}
+                else if (station->getOutputDirection() == directionRight ){posX= 25+ (float)pos/2;}
+                else {posX= 75 - (float)pos/2;}
+              break;
+            case directionLeft  : posX = pos;        if (station->getOutputDirection() == directionRight ) {posY = 50;}
+                else if(station->getOutputDirection() == directionDown) {posY= 25+ (float)pos/2;}
+                else{posY= 75- (float)pos/2;}
+              break;
+            case directionRight : posX = 100- pos;   if (station->getOutputDirection() == directionLeft ) {posY = 50;}
+                else if(station->getOutputDirection() == directionDown) {posY= 25+ (float)pos/2;}
+                else{posY= 75- (float)pos/2;}
+              break;
         }
     }else {
         switch (station->getOutputDirection()) {
-            case directionUp    : posX = 50; posY = 100-pos;    break;
-            case directionDown  : posX = 50; posY = pos;        break;
-            case directionLeft  : posX = 100 - pos; posY = 50;  break;
-            case directionRight : posX = pos; posY = 50;        break;
+            case directionUp    : if (station->getInputDirection() == directionDown ) {posX = 50;}                      else {posX= 50;};       posY = 100-pos;    break;
+            case directionDown  :if (station->getInputDirection() == directionUp ) {posX = 50;}                         else {posX= 50;};       posY = pos;        break;
+            case directionLeft  : posX = 100 - pos; if (station->getInputDirection() == directionRight ) {posY = 50;}   else {posY= 50;};       break;
+            case directionRight : posX = pos; if (station->getInputDirection() == directionLeft ) {posY = 50;}          else {posY= 50;};       break;
         }
 
     }
     return  guiPos(posX,posY);
+}
+
+uint8_t Placing::calculateProcessFromGuiPos(guiPos pos, BaseProductionStation *station) {
+    int32_t proc = -1;
+    uint32_t posX = pos.posX;
+    uint32_t posY = pos.posY;
+    switch (station->getInputDirection()) {
+        case directionUp    : if(posY <= 50) proc = posY;       break;
+        case directionDown  : if(posY >= 50) proc = 100-posY;   break;
+        case directionLeft  : if(posX <= 50) proc = posX;       break;
+        case directionRight : if(posX >= 50) proc = 100-posX;   break;
+    }
+    if(proc == -1) {
+        switch (station->getOutputDirection()) {
+            case directionUp    : proc = 100-posY;       break;
+            case directionDown  : proc = posY;   break;
+            case directionLeft  : proc =  100-posX;       break;
+            case directionRight : proc =posX;   break;
+        }
+    }
+    return proc;
 }

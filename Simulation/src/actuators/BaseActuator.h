@@ -18,6 +18,13 @@ using namespace std;
 enum actuatorState{
     ACTUATOR_OFF,
     ACTUATOR_ON
+};
+
+enum actuatorKind{
+    BaseActuator_,
+    Conveyorbelt_,
+    Pusher,
+    MillerDrill,
 
 };
 std::ostream &operator<<(std::ostream &strm, actuatorState a);
@@ -26,7 +33,22 @@ class BaseActuator {
 private:
     string  actuatorName;
     actuatorState actuatorState_ = ACTUATOR_OFF;
+
+protected:
+    /**
+     * the postion of the actuator
+     * this value can change if the avtuator is moving
+     */
+    int32_t position = 0;
+    actuatorKind kindOfAktuator = actuatorKind::BaseActuator_;
+
+    string  actuatorImageActiv = "";
+    string  actuatorImageInactiv = "";
+
 public:
+    int32_t getPosition();
+    string getActuatorImage();
+    actuatorKind getActuatorKind();
     BaseActuator(string name): actuatorName(name){};
     string getActuatorName();
     actuatorState getActuatorState();
@@ -34,13 +56,13 @@ public:
 
     /**
      * run this actuator for each Workpiece.
-     * Workpieces can move to the next station if thex reach the end of the station
+     * Workpieces can move to the next station if they reach the end of the station
      * @param boxSet set of boxes to run
      * @param nextStation
      */
     virtual void runActuator( vector<BaseWorkpiece*> * boxSet, BaseProductionStation *station) {};
     friend std::ostream &operator<<(std::ostream &strm, BaseActuator &a);
-    void toogleState();
+    virtual void toogleState();
 };
 
 

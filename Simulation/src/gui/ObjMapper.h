@@ -40,7 +40,7 @@ public:
 
     void addStation(BaseProductionStation *ps, GuiStation *gs);
     void addBox(BaseWorkpiece *wp, GuiBox *gb);
-
+    void dropBox( BaseWorkpiece *wp);
 };
 
 

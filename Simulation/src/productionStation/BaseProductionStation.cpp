@@ -46,7 +46,7 @@ void BaseProductionStation::runSimulationStep() {
 
 bool BaseProductionStation::insertBox(BaseWorkpiece *wp,uint32_t posToInsert) {
     Log::log("insertBox on station " + getStationName() + " boxName: "+wp->getName(),DebugL2);
-    if(Placing::canWorkpieceBePlacedAt(this, wp, posToInsert)){
+    if(stationCanReceiveNewBoxes() && Placing::canWorkpieceBePlacedAt(this, wp, posToInsert)){
         boxSet->insert(boxSet->begin(),wp);
         wp->setPosition(posToInsert);
         //boxSet->push_back(wp);
@@ -97,6 +97,36 @@ void BaseProductionStation::checkAllSensors() {
     for(int i = 0; i<sensorSet->size();i++){
         sensorSet->at(i)->checkSensor(boxSet);
     }
+
+}
+
+bool BaseProductionStation::stationCanReceiveNewBoxes() {
+    return true;
+}
+
+
+bool BaseProductionStation::dropBox(BaseWorkpiece *wpToDrop) {
+    Log::log("drop box on station "+ getStationName(),Info);
+    for(int i = 0; i<boxSet->size();i++){
+        if(boxSet->at(i) == wpToDrop){
+            boxSet->erase(boxSet->begin()+i);
+            return true;
+        }
+
+    }
+    Log::log("no such box to drop"+ getStationName(),Error);
+    return false;
+
+}
+
+bool BaseProductionStation::hasBox(BaseWorkpiece *wpToDrop) {
+    for(int i = 0; i<boxSet->size();i++){
+        if(boxSet->at(i) == wpToDrop){
+            return true;
+        }
+
+    }
+    return false;
 
 }
 

@@ -6,11 +6,21 @@
 #define PRODUCTION_LINE_SIMULATOR_PUSHER_H
 
 
+#include "BaseActuator.h"
 
-class pusher {
-
+enum PushDirection{
+    Idle,Forward,Backward
 };
 
+class pusher: public BaseActuator {
+    PushDirection direction = PushDirection::Idle;
+
+public:
+    pusher(string name = "pusher");
+    void runActuator( vector<BaseWorkpiece*> * boxSet, BaseProductionStation *station);
+    void setDirection(PushDirection direction);
+    void toogleState();
+};
 
 
 #endif //PRODUCTION_LINE_SIMULATOR_PUSHER_H

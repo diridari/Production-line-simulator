@@ -9,7 +9,11 @@
 #include <QtWidgets/QWidget>
 #include <src/productionStation/BaseProductionStation.h>
 #include <QLabel>
+#include <QtWidgets/QPushButton>
 #include "GuiSensor.h"
+#include "GuiActuator.h"
+#include "GuiBox.h"
+#include <QMouseEvent>
 class GuiStation : public QWidget{
 Q_OBJECT
     BaseProductionStation *connectedStation;
@@ -20,8 +24,12 @@ Q_OBJECT
     uint32_t widgetSizeX,widgetSizeY;
     string imagePath;
     vector<GuiSensor *> * guiSensors;
-
+    vector<GuiActuator*> *guiActuators;
+    QPushButton *stationActuator;
+protected:
+    void mousePressEvent(QMouseEvent * event);
 public:
+    BaseProductionStation *getConnectedStation();
     GuiStation(BaseProductionStation *connectedStation, Direction inputDirection, Direction outputDirection,  QWidget *parent = nullptr);
     Direction getInputDirection();
     Direction getOutputDirection();
@@ -39,8 +47,7 @@ public:
      }
      void handleBoxes();
 
-     void setWidetSize(uint32_t widgetSizeX_, uint32_t widgetSizeY_);
-
+     void setWidgetSize(uint32_t widgetSizeX_, uint32_t widgetSizeY_);
 
 public slots:
     void updateActuatorState();

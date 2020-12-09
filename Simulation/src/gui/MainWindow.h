@@ -9,16 +9,19 @@
 #include <src/productionStation/BaseProductionStation.h>
 #include "GuiBox.h"
 #include <QtWidgets/QGridLayout>
+#include <QMouseEvent>
 
 
-#define MinStationSize 300
+#define MinStationSize 200
 class MainWindow :public QWidget{
 Q_OBJECT
     BaseProductionStation * startStation;
     vector<GuiBox*> *boxSet;
     vector<GuiStation*> *stationSet;
+
 public:
     MainWindow(BaseProductionStation *startStation, QWidget *parent = nullptr);
+    bool dropBox(BaseWorkpiece *wp);
 
 
 public slots:

@@ -13,7 +13,7 @@
 using namespace std;
 
 typedef enum Direction{
-    directionUp,directionDown,directionLeft,directionRight
+    directionUp,directionDown,directionLeft,directionRight,noDirection
 }Direction;
 class BaseActuator;
 class BaseProductionStation {
@@ -63,7 +63,7 @@ public:
      * @param wp
      * @return true on success
      */
-    bool insertBox(BaseWorkpiece *wp, uint32_t posToInsert = 0);
+    virtual bool insertBox(BaseWorkpiece *wp, uint32_t posToInsert = 0);
 
     /**
      * run one simulation step for this station:
@@ -82,7 +82,11 @@ public:
      */
     virtual void runSimulationStep();
 
-
+    /**
+     * is the station able (independent from the boxes) to receive a new box (e.g. the pusher can not allways receive boxes)
+     * @return true if station is capable to receive a new box
+     */
+    virtual bool stationCanReceiveNewBoxes();
     vector<BaseWorkpiece*> *getBoxesOnStation();
     vector<BaseSensor*> * getSensors();
     vector<BaseActuator*> * getActuators();
@@ -91,6 +95,13 @@ public:
     Direction getOutputDirection();
     friend std::ostream &operator<<(std::ostream &strm, BaseProductionStation a);
     void checkAllSensors();
+    /**
+     * remove a box on that station
+     * @param wpToDrop box to drop
+     * @return true if box has been found and droped
+     */
+    bool dropBox(BaseWorkpiece *wpToDrop);
+    bool hasBox(BaseWorkpiece *wpToDrop);
 
 
 };
