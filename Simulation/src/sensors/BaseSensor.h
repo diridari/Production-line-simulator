@@ -14,13 +14,20 @@ enum sensorState{
     SENSOR_ON  // sensor Signal
 
 };
+enum sensorKind{
+    baseSensor,
+    lightSensor,
+    taster
+};
 std::ostream &operator<<(ostream &strm, sensorState a);
 
 class BaseSensor {
 protected:
     sensorState sensorState_ = SENSOR_OFF;
     string sensorName;
-    uint32_t placedAt;
+    int32_t placedAt;
+    sensorKind kinfOfSensor = sensorKind::baseSensor;
+    string sensOnImage,sensOffImage;
 
 public:
     uint32_t getSensorPos();
@@ -35,6 +42,9 @@ public:
     */
     virtual void checkSensor( vector<BaseWorkpiece*> * boxSet) {};
     friend std::ostream &operator<<(std::ostream &strm, BaseSensor a);
+    sensorKind getSensorKind();
+    string getSensOffImage();
+    string getSensOnImage();
 
 };
 

@@ -25,6 +25,8 @@ void lightBarrier::checkSensor(vector<BaseWorkpiece *> *boxSet) {
 }
 
 lightBarrier::lightBarrier(uint32_t placedAt):BaseSensor(placedAt,"lightBarrier") {
-
+    kinfOfSensor = sensorKind::lightSensor;
+    sensOnImage = "../img/lightSensDetect.png";
+    sensOffImage = "../img/lightSensIdle.png";
 }
 
