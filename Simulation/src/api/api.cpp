@@ -3,7 +3,7 @@
 //
 
 #include "api.h"
-#if Test != 1
+#if selfTest != 1
 #include <zmq.h>
 #endif
 #include <cassert>
@@ -22,7 +22,7 @@ void workerThread(void * responder, api* api){
     Log::log("started api worker thread",Info);
 
     while(1){
-#if Test != 1
+#if selfTest != 1
         Log::log("api wait for new data",Info);
         char buffer [67];
         int rc = zmq_recv (responder, buffer, 10, 0);
@@ -37,7 +37,8 @@ void workerThread(void * responder, api* api){
 
 api::api(BaseProductionStation *startStation_, int port) {
     Log::log("init api",Info);
-#if Test != 1
+    startStation = startStation_;
+#if selfTest != 1
 
     void *context = zmq_ctx_new ();
     responder = zmq_socket (context, ZMQ_REP);
@@ -80,13 +81,13 @@ string api::getNextToken(string *stringTo) {
     int tokenEndIndex = stringTo->find(' ');
     string outstring;
     if(tokenEndIndex != string::npos){ // end of string
-        outstring = stringTo->substr(0,tokenEndIndex-1);
+        outstring = stringTo->substr(0,tokenEndIndex);
         *stringTo = stringTo->substr(tokenEndIndex+1,stringTo->size()-1);
     }else{
         outstring = *stringTo;
         *stringTo = "";
     }
-    if(outstring.empty())
+    if(outstring.empty() || outstring == " ")
         return getNextToken(stringTo); // If multiple spaces
     return outstring;
 }

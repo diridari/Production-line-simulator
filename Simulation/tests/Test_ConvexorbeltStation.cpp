@@ -9,7 +9,7 @@
 
 TEST(ConveyorbeltStation,moveOneBox){
     conveyorbeltStation s1(nullptr);
-    BaseWorkpiece wp1 = BaseWorkpiece("b1");
+    BaseWorkpiece wp1 = BaseWorkpiece(0,"b1",10);
     ASSERT_TRUE(s1.insertBox(&wp1));
     for(int i = 0; i<10; i++){
         s1.runSimulationStep();
@@ -29,7 +29,7 @@ TEST(ConveyorbeltStation,moveOneBox){
 TEST(ConveyorbeltStation,RunFull){
     conveyorbeltStation s1(nullptr);
     s1.setConveyorbeltState(ACTUATOR_ON);
-    BaseWorkpiece wp1 = BaseWorkpiece(90);
+    BaseWorkpiece wp1 = BaseWorkpiece(90,"",10);
     s1.insertBox(&wp1,wp1.getPosition());
     s1.runSimulationStep();
     ASSERT_EQ(wp1.getPosition(),92);
@@ -44,7 +44,7 @@ TEST(ConveyorbeltStation,RunOverStation){
     conveyorbeltStation s1(&s2);
     s1.setConveyorbeltState(ACTUATOR_ON);
     s2.setConveyorbeltState(ACTUATOR_ON);
-    BaseWorkpiece wp1 = BaseWorkpiece(90);
+    BaseWorkpiece wp1 = BaseWorkpiece(90,"",10);
     s1.insertBox(&wp1,wp1.getPosition());
     s1.runSimulationStep();
     ASSERT_EQ(wp1.getPosition(),92);
@@ -70,9 +70,9 @@ TEST(ConveyorbeltStation,RunTOWPOverStation){
     conveyorbeltStation s1(&s2);
     s1.setConveyorbeltState(ACTUATOR_ON);
     s2.setConveyorbeltState(ACTUATOR_ON);
-    BaseWorkpiece wp1 = BaseWorkpiece(90);
-    BaseWorkpiece wp2 = BaseWorkpiece(78);
-    BaseWorkpiece wp3 = BaseWorkpiece(45);
+    BaseWorkpiece wp1 = BaseWorkpiece(90,"",10);
+    BaseWorkpiece wp2 = BaseWorkpiece(78,"",10);
+    BaseWorkpiece wp3 = BaseWorkpiece(45,"",10);
     s1.insertBox(&wp1,wp1.getPosition());
     s1.insertBox(&wp2,wp2.getPosition());
     s1.insertBox(&wp3,wp3.getPosition());
@@ -101,9 +101,9 @@ TEST(ConveyorbeltStation,RunTOWPOverStationAndBumpIntoEachother) {
     conveyorbeltStation s1(&s2);
     s1.setConveyorbeltState(ACTUATOR_ON);
     s2.setConveyorbeltState(ACTUATOR_OFF);
-    BaseWorkpiece wp1 = BaseWorkpiece(90);
-    BaseWorkpiece wp2 = BaseWorkpiece(70);
-    BaseWorkpiece wp3 = BaseWorkpiece(40);
+    BaseWorkpiece wp1 = BaseWorkpiece(90,"",10);
+    BaseWorkpiece wp2 = BaseWorkpiece(70,"",10);
+    BaseWorkpiece wp3 = BaseWorkpiece(40,"",10);
     s1.insertBox(&wp1,wp1.getPosition());
     s1.insertBox(&wp2,wp2.getPosition());
     s1.insertBox(&wp3,wp3.getPosition());
@@ -159,8 +159,8 @@ TEST(ConveyorbeltStation,RunTOWPOverStationAndBumpIntoEachother) {
 
 TEST(ConveyorbeltStation,moveTwoBoxes){
     conveyorbeltStation s1(nullptr);
-    BaseWorkpiece wp1 = BaseWorkpiece(40);
-    BaseWorkpiece wp2 = BaseWorkpiece(0);
+    BaseWorkpiece wp1 = BaseWorkpiece(40,"",10);
+    BaseWorkpiece wp2 = BaseWorkpiece(0,"",10);
     ASSERT_TRUE(s1.insertBox(&wp1,wp1.getPosition()));
     ASSERT_TRUE(s1.insertBox(&wp2,wp2.getPosition()));
     for(int i = 0; i<10; i++){

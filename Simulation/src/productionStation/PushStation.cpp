@@ -5,7 +5,7 @@
 #include <src/sensors/pushTaster.h>
 #include "PushStation.h"
 
-PushStation::PushStation(BaseProductionStation *next, string name):BaseProductionStation(next,"pusher:"+name) {
+PushStation::PushStation(BaseProductionStation *next, string name):BaseProductionStation(next,name) {
     pusher_ = new pusher(name);
     addActuator(pusher_);
     addSensor(new pushTaster(4,-10,pusher_,"pushTasterFront"));
