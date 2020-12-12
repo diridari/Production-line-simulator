@@ -9,6 +9,7 @@
 #include <QtWidgets/QApplication>
 #include <src/productionStation/PushStation.h>
 #include <src/productionStation/MillAndDrillStation.h>
+#include <src/api/api.h>
 #include "version.h"
 #include "src/gui/ObjMapper.h"
 ObjMapper *objectMapper;
@@ -36,7 +37,10 @@ int main(int argc, char *argv[])
     c4->setDirection(directionLeft,directionRight);
     c5->setDirection(directionLeft,directionDown);
     c6->setDirection(directionUp,directionDown);
-    
+
+    // init api
+    api * api_ = new api(c1);
+
     // simulation steps
     /**
      * 1. Operate all Workpieces
@@ -60,8 +64,21 @@ int main(int argc, char *argv[])
     w.show();
     return app.exec();
 }
+static int datax = 5;
 
-void runOnTime(){
+void runOnTime(void * requester){
+
+    sleep(1);
+
+    zmq_connect (requester, "tcp://localhost:5555");
+    char buff[64];
+    int s = sprintf(buff,"send xxx %d",datax);
+    datax++;
+
+    zmq_send (requester, buff,s, 0);
+
+
+    return;
     sleep(2);
     bool detectBox = false;
     c1->setConveyorbeltState(actuatorState::ACTUATOR_ON);
@@ -123,7 +140,5 @@ void runOnTime(){
 
 }
 void userLoop(){
-    while(1){
-       runOnTime();
-    }
+
 }

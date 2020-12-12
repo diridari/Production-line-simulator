@@ -11,25 +11,16 @@ int main (void)
 {
     //  Socket to talk to clients
     void *context = zmq_ctx_new ();
-    void *publischer = zmq_socket (context, ZMQ_PUB);
-    int rc = zmq_bind (publischer, "tcp://*:5556");
+    void *responder = zmq_socket (context, ZMQ_REP);
+    int rc = zmq_bind (responder, "tcp://*:5555");
     assert (rc == 0);
 
-    while(1) {
-        cout << "loop"<<endl;
-        for (int i = 0; i < 10; i++) {
-            usleep(300000);
-            zmq_send (publischer, "status", sizeof("status"), ZMQ_SNDMORE);
-            zmq_send (publischer, "All is well", sizeof("All is well"), 0);
-            cout << "status"<<endl;
-        }
-        sleep(1);
-        zmq_send (publischer, "status", sizeof("status"), ZMQ_SNDMORE);
-        zmq_send (publischer, "Faield xy", sizeof("Faield xy"), 0);
-        cout << "status"<<endl;
-        zmq_send (publischer, "error", sizeof("error"), ZMQ_SNDMORE);
-        zmq_send (publischer, "Failed to set XXY", sizeof("failed to set XXY"), 0);
-        cout << "error"<<endl;
+    while (1) {
+        char buffer [10];
+        zmq_recv (responder, buffer, 10, 0);
+        printf ("Received Hello\n");
+        sleep (1);          //  Do some 'work'
+        zmq_send (responder, "World", 5, 0);
     }
     return 0;
 }

@@ -44,7 +44,7 @@ if(Qt5Widgets_FOUND)
     set(CMAKE_AUTOUIC ON)
     set(CMAKE_AUTORCC ON)
     add_executable(Production_line_simulator ${src_files}  ${src_gui} src/main.cpp )
-    target_link_libraries(Production_line_simulator pthread CPPArgvParsLib SimpleLoggingLib  Qt5::Widgets ${PC_ZeroMQ_LIBRARY_DIRS} )
+    target_link_libraries(Production_line_simulator pthread CPPArgvParsLib SimpleLoggingLib  Qt5::Widgets ${ZeroMQ_LIBRARY} )
 
     #message( "src: " ${src_files} )
 endif()

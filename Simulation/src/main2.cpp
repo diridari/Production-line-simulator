@@ -10,27 +10,21 @@ int main (void)
 {
     printf ("Connecting to hello world server…\n");
     void *context = zmq_ctx_new ();
-    void *sub = zmq_socket (context, ZMQ_SUB);
-    zmq_connect (sub, "tcp://localhost:5556");
-    //  Subscribe to the 'status' topic
-    zmq_setsockopt (sub, ZMQ_SUBSCRIBE, "error", strlen ("error"));
-    zmq_setsockopt (sub, ZMQ_SUBSCRIBE, "status", strlen ("status"));
+    void *requester = zmq_socket (context, ZMQ_REQ);
+    zmq_connect (requester, "tcp://localhost:5555");
 
     int request_nbr;
-   while(1){
-       char buff[64];
-        int index = zmq_recv(sub,buff,64,0);
-        int64_t  t;
-        size_t more_size = sizeof t;
-        zmq_getsockopt (sub,ZMQ_RCVMORE, &t, &more_size);
-        while(t){
-            index += zmq_recv(sub,buff+index-1,64-index,0);
-            zmq_getsockopt (sub,ZMQ_RCVMORE, &t, &more_size);
-
-        }
-        std::cout << "got " << buff <<std::endl;
-   }
-    zmq_close (sub);
+    for (request_nbr = 0; request_nbr != 10; request_nbr++) {
+        sleep(1);
+        char buffer[64];
+        int i = sprintf(buffer, "hello:%d",request_nbr);
+        printf ("Sending%s …\n", buffer);
+        zmq_send (requester, buffer, i, 0);
+        memset(buffer,0,64);
+        zmq_recv (requester, buffer, 10, 0);
+        printf ("Received %s\n", buffer);
+    }
+    zmq_close (requester);
     zmq_ctx_destroy (context);
     return 0;
 }
