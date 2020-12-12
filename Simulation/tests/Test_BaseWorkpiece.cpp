@@ -10,7 +10,7 @@
 
 TEST(BaseWorkPiece,CreateObj){
     BaseWorkpiece b1(0);
-    BaseWorkpiece b2;
+    BaseWorkpiece b2("b1");
     BaseWorkpiece b3(10,"test");
     BaseWorkpiece b4("test");
     ASSERT_EQ(b1.getPosition(),0);

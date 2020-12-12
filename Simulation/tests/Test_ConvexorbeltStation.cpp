@@ -9,7 +9,7 @@
 
 TEST(ConveyorbeltStation,moveOneBox){
     conveyorbeltStation s1(nullptr);
-    BaseWorkpiece wp1 = BaseWorkpiece();
+    BaseWorkpiece wp1 = BaseWorkpiece("b1");
     ASSERT_TRUE(s1.insertBox(&wp1));
     for(int i = 0; i<10; i++){
         s1.runSimulationStep();

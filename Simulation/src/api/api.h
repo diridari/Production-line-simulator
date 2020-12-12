@@ -14,6 +14,8 @@ using namespace std;
 class api {
     BaseProductionStation * startStation;
     void *responder;
+    BaseProductionStation * getStationByName(string stationName);
+    string getNextToken(string * stringToAnalyze);
 public:
     /**
      * init the api interface

@@ -23,7 +23,7 @@ public:
      * position = 0
      * @param name name of obj
      */
-    explicit BaseWorkpiece(string name);
+    explicit BaseWorkpiece(string name = "BaseWorkpiece");
 
     /**
     * create workpiece by name

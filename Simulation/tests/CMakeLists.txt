@@ -5,5 +5,6 @@ set(test_files
         ${dir}Test_BaseWorkpiece.cpp
         ${dir}Test_ConvexorbeltStation.cpp
         ${dir}Test_LightBarrier.cpp
+        ${dir}TestApi.cpp
         ${dir}Test_BaseWorkStation.cpp
         PARENT_SCOPE )

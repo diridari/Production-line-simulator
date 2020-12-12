@@ -12,7 +12,6 @@ set(src_files
         ${src_workpiece}
         ${src_api}
         ${dir}version.h
-
         ${dir}main.h
         PARENT_SCOPE )
 
