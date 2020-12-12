@@ -17,6 +17,7 @@ add_subdirectory(src)
 find_path(ZeroMQ_INCLUDE_DIR
         NAMES zmq.hpp
         PATHS ${CMAKE_SOURCE_DIR}\\lib\\zeromq
+        REQUIRED
         )
 
 ## use the hint from about to find the location of libzmq
@@ -24,41 +25,40 @@ find_library(ZeroMQ_LIBRARY
         NAMES zmq libzmq 0mq zeromq libzmq-v141-mt-s-4_3.lib
         PATHS ${CMAKE_SOURCE_DIR}\\lib\\zeromq
         HINTS ${CMAKE_SOURCE_DIR}\\lib\\zeromq
-
         REQUIRED
         )
 
-include_directories(ZeroMQ_INCLUDE_DIR)
-add_executable(a1 src/main1.cpp)
-target_link_libraries(a1 ${ZeroMQ_LIBRARY})
-add_executable(a2 src/main2.cpp)
 
-target_link_libraries(a2 ${ZeroMQ_LIBRARY})
+include_directories(lib/zeromq)
+message("zeroMQ found at: " ${ZeroMQ_LIBRARY})
+if (CMAKE_BUILD_TYPE MATCHES Test)
+    message("Build for testing")
+    find_package(GTest)
+    if (GTest_FOUND)
+        message(" -- gtest found at " ${GTEST_INCLUDE_DIRS})
+        include_directories(${GTEST_INCLUDE_DIRS})
+        add_subdirectory(tests)
+        add_executable(selftest ${src_files} ${test_files})
+        target_link_libraries(selftest ${GTEST_LIBRARIES} pthread CPPArgvParsLib SimpleLoggingLib  )
+        target_compile_definitions(selftest PRIVATE Test=1)
 
-
-# QT 5
-find_package(Qt5Widgets)
-if(Qt5Widgets_FOUND)
-    message("found QT Lib at" ${Qt5Widgets_INCLUDE_DIRS})
-    set(CMAKE_AUTOMOC ON)
-    set(CMAKE_AUTOUIC ON)
-    set(CMAKE_AUTORCC ON)
-    add_executable(Production_line_simulator ${src_files}  ${src_gui} src/main.cpp )
-    target_link_libraries(Production_line_simulator pthread CPPArgvParsLib SimpleLoggingLib  Qt5::Widgets ${ZeroMQ_LIBRARY} )
-
-    #message( "src: " ${src_files} )
-endif()
-
-find_package(GTest)
-if (GTest_FOUND)
-    message(" -- gtest found at " ${GTEST_INCLUDE_DIRS})
-    include_directories(${GTEST_INCLUDE_DIRS})
-    add_subdirectory(tests)
-    add_executable(selftest ${src_files} ${test_files})
-    target_link_libraries(selftest ${GTEST_LIBRARIES} pthread CPPArgvParsLib SimpleLoggingLib)
-
+    else ()
+        message(WARNING "to enable self test install gtest")
+    endif ()
 else ()
-    message(WARNING "to enable self test install gtest")
-endif ()
+    message("Build for simulation")
+    # QT 5
+    find_package(Qt5Widgets)
+    if(Qt5Widgets_FOUND)
+        message("found QT Lib at" ${Qt5Widgets_INCLUDE_DIRS})
+        set(CMAKE_AUTOMOC ON)
+        set(CMAKE_AUTOUIC ON)
+        set(CMAKE_AUTORCC ON)
+        add_executable(Production_line_simulator ${src_files}  ${src_gui} src/main.cpp )
+        target_link_libraries(Production_line_simulator pthread CPPArgvParsLib SimpleLoggingLib  Qt5::Widgets ${ZeroMQ_LIBRARY} )
 
+        #message( "src: " ${src_files} )
+    endif()
+
+endif ()
 
