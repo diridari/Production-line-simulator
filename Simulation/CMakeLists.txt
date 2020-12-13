@@ -31,6 +31,21 @@ find_library(ZeroMQ_LIBRARY
 
 include_directories(lib/zeromq)
 message("zeroMQ found at: " ${ZeroMQ_LIBRARY})
+
+if (CMAKE_BUILD_TYPE MATCHES Test)
+    find_package(GTest)
+    if (GTest_FOUND)
+        message(" -- gtest found at " ${GTEST_INCLUDE_DIRS})
+        include_directories(${GTEST_INCLUDE_DIRS})
+        add_subdirectory(tests)
+        add_executable(selftest ${src_files} ${test_files})
+        target_link_libraries(selftest ${GTEST_LIBRARIES} ${ZeroMQ_LIBRARY}  pthread CPPArgvParsLib SimpleLoggingLib)
+        add_compile_definitions(selftest PRIVATE selfTest=1)
+
+    else ()
+        message(WARNING "to enable self test install gtest")
+    endif ()
+else()
     message("Build for testing")
     find_package(GTest)
 
@@ -48,15 +63,4 @@ message("zeroMQ found at: " ${ZeroMQ_LIBRARY})
         #message( "src: " ${src_files} )
     endif()
 
-find_package(GTest)
-if (GTest_FOUND)
-    message(" -- gtest found at " ${GTEST_INCLUDE_DIRS})
-    include_directories(${GTEST_INCLUDE_DIRS})
-    add_subdirectory(tests)
-    add_executable(selftest ${src_files} ${test_files})
-    target_link_libraries(selftest ${GTEST_LIBRARIES} ${ZeroMQ_LIBRARY}  pthread CPPArgvParsLib SimpleLoggingLib)
-    add_compile_definitions(selftest PRIVATE selfTest=1)
-
-else ()
-    message(WARNING "to enable self test install gtest")
 endif ()

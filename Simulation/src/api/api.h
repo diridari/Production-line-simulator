@@ -22,7 +22,12 @@ public:
      * @param port
      */
     api(BaseProductionStation * startStation,int port = 5555);
-    void handleRequest(string request);
+    /**
+     * handle a single api request and generate a respond string
+     * @param request  api reqeust string
+     * @return respond string
+     */
+    string handleRequest(string request);
     BaseProductionStation * getStationByName(string stationName);
     string getNextToken(string * stringToAnalyze);
 

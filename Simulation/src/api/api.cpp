@@ -48,10 +48,6 @@ api::api(BaseProductionStation *startStation_, int port) {
 #endif
 }
 
-void api::handleRequest(string request) {
-
-
-}
 
 BaseProductionStation *api::getStationByName(string stationName) {
     Log::log("api: get station by name",DebugL2);
@@ -65,13 +61,7 @@ BaseProductionStation *api::getStationByName(string stationName) {
 
     return nullptr;
 }
-int getIndexOf(string *s, char c){
-    for(int i = 0; i<s->length();i++){
-        if(s->at(i) == c)
-            return i;
-    }
-    return -1;
-}
+
 string api::getNextToken(string *stringTo) {
     Log::log("api: get next string token",DebugL2);
     if(stringTo == nullptr || *stringTo == ""){
@@ -91,4 +81,47 @@ string api::getNextToken(string *stringTo) {
         return getNextToken(stringTo); // If multiple spaces
     return outstring;
 }
+
+string api::handleRequest(string request) {
+    string requestTmp = request;
+    string out = "parsing error";
+    string reqeustKind = getNextToken(&request);
+    string stationName = getNextToken(&request);
+    BaseProductionStation *station = getStationByName(stationName);
+    string accessTo = getNextToken(&request);
+    int accessID = stoi(accessTo);
+    if(reqeustKind.empty()|| stationName.empty() || accessTo.empty() || (reqeustKind!="get" && reqeustKind != "set")){
+        Log::log("invalic request:"+ requestTmp+"\t allowed requests are: [get/set] StationName ID [opt. Value]",Error);
+        return "failed to pares request";
+    }
+    if(reqeustKind == "get"){
+        if(station->getSensors()->at(accessID) == nullptr){
+            Log::log("api access to not existing sensor \t request: "+requestTmp,Error);
+            return "no such sensor";
+        }
+        out = "ok: " + to_string(station->getSensors()->at(accessID)->getSensorState());
+
+    }else if(reqeustKind == "set"){
+
+        if(station->getActuators()->at(accessID) == nullptr){
+            Log::log("api access to not existing actuator \t request: "+requestTmp,Error);
+            return "no such actuator";
+        }
+        string value = getNextToken(&request);
+        if(value.empty()){
+            Log::log("got get request but no value",Error);
+            return "got no actuator value";
+        }
+        switch (stoi(value)) {
+            case 0:         station->getActuators()->at(accessID)->setActuatorState(ACTUATOR_OFF); break;
+            case 1:         station->getActuators()->at(accessID)->setActuatorState(ACTUATOR_ON); break;
+            default: return "failed to set actuator to value";
+        }
+        out = "ok";
+
+    }
+    return out;
+}
+
+
 
