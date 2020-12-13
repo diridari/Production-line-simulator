@@ -56,16 +56,36 @@ void pusher::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation 
 
 void pusher::setDirection(PushDirection direction_) {
     Log::log("set pusher state to "+to_string(direction_),Debug);
+
     direction = direction_;
+    if(direction_ != PushDirection::Idle){
+        setActuatorState(actuatorState::ACTUATOR_ON);
+    }
+    else
+        setActuatorState(actuatorState::ACTUATOR_OFF);
+    updateImage();
+
 }
 
 void pusher::toogleState() {
-
     switch (direction) {
-        case Idle:     setDirection(Forward); setActuatorState(actuatorState::ACTUATOR_ON); actuatorImageActiv = "../img/pusherForward.png"  ;break;
-        case Forward:  setDirection(Backward);  setActuatorState(actuatorState::ACTUATOR_ON); actuatorImageActiv = "../img/pusherBackward.png";break;
+        case Idle:     setDirection(Forward); setActuatorState(actuatorState::ACTUATOR_ON);break;
+        case Forward:  setDirection(Backward);  setActuatorState(actuatorState::ACTUATOR_ON);break;
         case Backward: setDirection(Idle); setActuatorState(actuatorState::ACTUATOR_OFF); break;
     }
+    updateImage();
 
+}
+
+PushDirection pusher::getDirection() {
+    return direction;
+}
+
+void pusher::updateImage() {
+    switch (direction) {
+        case Forward:     actuatorImageActiv = "../img/pusherForward.png"  ;break;
+        case Backward:  actuatorImageActiv = "../img/pusherBackward.png";break;
+        case Idle: break;
+    }
 }
 

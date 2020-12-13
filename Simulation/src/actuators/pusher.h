@@ -19,7 +19,11 @@ public:
     pusher(string name = "pusher");
     void runActuator( vector<BaseWorkpiece*> * boxSet, BaseProductionStation *station);
     void setDirection(PushDirection direction);
+    PushDirection getDirection();
     void toogleState();
+    void updateImage();
+
+
 };
 
 

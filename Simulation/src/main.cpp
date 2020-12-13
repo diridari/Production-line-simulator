@@ -14,10 +14,10 @@
 #include "src/gui/ObjMapper.h"
 ObjMapper *objectMapper;
 conveyorbeltStation *c6 = new conveyorbeltStation(nullptr,"End");
-PushStation *c5 = new PushStation(c6,"Push 2");
+PushStation *c5 = new PushStation(c6,"Pusher2");
 MillAndDrillStation *c4 = new MillAndDrillStation(c5,"Drill");
 MillAndDrillStation *c3 = new MillAndDrillStation(c4,"Mill");
-PushStation *c2 = new PushStation(c3,"Push1");
+PushStation *c2 = new PushStation(c3,"Pusher1");
 conveyorbeltStation *c1 = new conveyorbeltStation(c2,"Start");
 
 int main(int argc, char *argv[])

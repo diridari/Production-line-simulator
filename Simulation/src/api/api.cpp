@@ -6,9 +6,11 @@
 #if selfTest != 1
 #include <zmq.h>
 #endif
+
 #include <cassert>
 #include <thread>
 #include <unistd.h>
+#include <cstring>
 
 /*
  * c conveyorbeltStation(nullptr,"End");
@@ -18,18 +20,22 @@ MillAndDrillStation *c3 = new MillAndDrillStation(c4,"Mill");
 PushStation *c2 = new PushStation(c3,"Push1");
 conveyorbeltStation *c1 = new conveyorbeltStation(c2,"Start");
  */
-void workerThread(void * responder, api* api){
+void workerThread(void * zeroMQ, api* api){
     Log::log("started api worker thread",Info);
 
     while(1){
 #if selfTest != 1
-        Log::log("api wait for new data",Info);
-        char buffer [67];
-        int rc = zmq_recv (responder, buffer, 10, 0);
-        Log::log("api send respond",Info);
-        zmq_send(responder,"ok",2,0);
-
-        printf ("Received %s\n",buffer);
+        Log::log("api wait for new data",DebugL3);
+        char buffer [128] = {0,};
+        int rc = zmq_recv (zeroMQ, buffer, 128, 0);
+        if(rc <0){
+            Log::log("api failed to receive data. zeroMQ errno: " + string(std::strerror(zmq_errno())),Error);
+        }else{
+            string respond = api->handleRequest(buffer);
+            Log::log("api send respond:" + respond ,Debug);
+            zmq_send(zeroMQ,respond.c_str(), respond.size(),0);
+            printf ("Received %s\n",buffer);
+        }
 #endif
         usleep(1);
     }
@@ -91,8 +97,12 @@ string api::handleRequest(string request) {
     string accessTo = getNextToken(&request);
     int accessID = stoi(accessTo);
     if(reqeustKind.empty()|| stationName.empty() || accessTo.empty() || (reqeustKind!="get" && reqeustKind != "set")){
-        Log::log("invalic request:"+ requestTmp+"\t allowed requests are: [get/set] StationName ID [opt. Value]",Error);
+        Log::log("invalid request:"+ requestTmp+"\t allowed requests are: [get/set] StationName ID [opt. Value]",Error);
         return "failed to pares request";
+    }
+    if (station == nullptr){
+        Log::log("api: no such station "+ stationName,Error);
+        return "no such station "+ stationName;
     }
     if(reqeustKind == "get"){
         if(station->getSensors()->at(accessID) == nullptr){

@@ -28,6 +28,8 @@ find_library(ZeroMQ_LIBRARY
         REQUIRED
         )
 
+add_executable(apiTest src/main2.cpp)
+target_link_libraries(apiTest ${ZeroMQ_LIBRARY} )
 
 include_directories(lib/zeromq)
 message("zeroMQ found at: " ${ZeroMQ_LIBRARY})
