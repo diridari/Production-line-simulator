@@ -26,6 +26,8 @@ Q_OBJECT
     vector<GuiSensor *> * guiSensors;
     vector<GuiActuator*> *guiActuators;
     QPushButton *stationActuator;
+    QPushButton *stationActuator2;
+
 protected:
     void mousePressEvent(QMouseEvent * event);
 public:
@@ -51,6 +53,7 @@ public:
 
 public slots:
     void updateActuatorState();
+    void updateActuatorState2();
 
 
 };

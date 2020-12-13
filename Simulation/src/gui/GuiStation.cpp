@@ -115,11 +115,21 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
     Log::log("created all actuators",Debug);
     // Change actuator State Button
     stationActuator = new QPushButton(this);
-    stationActuator->setText("set Actuator State ");
+    string s = "set "+string(connectedStation->getActuators()->at(0)->getActuatorName());
+    stationActuator->setText(s.c_str());
     stationActuator->raise();
     stationActuator->move(this->size().width()-stationActuator->size().width(), 1);
     stationActuator->show();
     connect(stationActuator, SIGNAL(clicked()), this, SLOT(updateActuatorState()));
+    if(connectedStation->getActuators()->size() >=2){
+        stationActuator2 = new QPushButton(this);
+        s = "set "+string(connectedStation->getActuators()->at(1)->getActuatorName());
+        stationActuator2->setText(s.c_str());
+        stationActuator2->raise();
+        stationActuator2->move(this->size().width()-stationActuator2->size().width(), stationActuator2->size().height()+2);
+        stationActuator2->show();
+        connect(stationActuator2, SIGNAL(clicked()), this, SLOT(updateActuatorState2()));
+    }
 
 
 }
@@ -177,6 +187,13 @@ void GuiStation::updateActuatorState() {
     stationActuator->raise();
 
 }
+void GuiStation::updateActuatorState2() {
+    Log::log("gui change actuator state for "+connectedStation->getStationName(),Debug);
+    connectedStation->getActuators()->at(1)->toogleState();
+    stationActuator->raise();
+
+}
+
 
 void GuiStation::setWidgetSize(uint32_t widgetSizeX_, uint32_t widgetSizeY_){
     widgetSizeX = widgetSizeX_;
