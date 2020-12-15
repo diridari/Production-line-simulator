@@ -28,17 +28,16 @@ void workerThread(void * zeroMQ_, api* api){
     assert (rc == 0);
     while(1){
 #if selfTest != 1
-        Log::log("api wait for new data",DebugL2);
+        Log::log("api wait for new data",DebugL3);
         char buffer [128] = {0,};
         int rc = zmq_recv (responder, buffer, 128, 0);
         if(rc <0){
             Log::log("api failed to receive data. zeroMQ errno: " + string(std::strerror(zmq_errno())),Error);
         }else{
-            Log::log("api got data: "+ string(buffer),Info)
+            Log::log("api got data: "+ string(buffer),DebugL2)
             string respond = api->handleRequest(buffer);
-            Log::log("api send respond:" + respond ,Info);
+            Log::log("api send respond:" + respond ,DebugL2);
             zmq_send(responder,respond.c_str(), respond.size(),0);
-            printf ("Received %s\n",buffer);
         }
 
 #endif
@@ -64,7 +63,7 @@ BaseProductionStation *api::getStationByName(string stationName) {
             return station;
         station = station->getNextStationInChain();
     }
-    Log::log("api: get station by name: no such station: "+ stationName,Message);
+    Log::log("api: get station by name: no such station: "+ stationName,Error);
 
     return nullptr;
 }
@@ -131,6 +130,7 @@ string api::handleRequest(string request) {
         out = "ok";
 
     }
+    Log::log("api respond string: "+ out,DebugL3);
     return out;
 }
 

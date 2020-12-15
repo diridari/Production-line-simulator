@@ -20,7 +20,7 @@ void pusher::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation 
         case PushDirection::Forward :  newPos = position +2;    break;
     }
     bool couldPlaceAllBoxes = true;
-    if(newPos <= 100 && newPos >= 0 ) {
+    if(newPos <= 101 && newPos >= 0 ) {
 
         // process all boxes if moving forward
         if (direction == PushDirection::Forward){
@@ -28,10 +28,10 @@ void pusher::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation 
 
             for (int i = boxSet->size() - 1; i >= 0; i--) {
                 BaseWorkpiece *wp = boxSet->at(i);
-                if (Placing::canWorkpieceBePlacedAt(station, wp, newPos)) {
-                    if (newPos < BaseProductionStation::sizeOfStation ) { // Move Box
-                        if(wp->getPosition() < newPos)
-                            wp->setPosition(newPos);
+                if (Placing::canWorkpieceBePlacedAt(station, wp, newPos+wp->getWorkpieceSize()/2)) {
+                    if (newPos+wp->getWorkpieceSize()/2 < BaseProductionStation::sizeOfStation ) { // Move Box
+                        if(wp->getPosition()<= newPos+wp->getWorkpieceSize()/2) // TODO
+                            wp->setPosition(newPos+wp->getWorkpieceSize()/2);
                     } else { // moved out of station
                         Log::log(station->getStationName() + ": element has moved out of Station --> move to next",
                                  Info);

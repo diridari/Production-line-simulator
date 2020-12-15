@@ -13,7 +13,7 @@ void apiSend(char *toSend,int size, void * context_ ){
     if(size <=5){
         printf("error\r\n");
     }
-    printf("send :   %s\r\n",toSend);
+    //printf("send :   %s\r\n",toSend);
     char buff[64] = {0,};
     int s;
     if((s = zmq_send (requester, toSend,size, 0))<0){
@@ -32,8 +32,8 @@ int apiGet(char * request,int size, void* context_){
     // expect "ok: XX"
     int data = -1;
     if(size >0 && strstr(buff,"ok:")!= NULL){
-         data = atoi(buff);
-        //printf ("Received ok with data: %d\r\n", data);
+         data = atoi(buff+3);
+        //printf ("Received \"%s\" as ok with data: %d\r\n", buff,data);
 
     }
     return data;

@@ -45,7 +45,7 @@ public:
      * @param pos
      * @return
      */
-    uint8_t setPosition(uint32_t pos);
+    uint8_t setPosition(int32_t pos);
 
     /**
      * get obj name

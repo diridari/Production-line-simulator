@@ -15,7 +15,7 @@ PushStation::PushStation(BaseProductionStation *next, string name):BaseProductio
     addActuator(backwardPusher);
 
     addSensor(new pushTaster(4,-10,pusher_,"pushTasterFront"));
-    addSensor(new pushTaster(90,10,pusher_,"pushTasterBack"));
+    addSensor(new pushTaster(91,10,pusher_,"pushTasterBack"));
 }
 
 void PushStation::runSimulationStep() {
