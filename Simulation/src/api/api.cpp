@@ -20,22 +20,27 @@ MillAndDrillStation *c3 = new MillAndDrillStation(c4,"Mill");
 PushStation *c2 = new PushStation(c3,"Push1");
 conveyorbeltStation *c1 = new conveyorbeltStation(c2,"Start");
  */
-void workerThread(void * zeroMQ, api* api){
-    Log::log("started api worker thread",Info);
-
+void workerThread(void * zeroMQ_, api* api){
+    Log::log("api started api worker thread",Info);
+    void *context = zmq_ctx_new ();
+    void * responder = zmq_socket (context, ZMQ_REP);
+    int rc = zmq_bind (responder, "tcp://*:5556");
+    assert (rc == 0);
     while(1){
 #if selfTest != 1
-        Log::log("api wait for new data",DebugL3);
+        Log::log("api wait for new data",DebugL2);
         char buffer [128] = {0,};
-        int rc = zmq_recv (zeroMQ, buffer, 128, 0);
+        int rc = zmq_recv (responder, buffer, 128, 0);
         if(rc <0){
             Log::log("api failed to receive data. zeroMQ errno: " + string(std::strerror(zmq_errno())),Error);
         }else{
+            Log::log("api got data: "+ string(buffer),Info)
             string respond = api->handleRequest(buffer);
-            Log::log("api send respond:" + respond ,Debug);
-            zmq_send(zeroMQ,respond.c_str(), respond.size(),0);
+            Log::log("api send respond:" + respond ,Info);
+            zmq_send(responder,respond.c_str(), respond.size(),0);
             printf ("Received %s\n",buffer);
         }
+
 #endif
         usleep(1);
     }
@@ -46,10 +51,6 @@ api::api(BaseProductionStation *startStation_, int port) {
     startStation = startStation_;
 #if selfTest != 1
 
-    void *context = zmq_ctx_new ();
-    responder = zmq_socket (context, ZMQ_REP);
-    int rc = zmq_bind (responder, "tcp://*:5555");
-    assert (rc == 0);
     new thread(workerThread,responder,this);
 #endif
 }
