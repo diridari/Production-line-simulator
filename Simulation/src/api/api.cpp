@@ -89,6 +89,9 @@ string api::getNextToken(string *stringTo) {
 }
 
 string api::handleRequest(string request) {
+    if(request.empty()){
+        return "got empty request";
+    }
     string requestTmp = request;
     string out = "parsing error";
     string reqeustKind = getNextToken(&request);
@@ -96,14 +99,15 @@ string api::handleRequest(string request) {
     BaseProductionStation *station = getStationByName(stationName);
     string accessTo = getNextToken(&request);
     int accessID = stoi(accessTo);
-    if(reqeustKind.empty()|| stationName.empty() || accessTo.empty() || (reqeustKind!="get" && reqeustKind != "set")){
+    if (station == nullptr){
+        Log::log("api: no such station "+ stationName,Error);
+        return "no such station ";
+    }
+    if(reqeustKind.empty() ||stationName.empty() || accessTo.empty() || (reqeustKind!="get" && reqeustKind != "set")){
         Log::log("invalid request:"+ requestTmp+"\t allowed requests are: [get/set] StationName ID [opt. Value]",Error);
         return "failed to pares request";
     }
-    if (station == nullptr){
-        Log::log("api: no such station "+ stationName,Error);
-        return "no such station "+ stationName;
-    }
+
     if(reqeustKind == "get"){
         if(station->getSensors()->at(accessID) == nullptr){
             Log::log("api access to not existing sensor \t request: "+requestTmp,Error);
@@ -121,6 +125,10 @@ string api::handleRequest(string request) {
         if(value.empty()){
             Log::log("got get request but no value",Error);
             return "got no actuator value";
+        }
+        if(!isdigit(value.at(0))){
+            Log::log("expected digit in Api request at position 3 and 4",Error);
+            return "no actuator id found";
         }
         switch (stoi(value)) {
             case 0:         station->getActuators()->at(accessID)->setActuatorState(ACTUATOR_OFF); break;

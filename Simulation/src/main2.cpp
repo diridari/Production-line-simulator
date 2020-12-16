@@ -13,7 +13,7 @@ void apiSend(char *toSend,int size, void * context_ ){
     if(size <=5){
         printf("error\r\n");
     }
-    //printf("send :   %s\r\n",toSend);
+    printf("send :   \"%s\"\r\n",toSend);
     char buff[64] = {0,};
     int s;
     if((s = zmq_send (requester, toSend,size, 0))<0){
@@ -55,35 +55,95 @@ char s3[] = "Mill";
 char s4[] = "Drill";
 char s5[] = "Pusher2";
 char s6[] = "End";
+void handlePusher(char * name){
+    uint8_t tmp = 0;
+    char buff[128] = {0,};
+    int s;
+    s = sprintf(buff,"set %s 0 1",name); // start PUSHER
+    apiSend(buff,s,context);
+    do{
+        int s = sprintf(buff,"get %s 1 ",name); // get taster 1 back
+        tmp = apiGet(buff, s, context);
+        usleep(1000);
+    } while (!tmp);
+    s = sprintf(buff,"set %s 0 0",name); // stop PUSHER
+    apiSend(buff,s,context);
+    s = sprintf(buff,"set %s 1 1",name); // start PUSHER back
+    apiSend(buff,s,context);
+
+    // Move Pusher Back
+    do{
+        int s = sprintf(buff,"get %s 0 ",name); // get taster 1 front
+        tmp = apiGet(buff, s, context);
+        usleep(1000);
+    }while (!tmp);
+    s = sprintf(buff,"set %s 1 0",name); // stop PUSHER back
+    apiSend(buff,s,context);
+
+
+}
+void handleMiller(char* name){
+    uint8_t tmp = 0;
+    char buff[128];
+    int s;
+    s = sprintf(buff,"set %s 0 1",name); // start conv
+    apiSend(buff,s,context);
+    do{
+        int s = sprintf(buff,"get %s 0 ",name); // get light
+        tmp = apiGet(buff, s, context);
+        usleep(1000);
+    }while (!tmp);
+    s = sprintf(buff,"set %s 0 0",name); // stop conv
+    apiSend(buff,s,context);
+    s = sprintf(buff,"set %s 1 1",name); // start miller
+    apiSend(buff,s,context);
+    usleep(1000000);
+    s = sprintf(buff,"set %s 0 1",name); // start conv
+    apiSend(buff,s,context);
+    s = sprintf(buff,"set %s 1 0",name); // stop miller
+    apiSend(buff,s,context);
+}
 void runOneTime(){
     printf("run one time \r\n");
     char buff[128];
     int s = sprintf(buff,"set %s 0 1",s1); // start conv1
     apiSend(buff,s,context);
-    uint8_t hasBox = 0;
-    for(int i = 0; i<5000;i++){
-        int s = sprintf(buff,"get %s 0 ",s1); // get l1
-        if (apiGet(buff,s,context))
-            hasBox = 1;
+    uint8_t tmp = 0;
+    do{
+        int s = sprintf(buff,"get %s 0 ",s1); // get light
+        tmp = apiGet(buff, s, context);
         usleep(1000);
-    }
+    }while (!tmp);
+    usleep(3000000);
     s = sprintf(buff,"set %s 0 0",s1); // stop conv1
     apiSend(buff,s,context);
-    if(!hasBox){
-        return;
-    }
+
     // PUSHER 1 Forward
-    s = sprintf(buff,"set %s 0 1",s2); // start conv1
+    handlePusher(s2);
+
+    handleMiller(s3);
+    handleMiller(s4);
+
+    s = sprintf(buff,"set %s 0 0",s3); // stop miller
+    apiSend(buff,s,context);
+
+    usleep(4500000); // wait until box has moved to pusher
+    s = sprintf(buff,"set %s 0 0",s4); // stop conv1
+    apiSend(buff,s,context);
+    handlePusher(s5);
+    s = sprintf(buff,"set %s 0 1",s6); // start end
     apiSend(buff,s,context);
     do{
-        int s = sprintf(buff,"get %s 1 ",s2); // get pusher 1 back
-        hasBox = apiGet(buff,s,context);
+        int s = sprintf(buff,"get %s 0 ",s6); // get taster 1 front
+        tmp = apiGet(buff, s, context);
         usleep(1000);
-    } while (!hasBox);
-    s = sprintf(buff,"set %s 0 0",s2); // start conv1
+    }while (!tmp);
+    s = sprintf(buff,"set %s 0 0",s6); // stop end
     apiSend(buff,s,context);
-    s = sprintf(buff,"set %s 1 1",s2); // start conv1
-    apiSend(buff,s,context);
+
+
+    // Miller
+
 }
 
 int main (void)
