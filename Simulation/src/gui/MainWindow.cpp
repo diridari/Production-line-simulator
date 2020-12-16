@@ -45,9 +45,13 @@ MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : s
         station = station->getNextStationInChain();
     }
     Log::log("Grid min/Max Pos: " + to_string(MinX) + ","+to_string(MinY),Info);
+    gridSizeX = (-MinX)+MaxX+1;
+    gridSizeY = (-MinY) + MaxY+2;
+    Log::log("Grid size " + to_string(gridSizeX) + ","+to_string(gridSizeY),Info);
+
     currentX = 0;
     currentY = 0;
-    //setMinimumSize((-MinX+MaxX)*MinStationSize,(-MinY+MaxY)*MinStationSize);
+    setMinimumSize((-MinX+MaxX)*MinStationSize,(-MinY+MaxY)*MinStationSize);
     lastDir =  noDirection;
     for(int i = 0; i<stationSet->size();i++){
 
@@ -64,7 +68,7 @@ MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : s
         }
         station->setGridPosition(currentX + (-MinX), currentY + (-MinY)); // add the minimum size to the position to get the total position
         lastDir = station->getOutputDirection();
-        station->move(station->getGridPositionX() * MinStationSize, station->getGridPositionY() * MinStationSize);
+        station->move(station->getGridPositionX() * station->width(), station->getGridPositionY() * station->height());
     }
     Log::log("added all Gui Station: grid size {x:" + to_string((-MinX)+MaxX) +" , y:" +to_string((-MinY)+MaxY)+ "}",Info);
 
@@ -73,6 +77,9 @@ MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : s
     connect(timer, &QTimer::timeout, this, &MainWindow::update);
     timer->start(100);
     Log::log("Main window Done",Message);
+
+    // Resize
+
 
 }
 
@@ -84,6 +91,7 @@ void MainWindow::update() {
     while (station != nullptr){
         objectMapper->getGuiStation(station)->handleBoxes();
         station = station->getNextStationInChain();
+
     }
 
 }
@@ -105,3 +113,28 @@ bool MainWindow::dropBox(BaseWorkpiece *wp) {
     return false;
 }
 
+void MainWindow::resizeEvent( QResizeEvent *e) {
+
+    Log::log(" handle resize event from: " + to_string(e->oldSize().width()) + "," + to_string(e->oldSize().height()) +
+             "  to new size: " + to_string(e->size().width()) + "," + to_string(e->size().height()), Message);
+    for (int i = 0; i < stationSet->size(); i++) {
+        GuiStation *s = stationSet->at(i);
+        int scaleX = std::get<0>(s->stationScaleFaktors);
+        int scaleY = std::get<1>(s->stationScaleFaktors);
+        s->resize(e->size().width() / gridSizeX * scaleX, e->size().height() / gridSizeY * scaleY);
+        s->move(s->getGridPositionX() * e->size().width() / gridSizeX,
+                s->getGridPositionY() * e->size().height() / gridSizeY);
+
+    }
+    int baseSize = e->size().width() / gridSizeX;
+    if (e->size().height() / gridSizeY < baseSize)
+        baseSize = e->size().height() / gridSizeY;
+
+
+    for (int i = 0; i < boxSet->size(); i++) {
+        cout << "resize box"<<endl;
+        int t = baseSize/boxSet->at(i)->connectedWorkpiece->getWorkpieceSize();
+        boxSet->at(i)->resize(t,t);
+    }
+
+}

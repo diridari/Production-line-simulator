@@ -20,21 +20,15 @@ GuiBox::GuiBox( BaseWorkpiece *connectedWorkpiece, QWidget *parent_):
 QPoint GuiBox::getNewPos(QPoint BaseOffset, uint32_t WidgetSizeX, uint32_t WidgetSizeY,BaseProductionStation *station  ) {
     guiPos p = Placing::calculateGuiPosition(connectedWorkpiece, station);
     uint32_t posX,posY;
-    posX = BaseOffset.x() + (WidgetSizeX/100) * p.posX - width()/2;
-    posY = BaseOffset.y() +(WidgetSizeY/100) * p.posY -height()/2;
+    posX = BaseOffset.x() + (WidgetSizeX/100) * p.posX ;
+    posY = BaseOffset.y() +(WidgetSizeY/100) * p.posY ;
     return QPoint(posX,posY);
 
 }
 
 void GuiBox::moveToNewPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY,BaseProductionStation * station) {
-    QSize size;
-    switch (station->getOutputDirection()) {
-        case directionRight     :   size = QSize(MinStationSize*2,MinStationSize); break;
-        case directionLeft      :   size = QSize(MinStationSize*2,MinStationSize); break;
-        case directionUp        :   size = QSize(MinStationSize,MinStationSize*2); break;
-        case directionDown      :   size = QSize(MinStationSize,MinStationSize*2); break;
-    }
-    move(getNewPos(BaseOffset,size.width(),size.height(),station));
+
+    move(getNewPos(BaseOffset,baseWidgetSizeX,baseWidgetSizeY,station));
 }
 
 void GuiBox::mousePressEvent(QMouseEvent *event) {
@@ -50,5 +44,11 @@ void GuiBox::mousePressEvent(QMouseEvent *event) {
         default:
             Log::log("clicked on Main  with "+ to_string(event->button()),Message);break;
     }
+}
+
+void GuiBox::resizeEvent(QResizeEvent *e) {
+    cout << "resize to " << e->size().height()<<endl;
+    l->resize(e->size());
+    l->show();
 }
 

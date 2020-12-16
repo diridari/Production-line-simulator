@@ -25,8 +25,8 @@ Q_OBJECT
     string imagePath;
     vector<GuiSensor *> * guiSensors;
     vector<GuiActuator*> *guiActuators;
-    QPushButton *stationActuator;
-    QPushButton *stationActuator2;
+    QPushButton *stationActuator = nullptr;
+    QPushButton *stationActuator2 = nullptr ;
 
 protected:
     void mousePressEvent(QMouseEvent * event);
@@ -35,6 +35,7 @@ public:
     GuiStation(BaseProductionStation *connectedStation, Direction inputDirection, Direction outputDirection,  QWidget *parent = nullptr);
     Direction getInputDirection();
     Direction getOutputDirection();
+    tuple<int,int> stationScaleFaktors;
 
     /**
      * return gui psoition
@@ -54,7 +55,7 @@ public:
 public slots:
     void updateActuatorState();
     void updateActuatorState2();
-
+    void resizeEvent( QResizeEvent *e);
 
 };
 
