@@ -243,7 +243,7 @@ void GuiStation::mousePressEvent(QMouseEvent *event) {
 //    vector<GuiSensor *> * guiSensors;
 //    vector<GuiActuator*> *guiActuators;
 void GuiStation::resizeEvent(QResizeEvent *e) {
-    Log::log("station size"+to_string(e->size().width())+to_string(e->size().height()),Info);
+    Log::log("station size"+to_string(e->size().width())+to_string(e->size().height()),DebugL2);
     l->resize(e->size().width(),e->size().height());
 
     if(stationActuator != nullptr) {

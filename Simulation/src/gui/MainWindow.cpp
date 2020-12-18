@@ -116,7 +116,7 @@ bool MainWindow::dropBox(BaseWorkpiece *wp) {
 void MainWindow::resizeEvent( QResizeEvent *e) {
 
     Log::log(" handle resize event from: " + to_string(e->oldSize().width()) + "," + to_string(e->oldSize().height()) +
-             "  to new size: " + to_string(e->size().width()) + "," + to_string(e->size().height()), Message);
+             "  to new size: " + to_string(e->size().width()) + "," + to_string(e->size().height()), DebugL2);
     for (int i = 0; i < stationSet->size(); i++) {
         GuiStation *s = stationSet->at(i);
         int scaleX = std::get<0>(s->stationScaleFaktors);
@@ -132,7 +132,6 @@ void MainWindow::resizeEvent( QResizeEvent *e) {
 
 
     for (int i = 0; i < boxSet->size(); i++) {
-        cout << "resize box"<<endl;
         int t = baseSize/boxSet->at(i)->connectedWorkpiece->getWorkpieceSize();
         boxSet->at(i)->resize(t,t);
     }
