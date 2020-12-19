@@ -6,10 +6,7 @@
 #include "ArgumentCallbackFunctions.h"
 #include "version.h"
 #include <sstream>
-#include "productionStation/conveyorbeltStation.h"
-#include "productionStation/BaseProductionStation.h"
-#include "productionStation/MillAndDrillStation.h"
-#include "productionStation/PushStation.h"
+
 using namespace std;
 
 
@@ -55,15 +52,17 @@ int callBackLogLogLevelSeperat(int i, char *buff[]) {
 
 static  Direction StringToDirection(string direction){
     Direction ret = Direction::noDirection;
-    if(direction=="up")
+    if(direction=="Up")
         ret = Direction::directionUp;
-    else if (direction=="down")
+    else if (direction=="Down")
         ret = Direction::directionDown;
-    else if (direction=="left")
+    else if (direction=="Left")
         ret = Direction::directionLeft;
     else if (direction=="Right")
         ret = Direction::directionRight;
-
+    else{
+        Log::log("could not parse direction: " + direction,Error);
+    }
     return ret;
 }
 
@@ -72,12 +71,9 @@ int insertStation(int i, char *buff[]){
     Log::log("insert new station by argument",Info);
     i++;
     string stationKind = buff[i];
-    i++;
-    string stationName = buff[i];
-    i++;
-    string inDir = buff[i];
-    i++;
-    string outDir = buff[i];
+    string stationName = buff[i+1];
+    string inDir = buff[i+2];
+    string outDir = buff[i+3];
     BaseProductionStation *s;
     //conveyorbeltStation","MillAndDrillStation","PushStation","BaseProductionStation"
     if(stationKind == "conveyorbeltStation"){
@@ -93,6 +89,9 @@ int insertStation(int i, char *buff[]){
     }
     s->setDirection(StringToDirection(inDir),StringToDirection(outDir));
     newStartStation = s;
+
+
+    return i+3;
 
 }
 

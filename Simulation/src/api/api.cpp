@@ -22,12 +22,13 @@ conveyorbeltStation *c1 = new conveyorbeltStation(c2,"Start");
  */
 void workerThread(void * zeroMQ_, api* api){
     Log::log("api started api worker thread",Info);
+#if selfTest != 1
     void *context = zmq_ctx_new ();
     void * responder = zmq_socket (context, ZMQ_REP);
     int rc = zmq_bind (responder, "tcp://*:5556");
     assert (rc == 0);
     while(1){
-#if selfTest != 1
+
         Log::log("api wait for new data",DebugL3);
         char buffer [128] = {0,};
         int rc = zmq_recv (responder, buffer, 128, 0);
@@ -39,9 +40,10 @@ void workerThread(void * zeroMQ_, api* api){
             Log::log("api send respond:" + respond ,DebugL2);
             zmq_send(responder,respond.c_str(), respond.size(),0);
         }
+     }
 #endif
         usleep(1);
-    }
+
 }
 
 api::api(BaseProductionStation *startStation_, int port) {
