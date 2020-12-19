@@ -13,6 +13,8 @@ set(src_files
         ${src_api}
         ${dir}version.h
         ${dir}main.h
+        ${dir}ArgumentCallbackFunctions.cpp
+        ${dir}ArgumentCallbackFunctions.h
         PARENT_SCOPE )
 
 set(src_gui

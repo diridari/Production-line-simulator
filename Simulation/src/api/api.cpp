@@ -39,7 +39,6 @@ void workerThread(void * zeroMQ_, api* api){
             Log::log("api send respond:" + respond ,DebugL2);
             zmq_send(responder,respond.c_str(), respond.size(),0);
         }
-
 #endif
         usleep(1);
     }

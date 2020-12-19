@@ -11,6 +11,7 @@
 #include <src/productionStation/MillAndDrillStation.h>
 #include <src/api/api.h>
 #include "version.h"
+#include "ArgumentCallbackFunctions.h"
 #include "src/gui/ObjMapper.h"
 ObjMapper *objectMapper;
 conveyorbeltStation *c6 = new conveyorbeltStation(nullptr,"End");
@@ -24,9 +25,15 @@ int main(int argc, char *argv[])
 {
 
 
-    Log::advancedConf()->setCliHighLight(false);
+
     Log::setLogLevel(Info,DebugL3);
-    Log::log("run event Loop",Info);
+    argvParser *p = initProgramArguments();
+    // analyze the given parameters
+    if (!p->analyseArgv(argc, argv)) {
+        p->printHelpMessage(cliHighlighting);
+        return -5;
+    }
+    logArgumentStatus();
     Log:log("start simulation version: " + to_string(VERSION_MAJOR) + "."+ to_string(VERSION_MINOR) + "."+ to_string(VERSION_REVISION) +"\r\n",Message);
 
 
@@ -59,86 +66,6 @@ int main(int argc, char *argv[])
     objectMapper = new ObjMapper;
     QApplication app(argc,argv);
     MainWindow w(c1);
-    void userLoop();
-    new thread(userLoop);
     w.show();
     return app.exec();
-}
-static int datax = 5;
-
-void runOnTime(void * requester){
-
-    sleep(1);
-
-    zmq_connect (requester, "tcp://localhost:5555");
-    char buff[64];
-    int s = sprintf(buff,"send xxx %d",datax);
-    datax++;
-
-    zmq_send (requester, buff,s, 0);
-
-
-    return;
-    sleep(2);
-    bool detectBox = false;
-    c1->setConveyorbeltState(actuatorState::ACTUATOR_ON);
-    for(int i = 0; i<70;i++){
-        usleep(100000);
-        if(c1->getSensors()->at(0)->getSensorState() == sensorState::SENSOR_ON)
-            detectBox = true;
-    }
-    if(!detectBox)
-        return;
-    sleep(1);
-    c1->setConveyorbeltState(actuatorState::ACTUATOR_OFF);
-
-    // Push 1
-    c2->getActuators()->at(0)->toogleState(); // Push on
-    sleep(7);
-    c2->getActuators()->at(0)->toogleState(); // Push back
-    sleep(7);
-    c2->getActuators()->at(0)->toogleState(); // Push off
-
-    // Mill
-    detectBox = false;
-    c3->getActuators()->at(0)->setActuatorState(actuatorState::ACTUATOR_ON);
-    for(int i = 0; i<60;i++){
-        usleep(100000);
-        if(c3->getSensors()->at(0)->getSensorState() == sensorState::SENSOR_ON && !detectBox){
-            detectBox = true;
-            c3->getActuators()->at(0)->setActuatorState(actuatorState::ACTUATOR_OFF);
-            c3->getActuators()->at(1)->setActuatorState(actuatorState::ACTUATOR_ON);
-
-            sleep(1);
-            c3->getActuators()->at(0)->setActuatorState(actuatorState::ACTUATOR_ON);
-            c3->getActuators()->at(1)->setActuatorState(actuatorState::ACTUATOR_OFF);
-
-        }
-    }
-    c3->getActuators()->at(0)->setActuatorState(actuatorState::ACTUATOR_OFF);
-    if(!detectBox)
-        return;
-    // Drill
-    detectBox = false;
-    c4->getActuators()->at(0)->setActuatorState(actuatorState::ACTUATOR_ON);
-    for(int i = 0; i<60;i++){
-        usleep(100000);
-        if(c4->getSensors()->at(0)->getSensorState() == sensorState::SENSOR_ON && !detectBox){
-            detectBox = true;
-            c4->getActuators()->at(0)->setActuatorState(actuatorState::ACTUATOR_OFF);
-            c4->getActuators()->at(1)->setActuatorState(actuatorState::ACTUATOR_ON);
-
-            sleep(1);
-            c4->getActuators()->at(0)->setActuatorState(actuatorState::ACTUATOR_ON);
-            c4->getActuators()->at(1)->setActuatorState(actuatorState::ACTUATOR_OFF);
-        }
-
-    }
-    c4->getActuators()->at(0)->setActuatorState(actuatorState::ACTUATOR_OFF);
-    if(!detectBox)
-        return;
-
-}
-void userLoop(){
-
 }

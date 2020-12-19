@@ -98,7 +98,7 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
 
     Log::log("widget size: "+to_string(l->width())+to_string(l->height()) ,Info)
 
-    Log::log("create station Info lable for"+ connectedStation->getStationName(),DebugL3);
+    Log::log("create station Info label for"+ connectedStation->getStationName(),DebugL3);
     // PrintState Text
     stationState = new QLabel(this);
     stationState->setScaledContents(true);
@@ -168,7 +168,7 @@ void GuiStation::handleBoxes() {
 
     // Update State text
     Log::log("update Station Sates on Gui",DebugL2);
-    string stationStateText = "station State :\r\n";
+    string stationStateText = "station Name:\":"+connectedStation->getStationName()+"\"\r\n";
     vector<BaseActuator *>* actators = connectedStation->getActuators();
     vector<BaseSensor *>* sensors = connectedStation->getSensors();
     for(int i = 0; i <actators->size();i++){
