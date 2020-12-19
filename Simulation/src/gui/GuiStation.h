@@ -35,7 +35,7 @@ public:
     GuiStation(BaseProductionStation *connectedStation, Direction inputDirection, Direction outputDirection,  QWidget *parent = nullptr);
     Direction getInputDirection();
     Direction getOutputDirection();
-    tuple<int,int> stationScaleFaktors;
+    tuple<int,int> stationScaleFaktors = tuple<int,int>(2,1);;
 
     /**
      * return gui psoition

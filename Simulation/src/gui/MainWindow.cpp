@@ -8,48 +8,36 @@
 #include <QtWidgets/QApplication>
 #include <src/main.h>
 #include <QMenuBar>
+#include "GuiPlacing.h"
 
 MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : startStation(startStation), QWidget(parent){
     Log::log("generate Main window",Message);
     stationSet = new vector<GuiStation*>;
     BaseProductionStation *station = startStation;
-    int gridX= 0,gridY=0;
-    int gridSizeX = 1;
-    int gridSizeY = 1;
-    int gridMinX = 1;
-    int gridMinY = 1;
-    Direction     lastDir =  noDirection;
 
+    Direction     lastDir =  noDirection;
+    GuiPlacing p;
     while(station != nullptr){
         GuiStation *guiStation = new  GuiStation(station,station->getInputDirection(),station->getOutputDirection(),this);
-        guiStation->setGridPosition(gridX, gridY); // add the minimum size to the position to get the total position
-        switch (station->getOutputDirection()) {
-            case directionDown  : if(lastDir == directionLeft) {gridX-=2;}   else if(lastDir == directionRight){gridX+=2;}    else if(lastDir == directionDown ) {gridY +=2;}
-                break;
-            case directionUp    : if(lastDir == directionLeft) {gridX-=2;}  else if(lastDir == directionRight){gridX+=2;}   else if(lastDir == directionUp ){gridY -=2;}
-                break;
-            case directionLeft  : if(lastDir == directionUp)  {gridY -=2;}    else if(lastDir == directionDown) {gridY -=2;}   else if(lastDir == directionLeft ){gridX -=2;}
-                break;
-            case directionRight : if(lastDir == directionUp)  {gridY -=2;}    else if(lastDir == directionDown) {gridY +=2;}   else if(lastDir == directionRight ) {gridX +=2;}
-                break;
-        }
-        stationSet->push_back(guiStation);
+        GridPosition gp = p.addStation(station);
         objectMapper->addStation(station,guiStation);
-        if(gridX > gridSizeX) gridSizeX = gridX;
-        if(gridY > gridSizeY) gridSizeY = gridY;
-        if(gridX < gridMinX) gridMinX = gridX;
-        if(gridY < gridMinY) gridMinY = gridY;
-
-        lastDir = station->getOutputDirection();
+        guiStation->setGridPosition(gp.x, gp.y); // add the minimum size to the position to get the total position
+        Log::log("pre place station at:"+to_string(gp.x)+","+to_string(gp.y),Message);
         station = station->getNextStationInChain();
+        stationSet->push_back(guiStation);
     }
 
     //
+    GridPosition offset = p.getCurrentOffset();
     for(int i = 0; i<stationSet->size();i++ ){
         GuiStation * station = stationSet->at(i);
-        station->setGridPosition(station->getGridPositionX()-gridMinX,station->getGridPositionY()-gridMinY);
+        station->setGridPosition(station->getGridPositionX()-offset.x,station->getGridPositionY()-offset.y);
+        Log::log("place station at:"+to_string(station->getGridPositionX())+","+to_string(station->getGridPositionY()),Message);
+
         station->move((station->getGridPositionX()) * station->width(), (station->getGridPositionY()) * station->height());
     }
+    gridSizeY = p.getGridSize().y;
+    gridSizeX = p.getGridSize().x;
 
     ///////////
 
@@ -97,14 +85,14 @@ bool MainWindow::dropBox(BaseWorkpiece *wp) {
 }
 
 void MainWindow::resizeEvent( QResizeEvent *e) {
-    return;
-
+    if(stationSet == nullptr) return;
     Log::log(" handle resize event from: " + to_string(e->oldSize().width()) + "," + to_string(e->oldSize().height()) +
              "  to new size: " + to_string(e->size().width()) + "," + to_string(e->size().height()), DebugL2);
     for (int i = 0; i < stationSet->size(); i++) {
         GuiStation *s = stationSet->at(i);
         int scaleX = std::get<0>(s->stationScaleFaktors);
         int scaleY = std::get<1>(s->stationScaleFaktors);
+
         s->resize(e->size().width() / gridSizeX * scaleX, e->size().height() / gridSizeY * scaleY);
         s->move(s->getGridPositionX() * e->size().width() / gridSizeX,
                 s->getGridPositionY() * e->size().height() / gridSizeY);

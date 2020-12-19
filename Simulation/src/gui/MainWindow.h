@@ -18,8 +18,8 @@ class MainWindow :public QWidget{
 Q_OBJECT
     BaseProductionStation * startStation;
     vector<GuiBox*> *boxSet = new vector<GuiBox*>();
-    vector<GuiStation*> *stationSet;
-    uint8_t gridSizeX,gridSizeY;
+    vector<GuiStation*> *stationSet = new vector<GuiStation*>();
+    uint8_t gridSizeX = 1,gridSizeY=1;
 
 public:
     MainWindow(BaseProductionStation *startStation, QWidget *parent = nullptr);

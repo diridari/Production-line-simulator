@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 
 
 
-    Log::setLogLevel(Info,DebugL3);
+    Log::setLogLevel(Message,DebugL3);
     argvParser *p = initProgramArguments();
     // analyze the given parameters
     if (!p->analyseArgv(argc, argv)) {

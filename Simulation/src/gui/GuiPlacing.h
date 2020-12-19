@@ -21,6 +21,7 @@ class GuiPlacing {
     Direction lastDirection = Direction::noDirection;
     int currentX = 0;
     int currentY = 0;
+    void setBorder(int minx_, int maxx_, int miny_, int maxy);
 public:
     /**
      * get the relativ grid position of a station
@@ -32,7 +33,7 @@ public:
      * get the offset to the point 0,0
      * @return grid ofset
      */
-    GridPosition getCurrentOfset();
+    GridPosition getCurrentOffset();
 
 
     GridPosition getGridSize();
