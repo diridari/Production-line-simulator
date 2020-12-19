@@ -13,4 +13,6 @@ set(src_gui
         ${dir}GuiSensor.cpp
         ${dir}GuiActuator.cpp
         ${dir}GuiActuator.h
+        ${dir}GuiPlacing.cpp
+        ${dir}GuiPlacing.h
         PARENT_SCOPE )

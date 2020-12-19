@@ -35,6 +35,7 @@ include_directories(lib/zeromq)
 message("zeroMQ found at: " ${ZeroMQ_LIBRARY})
 
 if (CMAKE_BUILD_TYPE MATCHES Test)
+    set( CMAKE_BUILD_TYPE Debug)
     find_package(GTest)
     if (GTest_FOUND)
         message(" -- gtest found at " ${GTEST_INCLUDE_DIRS})
