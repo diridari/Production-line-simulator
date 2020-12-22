@@ -11,7 +11,7 @@ GuiBox::GuiBox( BaseWorkpiece *connectedWorkpiece, QWidget *parent_):
         QWidget(parent_),connectedWorkpiece(connectedWorkpiece) {
     Log::log("new gui Box for " + connectedWorkpiece->getName(),Info);
     l = new QLabel(this);
-    uint32_t size = MinStationSize*2/100*connectedWorkpiece->getWorkpieceSize();
+    uint32_t size = MinStationSize*2*connectedWorkpiece->getWorkpieceSize()/100;
     l->setPixmap(QPixmap("../img/box.png").scaled(size,size,Qt::KeepAspectRatio));
     l->show();
 
@@ -50,5 +50,9 @@ void GuiBox::resizeEvent(QResizeEvent *e) {
     cout << "resize to " << e->size().height()<<endl;
     l->resize(e->size());
     l->show();
+}
+
+void GuiBox::update() {
+    QWidget::update();
 }
 

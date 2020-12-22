@@ -36,6 +36,7 @@ public:
     void moveToNewPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY,BaseProductionStation * station);
 public slots:
     void resizeEvent( QResizeEvent *e);
+    void update();
 
 
 

@@ -154,7 +154,7 @@ void GuiStation::handleBoxes() {
         GuiBox *gb = objectMapper->getGuiBox(wp);
         if(gb == nullptr){
             Log::log("found no matching gui box --> create new one ",Debug);
-            // Boxes habe the parent widget as parent because otherwise the box gets cut on the station edges
+            // Boxes have the parent widget as parent because otherwise the box gets cut on the station edges
             gb = new GuiBox(wp,this->parentWidget());
             gb->show();
             objectMapper->addBox(wp,gb);
@@ -163,6 +163,7 @@ void GuiStation::handleBoxes() {
         QPoint baseOffset = pos();
         baseOffset.setX(pos().x()-gb->width()/2);
         baseOffset.setY(pos().y()-gb->width()/2);
+        show();
         gb->moveToNewPos(baseOffset,width(),height(), connectedStation);
     }
 
@@ -182,16 +183,6 @@ void GuiStation::handleBoxes() {
     stationState->adjustSize();
     stationState->show();
     show();
-
-    // update senspos
-    for(int i = 0; i<guiSensors->size();i++){
-        guiSensors->at(i)->update();
-    }
-    // update actuators
-    for(int i = 0; i<guiActuators->size();i++){
-        guiActuators->at(i)->update();
-    }
-
 
 
 }
@@ -262,4 +253,19 @@ void GuiStation::resizeEvent(QResizeEvent *e) {
 
     }
     show();
+}
+
+void GuiStation::update() {
+        show();
+    // update senspos
+    for(int i = 0; i<guiSensors->size();i++){
+        guiSensors->at(i)->update();
+    }
+    // update actuators
+    for(int i = 0; i<guiActuators->size();i++){
+        guiActuators->at(i)->update();
+    }
+
+
+
 }

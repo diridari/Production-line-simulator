@@ -56,7 +56,7 @@ public slots:
     void updateActuatorState();
     void updateActuatorState2();
     void resizeEvent( QResizeEvent *e);
-
+    void update();
 };
 
 

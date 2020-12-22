@@ -28,6 +28,7 @@ MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : s
     }
 
     //
+    setMinimumSize(MinStationSize*p.getGridSize().x,MinStationSize*p.getGridSize().y);
     GridPosition offset = p.getCurrentOffset();
     for(int i = 0; i<stationSet->size();i++ ){
         GuiStation * station = stationSet->at(i);
@@ -60,9 +61,10 @@ void MainWindow::update() {
     BaseProductionStation *station = startStation;
     station->runSimulationStep(); // update simulation
     while (station != nullptr){
-        objectMapper->getGuiStation(station)->handleBoxes();
+        GuiStation *g =  objectMapper->getGuiStation(station);
+        g->update();
+        g->handleBoxes();
         station = station->getNextStationInChain();
-
     }
 
 }

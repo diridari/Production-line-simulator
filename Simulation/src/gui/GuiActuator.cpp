@@ -70,6 +70,8 @@ void GuiActuator::update() {
                 break;
         }
     }
+    l->resize(actuatorSize);
+    resize(actuatorSize);
     move(getPos(BaseOffset,parent->width(),parent->height()));
     show();
 
@@ -122,6 +124,9 @@ QPoint GuiActuator::getPos(QPoint BaseOffset_, uint32_t baseWidgetSizeX, uint32_
     posX = BaseOffset.x() + (parentWidget()->width()/100) * p.posX;
     posY = BaseOffset.y() +(parentWidget()->height()/100) * p.posY; // move by widget size to the left
     return QPoint(posX,posY);
+}
+
+void GuiActuator::resizeEvent(QResizeEvent *e) {
 }
 
 

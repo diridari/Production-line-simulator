@@ -30,6 +30,7 @@ public:
     GuiActuator(BaseActuator *connectedActuator_, BaseProductionStation *station, QWidget *parent);
 
     void update();
+    void resizeEvent( QResizeEvent *e);
 };
 
 
