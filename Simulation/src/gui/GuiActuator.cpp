@@ -92,11 +92,11 @@ QPoint GuiActuator::getPos(QPoint BaseOffset_, uint32_t baseWidgetSizeX, uint32_
                       //p = guiPos(0,connectedActuator->getPosition()*0.8);
                       p.posX = 0;
                       break;
-                    case directionRight:      rot = QTransform().rotate(0);   BaseOffset = QPoint(-this->width(),0);
+                    case directionRight:      rot = QTransform().rotate(0);   BaseOffset = QPoint(-this->width()*2,0);
                      // p = guiPos(connectedActuator->getPosition()*0.8,0);
                       p.posY = 0;
                       break;
-                    case directionLeft:       rot = QTransform().rotate(180); BaseOffset = QPoint(this->width(),0);
+                    case directionLeft:       rot = QTransform().rotate(180); BaseOffset = QPoint(this->width()*2,0);
                      // p = guiPos(100-connectedActuator->getPosition()*0.8,0);
                       p.posY = 0;
                       break;

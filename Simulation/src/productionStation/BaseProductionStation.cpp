@@ -137,14 +137,14 @@ string BaseProductionStation::getStationInfo() {
         s += "\tActuators:\r\n";
         for(int i = 0; i<actuatorSet->size();i++){
             s+= "\t\t* " + actuatorSet->at(i)->getActuatorInfo() + "\r\n";
-            s += "\t\t    Api access: \"set "+getStationName()+" " + to_string(i) + " <0/1>\r\n";
+            s += "\t\t    Api access: \"set "+getStationName()+" " + to_string(i) + " <0/1>\"\r\n";
         }
     }
     if(sensorSet->size() >0){
         s += "\tSensors:\r\n";
         for(int i = 0; i<sensorSet->size();i++){
             s+= "\t\t* " + sensorSet->at(i)->getSensorInfo() + "\r\n";
-            s += "\t\t    Api access: \"get "+getStationName()+" " + to_string(i) +"\r\n";
+            s += "\t\t    Api access: \"get "+getStationName()+" " + to_string(i) +"\"\r\n";
         }
     }
     return s;
