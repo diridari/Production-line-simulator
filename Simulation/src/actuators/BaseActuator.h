@@ -44,12 +44,14 @@ protected:
 
     string  actuatorImageActiv = "";
     string  actuatorImageInactiv = "";
+    string ActuatorInfo = "a not further defined actuator";
 
 public:
     virtual int32_t getPosition();
     virtual string getActuatorImage();
     virtual actuatorKind getActuatorKind();
-    BaseActuator(string name): actuatorName(name){};
+    BaseActuator(string name): actuatorName(name){
+    };
     virtual string getActuatorName();
     virtual actuatorState getActuatorState();
     virtual void setActuatorState(actuatorState toSet);
@@ -63,6 +65,7 @@ public:
     virtual void runActuator( vector<BaseWorkpiece*> * boxSet, BaseProductionStation *station) {};
     friend std::ostream &operator<<(std::ostream &strm, BaseActuator &a);
     virtual void toogleState();
+    string getActuatorInfo();
 };
 
 

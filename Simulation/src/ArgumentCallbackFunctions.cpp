@@ -15,7 +15,7 @@ int port = 5555;
 bool generateAPI = true;
 bool cliHighlighting = true;
 BaseProductionStation *newStartStation = nullptr;
-
+extern BaseProductionStation *startStation;
 
 int callBackPort(int i, char **buff) {
     i++;
@@ -95,6 +95,19 @@ int insertStation(int i, char *buff[]){
 
 }
 
+void generateSetupInfo(){
+    cout << "The current setup is:"<<endl;
+    BaseProductionStation * s = startStation;
+    if(newStartStation != nullptr)
+        s = newStartStation;
+    int index = 1;
+    while (s != nullptr){
+        cout <<index<<": " << s->getStationInfo()<<endl<<endl;
+        s = s->getNextStationInChain();
+        index++;
+    }
+
+}
 argvParser *initProgramArguments() {
     string desc = "This application intense to simulate the \"Fischertechnik-Productionline\". \r\n"
                   "This simulation was created during the Corona crisis to enable the students of the University of Applied Sciences Munich to attend the work placement  for the lecture \"Embedded Systems\". \r\n"
@@ -111,13 +124,14 @@ argvParser *initProgramArguments() {
     argvParser *p = new argvParser("FischertechnikSimulation", desc, true, "%#");
     p->checkForDefaulConfigFilesIn("simConf", "~/ ./ ../");
 
-p->addSection("StationSetup");
-    p->addArg("-s","--addStation","insert Station. This station gets insert before the last station (build reverse!)  \r\n \t\t\t\t"
+    p->addSection("StationSetup");
+    p->addArg("-s","--addStation","insert Station. This station gets insert before the last station (build reverse!)  \r\n \t\t\t\t\t\t\t"
                                   "setup <stationKind> <unique stationName> <directionIn> <directionOut>",insertStation)->numberOfParameter(4)->allowedParameter(4,"conveyorbeltStation","MillAndDrillStation","PushStation","BaseProductionStation")
                                   ->addAdditionalHelp(R"(with this command it is possible to define the simulation setup. There are 4 Station kinds: "conveyorbeltStation", "MillAndDrillStation", "PushStation" and the "BaseProductionStation)"
                                                       "to define a new setup is is necessary to the define the stations in reverse order for each station the command must be called with 4 arguments:\r\n"
                                                       "1. StationKind \r\n2. an unique stationName\r\n 3. input direction (Up, Down, Left, Right)\r\n 4. output direction(Up, Down, Left, Right)");
 
+    p->addArg("-cs","--currentSetup","print information about the current setup. Use \"help --currentSetup\"",[] {generateSetupInfo(); exit(-1);  });
 // API
     p->addSection("API");
     p->addArg("-p", "--port", "port for the api", callBackPort)->numberOfParameter(1)

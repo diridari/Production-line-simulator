@@ -103,6 +103,8 @@ public:
     bool dropBox(BaseWorkpiece *wpToDrop);
     bool hasBox(BaseWorkpiece *wpToDrop);
 
+    string getStationInfo();
+
 
 };
 

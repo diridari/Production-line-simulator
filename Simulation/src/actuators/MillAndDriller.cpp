@@ -10,4 +10,6 @@ MillAndDriller::MillAndDriller(string name) : BaseActuator("Driller:"+name) {
     actuatorImageInactiv = "../img/drillerInactiv.png";
 
     position = 50;
+
+    ActuatorInfo = "Miller and Driller. This Actuator has no real effect";
 }

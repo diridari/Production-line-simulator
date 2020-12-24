@@ -9,6 +9,14 @@
 directedPusher::directedPusher(pusher *toHandle, PushDirection pushdirection_):BaseActuator("directedPusher") {
     connectedPusher = toHandle;
     pushdirection = pushdirection_;
+
+    ActuatorInfo = "Directed Pusher. This actuator moves a directed pusher in the direction: ";
+    if(pushdirection_ == PushDirection::Forward)
+        ActuatorInfo += "\"forward\"";
+    else
+        ActuatorInfo += "\"backward\"";
+
+
 }
 
 void directedPusher::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation *station) {
