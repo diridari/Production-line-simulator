@@ -10,7 +10,7 @@
 
 TEST(BaseWorkPiece,CreateObj){
     BaseWorkpiece b1(0);
-    BaseWorkpiece b2;
+    BaseWorkpiece b2("b1");
     BaseWorkpiece b3(10,"test");
     BaseWorkpiece b4("test");
     ASSERT_EQ(b1.getPosition(),0);
@@ -46,7 +46,7 @@ TEST(BaseWorkPiece,maxPos) {
 }
 TEST(BoxPlacing, canBoxBePlacedOnEmptyStationWithNoNext){
     conveyorbeltStation s1(nullptr);
-    BaseWorkpiece wp1 = BaseWorkpiece(40);
+    BaseWorkpiece wp1 = BaseWorkpiece(40,"",10);
     ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 0));
     ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 10));
     ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 90));
@@ -57,7 +57,7 @@ TEST(BoxPlacing, canBoxBePlacedOnEmptyStationWithNoNext){
 TEST(BoxPlacing, canBoxBePlacedOnEmptyStationWithNext){
     conveyorbeltStation s2(nullptr);
     conveyorbeltStation s1(&s2);
-    BaseWorkpiece wp1 = BaseWorkpiece(40);
+    BaseWorkpiece wp1 = BaseWorkpiece(40,"",10);
     ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 0));
     ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 10));
     ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 90));
@@ -68,8 +68,8 @@ TEST(BoxPlacing, canBoxBePlacedOnEmptyStationWithNext){
 TEST(BoxPlacing, canBoxBePlacedOnEmptyStationWithNextBlockedAt5){
     conveyorbeltStation s2(nullptr);
     conveyorbeltStation s1(&s2);
-    BaseWorkpiece wp1 = BaseWorkpiece(40);
-    BaseWorkpiece wp2 = BaseWorkpiece(5);
+    BaseWorkpiece wp1 = BaseWorkpiece(40,"",10);
+    BaseWorkpiece wp2 = BaseWorkpiece(5,"",10);
     s2.insertBox(&wp2,5);
     ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 0));
     ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 10));
@@ -81,8 +81,8 @@ TEST(BoxPlacing, canBoxBePlacedOnEmptyStationWithNextBlockedAt5){
 TEST(BoxPlacing, canBoxBePlacedOnEmptyStationWithNextBlockedAt10){
     conveyorbeltStation s2(nullptr);
     conveyorbeltStation s1(&s2);
-    BaseWorkpiece wp1 = BaseWorkpiece(40);
-    BaseWorkpiece wp2 = BaseWorkpiece(10);
+    BaseWorkpiece wp1 = BaseWorkpiece(40,"",10);
+    BaseWorkpiece wp2 = BaseWorkpiece(10,"",10);
     s2.insertBox(&wp2,10);
     ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 0));
     ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 10));
@@ -97,8 +97,8 @@ TEST(BoxPlacing, canBoxBePlacedOnEmptyStationWithNextBlockedAt10){
 
 TEST(BaseWorkPiece, canBoxBePlacedOnitSelf){
     conveyorbeltStation s1(nullptr);
-    BaseWorkpiece wp1 = BaseWorkpiece(10);
-    BaseWorkpiece wp2 = BaseWorkpiece(50);
+    BaseWorkpiece wp1 = BaseWorkpiece(10,"",10);
+    BaseWorkpiece wp2 = BaseWorkpiece(50,"",10);
     s1.insertBox(&wp1,10);
     s1.insertBox(&wp2,50);
     ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 0));
@@ -113,8 +113,8 @@ TEST(BaseWorkPiece, canBoxBePlacedOnitSelf){
 
 TEST(BoxPlacing, canBoxBePlacedOnStationWithOneOtherBox){
     conveyorbeltStation s1(nullptr);
-    BaseWorkpiece wp1 = BaseWorkpiece(10);
-    BaseWorkpiece wp2 = BaseWorkpiece(50);
+    BaseWorkpiece wp1 = BaseWorkpiece(10,"",10);
+    BaseWorkpiece wp2 = BaseWorkpiece(50,"",10);
     s1.insertBox(&wp1,10);
     s1.insertBox(&wp2,50);
     ASSERT_TRUE(Placing::canWorkpieceBePlacedAt(&s1, &wp1, 39));

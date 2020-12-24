@@ -8,9 +8,13 @@
 
 #include <src/actuators/pusher.h>
 #include "BaseProductionStation.h"
+#include "../actuators/directedPusher.h"
 
 class PushStation: public BaseProductionStation {
     pusher *pusher_;
+    directedPusher *forwardPusher ;
+    directedPusher *backwardPusher;
+    bool lastPushDirection = true; // to toggle the first pusher to see when both pusher are active
 public:
     PushStation(BaseProductionStation * next, string name = "");
     void runSimulationStep();

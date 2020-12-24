@@ -73,7 +73,7 @@ guiPos Placing::calculateGuiPosition(uint32_t pos, BaseProductionStation *statio
     }
     uint32_t posX,posY;
     // Calculate the pos depending of station direction
-    if(pos <= 50){
+    if(pos < 50){
         switch (station->getInputDirection()) {
             case directionUp    : posY = pos;        if (station->getOutputDirection() == directionDown ) {posX = 50;}
                 else if(station->getOutputDirection() == directionRight) {posX= 25+ (float)pos/2;}
@@ -94,10 +94,10 @@ guiPos Placing::calculateGuiPosition(uint32_t pos, BaseProductionStation *statio
         }
     }else {
         switch (station->getOutputDirection()) {
-            case directionUp    : if (station->getInputDirection() == directionDown ) {posX = 50;}                      else {posX= 50;};       posY = 100-pos;    break;
-            case directionDown  :if (station->getInputDirection() == directionUp ) {posX = 50;}                         else {posX= 50;};       posY = pos;        break;
-            case directionLeft  : posX = 100 - pos; if (station->getInputDirection() == directionRight ) {posY = 50;}   else {posY= 50;};       break;
-            case directionRight : posX = pos; if (station->getInputDirection() == directionLeft ) {posY = 50;}          else {posY= 50;};       break;
+            case directionUp    :posX= 50;       posY = 100-pos;    break;
+            case directionDown  :posX = 50;      posY = pos;        break;
+            case directionLeft  : posX = 100 - pos; posY = 50;       break;
+            case directionRight : posX = pos;       posY = 50;       break;
         }
 
     }

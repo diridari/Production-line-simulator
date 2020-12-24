@@ -8,16 +8,18 @@
 #include <QtWidgets/QLabel>
 #include <src/productionStation/BaseProductionStation.h>
 #include "GuiBox.h"
+#include "GuiStation.h"
 #include <QtWidgets/QGridLayout>
 #include <QMouseEvent>
 
 
-#define MinStationSize 200
+#define MinStationSize 150
 class MainWindow :public QWidget{
 Q_OBJECT
     BaseProductionStation * startStation;
-    vector<GuiBox*> *boxSet;
-    vector<GuiStation*> *stationSet;
+    vector<GuiBox*> *boxSet = new vector<GuiBox*>();
+    vector<GuiStation*> *stationSet = new vector<GuiStation*>();
+    uint8_t gridSizeX = 1,gridSizeY=1;
 
 public:
     MainWindow(BaseProductionStation *startStation, QWidget *parent = nullptr);
@@ -26,6 +28,7 @@ public:
 
 public slots:
     void update();
+    void resizeEvent( QResizeEvent *e) override;
 };
 
 

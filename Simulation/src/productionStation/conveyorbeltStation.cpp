@@ -15,7 +15,7 @@ void conveyorbeltStation::runSimulationStep() {
 
 }
 
-conveyorbeltStation::conveyorbeltStation(BaseProductionStation *next, string name) :BaseProductionStation(next,"conveyorbeltStation:"+name ){
+conveyorbeltStation::conveyorbeltStation(BaseProductionStation *next, string name) :BaseProductionStation(next,name ){
     conv = new conveyorbelt("Band1");
     lb = new lightBarrier(80);
     addActuator(conv);

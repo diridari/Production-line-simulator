@@ -16,7 +16,11 @@ string BaseSensor::getSensorName() {
     return sensorName;
 }
 
-BaseSensor::BaseSensor(uint32_t placedAt_ = 0, string sensorName_) : placedAt(placedAt_), sensorName(sensorName_){}
+BaseSensor::BaseSensor(uint32_t placedAt_ = 0, string sensorName_) : placedAt(placedAt_), sensorName(sensorName_){
+    sensOnImage = "../img/lightSensDetect.png";
+    sensOffImage = "../img/lightSensIdle.png";
+
+}
 
 uint32_t BaseSensor::getSensorPos() {
     return placedAt;
@@ -24,6 +28,18 @@ uint32_t BaseSensor::getSensorPos() {
 
 sensorState BaseSensor::getSensorState() {
     return sensorState_;
+}
+
+sensorKind BaseSensor::getSensorKind() {
+    return kinfOfSensor;
+}
+
+string BaseSensor::getSensOffImage() {
+    return sensOffImage;
+}
+
+string BaseSensor::getSensOnImage() {
+    return sensOnImage;
 }
 
 std::ostream &operator<<(ostream &strm, sensorState a) {

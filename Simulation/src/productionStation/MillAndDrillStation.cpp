@@ -18,7 +18,7 @@ void MillAndDrillStation::setConveyorbeltState(actuatorState toSet) {
     conv->setActuatorState(toSet);
 }
 
-MillAndDrillStation::MillAndDrillStation(BaseProductionStation *next, string name):BaseProductionStation(next,"MillAndDriller") {
+MillAndDrillStation::MillAndDrillStation(BaseProductionStation *next, string name):BaseProductionStation(next,name) {
     conv = new conveyorbelt("Band");
     lb = new lightBarrier(50);
     addActuator(conv);

@@ -8,4 +8,6 @@ set(src_actuators
         ${dir}pusher.h
         ${dir}MillAndDriller.h
         ${dir}MillAndDriller.cpp
+        ${dir}directedPusher.cpp
+        ${dir}directedPusher.h
         PARENT_SCOPE )

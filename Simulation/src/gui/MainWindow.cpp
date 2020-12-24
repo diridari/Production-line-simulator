@@ -8,71 +8,50 @@
 #include <QtWidgets/QApplication>
 #include <src/main.h>
 #include <QMenuBar>
+#include "GuiPlacing.h"
 
 MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : startStation(startStation), QWidget(parent){
     Log::log("generate Main window",Message);
     stationSet = new vector<GuiStation*>;
     BaseProductionStation *station = startStation;
-    int MinX = 0;
-    int MinY = 0;
-    int MaxX = 0;
-    int MaxY = 0;
-    int currentX = 0;
-    int currentY = 0;
-    Direction     lastDir =  noDirection;
 
+    Direction     lastDir =  noDirection;
+    GuiPlacing p;
     while(station != nullptr){
         GuiStation *guiStation = new  GuiStation(station,station->getInputDirection(),station->getOutputDirection(),this);
-        stationSet->push_back(guiStation); //generate all stations
+        GridPosition gp = p.addStation(station);
         objectMapper->addStation(station,guiStation);
-        // calculate the needed grid
-        switch (station->getOutputDirection()) {
-            case directionDown  : if(lastDir == directionLeft) {currentX-=2;}   else if(lastDir == directionRight){currentX+=2;}    else if(lastDir == directionDown ) {currentY +=2;}
-                break;
-            case directionUp    : if(lastDir == directionLeft) {currentX-=2;}  else if(lastDir == directionRight){currentX+=2;}   else if(lastDir == directionUp ){currentY -=2;}
-                break;
-            case directionLeft  : if(lastDir == directionUp)  {currentY -=2;}    else if(lastDir == directionDown) {currentY -=2;}   else if(lastDir == directionLeft ){currentX -=2;}
-                break;
-            case directionRight : if(lastDir == directionUp)  {currentY -=2;}    else if(lastDir == directionDown) {currentY +=2;}   else if(lastDir == directionRight ) {currentX +=2;}
-                break;
-        }
-        if(currentX > MaxX) MaxX = currentX;
-        if(currentX < MinX) MinX = currentX;
-        if(currentY < MinY) MinY = currentY;
-        if(currentY > MaxY) MaxY = currentY;
-
-        lastDir = station->getOutputDirection();
+        guiStation->setGridPosition(gp.x, gp.y); // add the minimum size to the position to get the total position
+        Log::log("pre place station at:"+to_string(gp.x)+","+to_string(gp.y),Message);
         station = station->getNextStationInChain();
+        stationSet->push_back(guiStation);
     }
-    Log::log("Grid min/Max Pos: " + to_string(MinX) + ","+to_string(MinY),Info);
-    currentX = 0;
-    currentY = 0;
-    //setMinimumSize((-MinX+MaxX)*MinStationSize,(-MinY+MaxY)*MinStationSize);
-    lastDir =  noDirection;
-    for(int i = 0; i<stationSet->size();i++){
 
+    //
+    setMinimumSize(MinStationSize*p.getGridSize().x,MinStationSize*p.getGridSize().y);
+    GridPosition offset = p.getCurrentOffset();
+    for(int i = 0; i<stationSet->size();i++ ){
         GuiStation * station = stationSet->at(i);
-        switch (station->getOutputDirection()) {
-            case directionDown  : if(lastDir == directionLeft) {currentX-=1;}   else if(lastDir == directionRight){currentX+=2;}    else if(lastDir == directionDown ) {currentY +=2;} else {currentY +=1;}
-                break;
-            case directionUp    : if(lastDir == directionLeft) {currentX-=1;}  else if(lastDir == directionRight){currentX+=2;}   else if(lastDir == directionUp ){currentY -=2;} else {currentY -=1;}
-                break;
-            case directionLeft  : if(lastDir == directionUp)  {currentY -=1;}    else if(lastDir == directionDown) {currentY -=2;}   else if(lastDir == directionLeft ){currentX -=2;} else {currentX -=1;}
-                break;
-            case directionRight : if(lastDir == directionUp)  {currentY -=1;}    else if(lastDir == directionDown) {currentY +=2;}   else if(lastDir == directionRight ) {currentX +=2;} else {currentX +=1;}
-                break;
-        }
-        station->setGridPosition(currentX + (-MinX), currentY + (-MinY)); // add the minimum size to the position to get the total position
-        lastDir = station->getOutputDirection();
-        station->move(station->getGridPositionX() * MinStationSize, station->getGridPositionY() * MinStationSize);
+        station->setGridPosition(station->getGridPositionX()-offset.x,station->getGridPositionY()-offset.y);
+        Log::log("place station at:"+to_string(station->getGridPositionX())+","+to_string(station->getGridPositionY()),Message);
+
+        station->move((station->getGridPositionX()) * station->width(), (station->getGridPositionY()) * station->height());
     }
-    Log::log("added all Gui Station: grid size {x:" + to_string((-MinX)+MaxX) +" , y:" +to_string((-MinY)+MaxY)+ "}",Info);
+    gridSizeY = p.getGridSize().y;
+    gridSizeX = p.getGridSize().x;
+
+    ///////////
+
+    Log::log("added all Gui Station: grid size {x:" + to_string(gridSizeX) +" , y:" +to_string(gridSizeY)+ "}",Info);
 
     Log::log("Start Timer",Info);
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::update);
     timer->start(100);
     Log::log("Main window Done",Message);
+
+    // Resize
+
 
 }
 
@@ -82,7 +61,9 @@ void MainWindow::update() {
     BaseProductionStation *station = startStation;
     station->runSimulationStep(); // update simulation
     while (station != nullptr){
-        objectMapper->getGuiStation(station)->handleBoxes();
+        GuiStation *g =  objectMapper->getGuiStation(station);
+        g->update();
+        g->handleBoxes();
         station = station->getNextStationInChain();
     }
 
@@ -105,3 +86,28 @@ bool MainWindow::dropBox(BaseWorkpiece *wp) {
     return false;
 }
 
+void MainWindow::resizeEvent( QResizeEvent *e) {
+    if(stationSet == nullptr) return;
+    Log::log(" handle resize event from: " + to_string(e->oldSize().width()) + "," + to_string(e->oldSize().height()) +
+             "  to new size: " + to_string(e->size().width()) + "," + to_string(e->size().height()), DebugL2);
+    for (int i = 0; i < stationSet->size(); i++) {
+        GuiStation *s = stationSet->at(i);
+        int scaleX = std::get<0>(s->stationScaleFaktors);
+        int scaleY = std::get<1>(s->stationScaleFaktors);
+
+        s->resize(e->size().width() / gridSizeX * scaleX, e->size().height() / gridSizeY * scaleY);
+        s->move(s->getGridPositionX() * e->size().width() / gridSizeX,
+                s->getGridPositionY() * e->size().height() / gridSizeY);
+
+    }
+    int baseSize = e->size().width() / gridSizeX;
+    if (e->size().height() / gridSizeY < baseSize)
+        baseSize = e->size().height() / gridSizeY;
+
+
+    for (int i = 0; i < boxSet->size(); i++) {
+        int t = baseSize/boxSet->at(i)->connectedWorkpiece->getWorkpieceSize();
+        boxSet->at(i)->resize(t,t);
+    }
+
+}

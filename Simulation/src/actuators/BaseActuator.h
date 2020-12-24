@@ -46,13 +46,13 @@ protected:
     string  actuatorImageInactiv = "";
 
 public:
-    int32_t getPosition();
-    string getActuatorImage();
-    actuatorKind getActuatorKind();
+    virtual int32_t getPosition();
+    virtual string getActuatorImage();
+    virtual actuatorKind getActuatorKind();
     BaseActuator(string name): actuatorName(name){};
-    string getActuatorName();
-    actuatorState getActuatorState();
-    void setActuatorState(actuatorState toSet);
+    virtual string getActuatorName();
+    virtual actuatorState getActuatorState();
+    virtual void setActuatorState(actuatorState toSet);
 
     /**
      * run this actuator for each Workpiece.

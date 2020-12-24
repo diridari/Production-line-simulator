@@ -10,7 +10,7 @@
 
 TEST(BaseWorkstation,canStationReceiveBox){
     conveyorbeltStation s1(nullptr);
-    BaseWorkpiece wp1 = BaseWorkpiece();
+    BaseWorkpiece wp1 = BaseWorkpiece("b1");
     s1.insertBox(&wp1);
     ASSERT_FALSE(Placing::canStationReceiveNewWorkpiece(&s1, 0));
     ASSERT_FALSE(Placing::canStationReceiveNewWorkpiece(&s1, 1));
@@ -28,7 +28,7 @@ TEST(BaseWorkstation,canStationReceiveBox){
 }
 TEST(BaseWorkstation,canStationReceiveBoxGetFirstBox){
     conveyorbeltStation s1(nullptr);
-    BaseWorkpiece wp1 = BaseWorkpiece();
+    BaseWorkpiece wp1 = BaseWorkpiece("b1");
     BaseWorkpiece wp2 = BaseWorkpiece(20);
     s1.insertBox(&wp1);
     s1.insertBox(&wp2);

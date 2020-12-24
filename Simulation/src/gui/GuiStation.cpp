@@ -32,16 +32,22 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
     if(inputDirection == directionUp && outputDirection == directionDown || inputDirection == directionDown && outputDirection ==  directionUp) {
         imagePath = "../img/BaseStation.png";
         size = QSize(MinStationSize,MinStationSize*2);
+        stationScaleFaktors = tuple<int,int>(1,2);
     }else if (inputDirection == directionLeft && outputDirection == directionRight || inputDirection == directionRight && outputDirection ==  directionLeft){
         imagePath = "../img/BaseStation.png";
         rot = QTransform().rotate(90);
         size = QSize(MinStationSize*2,MinStationSize);
+        stationScaleFaktors = tuple<int,int>(2,1);
     }else if(inputDirection == directionUp && outputDirection == directionRight) {
         imagePath = "../img/BaseStationEdge.png";
         size = QSize(MinStationSize*2,MinStationSize);
+        stationScaleFaktors = tuple<int,int>(2,1);
+
     }else if(inputDirection == directionRight && outputDirection == directionUp){
         imagePath = "../img/BaseStationEdge.png";
         size = QSize(MinStationSize*2,MinStationSize);
+        stationScaleFaktors = tuple<int,int>(2,1);
+
         rot = QTransform().rotate(90);
         rot = rot.rotate(180,Qt::XAxis);
     }
@@ -49,6 +55,7 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
         imagePath = "../img/BaseStationEdge.png";
         rot = QTransform().rotate(90);
         size = QSize(MinStationSize,MinStationSize*2);
+        stationScaleFaktors = tuple<int,int>(1,2);
 
     }
     else if(inputDirection == directionDown && outputDirection == directionRight){
@@ -56,14 +63,19 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
         rot = rot.rotate(180);
         rot = rot.rotate(180,Qt::YAxis);
         size = QSize(MinStationSize*2,MinStationSize);
+        stationScaleFaktors = tuple<int,int>(2,1);
+
     }else if(inputDirection == directionDown && outputDirection == directionLeft) {
         imagePath = "../img/BaseStationEdge.png";
         rot = QTransform().rotate(180);
         size = QSize(MinStationSize*2,MinStationSize);
+        stationScaleFaktors = tuple<int,int>(2,1);
+
 
     }else if(inputDirection == directionLeft && outputDirection == directionDown){
         imagePath = "../img/BaseStationEdge.png";
         size = QSize(MinStationSize,MinStationSize*2);
+        stationScaleFaktors = tuple<int,int>(1,2);
         rot = QTransform().rotate(90);
         rot =rot.rotate(180,Qt::XAxis);
 
@@ -78,15 +90,15 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
         Log::log("Gui station could not find rotation matrix to determine station image: inputdir" + to_string(inputDirection) + " outputdir: "+ to_string(outputDirection),Error);
     }
     l = new QLabel(this);
-    QPixmap pix = QPixmap(imagePath.c_str()).scaled(size,Qt::KeepAspectRatio).transformed(rot);
+    QPixmap pix = QPixmap(imagePath.c_str()).scaled(size,Qt::IgnoreAspectRatio).transformed(rot);
     l->setPixmap(pix);
     l->setScaledContents(true);
     l->setMinimumSize(size);
     setMinimumSize(size);
-    setMaximumSize(size);
+
     Log::log("widget size: "+to_string(l->width())+to_string(l->height()) ,Info)
 
-    Log::log("create station Info lable for"+ connectedStation->getStationName(),DebugL3);
+    Log::log("create station Info label for"+ connectedStation->getStationName(),DebugL3);
     // PrintState Text
     stationState = new QLabel(this);
     stationState->setScaledContents(true);
@@ -115,11 +127,21 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
     Log::log("created all actuators",Debug);
     // Change actuator State Button
     stationActuator = new QPushButton(this);
-    stationActuator->setText("set Actuator State ");
+    string s = "set "+string(connectedStation->getActuators()->at(0)->getActuatorName());
+    stationActuator->setText(s.c_str());
     stationActuator->raise();
     stationActuator->move(this->size().width()-stationActuator->size().width(), 1);
     stationActuator->show();
     connect(stationActuator, SIGNAL(clicked()), this, SLOT(updateActuatorState()));
+    if(connectedStation->getActuators()->size() >=2){
+        stationActuator2 = new QPushButton(this);
+        s = "set "+string(connectedStation->getActuators()->at(1)->getActuatorName());
+        stationActuator2->setText(s.c_str());
+        stationActuator2->raise();
+        stationActuator2->move(this->size().width()-stationActuator2->size().width(), stationActuator2->size().height()+2);
+        stationActuator2->show();
+        connect(stationActuator2, SIGNAL(clicked()), this, SLOT(updateActuatorState2()));
+    }
 
 
 }
@@ -132,18 +154,22 @@ void GuiStation::handleBoxes() {
         GuiBox *gb = objectMapper->getGuiBox(wp);
         if(gb == nullptr){
             Log::log("found no matching gui box --> create new one ",Debug);
-            // Boxes habe the parent widget as parent because otherwise the box gets cut on the station edges
+            // Boxes have the parent widget as parent because otherwise the box gets cut on the station edges
             gb = new GuiBox(wp,this->parentWidget());
             gb->show();
             objectMapper->addBox(wp,gb);
         }
         // move box
-        gb->moveToNewPos(pos(),width(),height(), connectedStation);
+        QPoint baseOffset = pos();
+        baseOffset.setX(pos().x()-gb->width()/2);
+        baseOffset.setY(pos().y()-gb->width()/2);
+        show();
+        gb->moveToNewPos(baseOffset,width(),height(), connectedStation);
     }
 
     // Update State text
     Log::log("update Station Sates on Gui",DebugL2);
-    string stationStateText = "station State :\r\n";
+    string stationStateText = "station Name:\":"+connectedStation->getStationName()+"\"\r\n";
     vector<BaseActuator *>* actators = connectedStation->getActuators();
     vector<BaseSensor *>* sensors = connectedStation->getSensors();
     for(int i = 0; i <actators->size();i++){
@@ -158,16 +184,6 @@ void GuiStation::handleBoxes() {
     stationState->show();
     show();
 
-    // update senspos
-    for(int i = 0; i<guiSensors->size();i++){
-        guiSensors->at(i)->update();
-    }
-    // update actuators
-    for(int i = 0; i<guiActuators->size();i++){
-        guiActuators->at(i)->update();
-    }
-
-
 
 }
 
@@ -177,12 +193,19 @@ void GuiStation::updateActuatorState() {
     stationActuator->raise();
 
 }
+void GuiStation::updateActuatorState2() {
+    Log::log("gui change actuator state for "+connectedStation->getStationName(),Debug);
+    connectedStation->getActuators()->at(1)->toogleState();
+    stationActuator->raise();
+
+}
+
 
 void GuiStation::setWidgetSize(uint32_t widgetSizeX_, uint32_t widgetSizeY_){
     widgetSizeX = widgetSizeX_;
     widgetSizeY = widgetSizeY_;
-    l->setPixmap(QPixmap(imagePath.c_str()).scaled(widgetSizeX,widgetSizeY,Qt::KeepAspectRatio));
-
+    l->setPixmap(QPixmap(imagePath.c_str()).scaled(widgetSizeX,widgetSizeY,Qt::IgnoreAspectRatio));
+    l->show();
 }
 
 BaseProductionStation *GuiStation::getConnectedStation() {
@@ -206,4 +229,43 @@ void GuiStation::mousePressEvent(QMouseEvent *event) {
         default:
             Log::log("clicked on Main  with "+ to_string(event->button())+ "  --> ignore" ,Info);break;
     }
+}
+
+//    vector<GuiSensor *> * guiSensors;
+//    vector<GuiActuator*> *guiActuators;
+void GuiStation::resizeEvent(QResizeEvent *e) {
+    Log::log("station size"+to_string(e->size().width())+to_string(e->size().height()),DebugL2);
+    l->resize(e->size().width(),e->size().height());
+
+    if(stationActuator != nullptr) {
+        stationActuator->move(this->size().width() - stationActuator->size().width(), 1);
+    }
+    if(stationActuator2 != nullptr) {
+        stationActuator2->move(this->size().width() - stationActuator2->size().width(),stationActuator2->size().height() + 2);
+    }
+
+    for(int i = 0; i<guiSensors->size();i++){
+       // guiSensors->at(i)->resize(e->size().height()/4,e->size().width()/4);
+
+    }
+    for(int i = 0; i<guiActuators->size();i++){
+       // guiActuators->at(i)->resize(e->size().height()/4,e->size().width()/4);
+
+    }
+    show();
+}
+
+void GuiStation::update() {
+        show();
+    // update senspos
+    for(int i = 0; i<guiSensors->size();i++){
+        guiSensors->at(i)->update();
+    }
+    // update actuators
+    for(int i = 0; i<guiActuators->size();i++){
+        guiActuators->at(i)->update();
+    }
+
+
+
 }

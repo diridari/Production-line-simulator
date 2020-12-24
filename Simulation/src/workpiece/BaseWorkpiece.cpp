@@ -40,7 +40,7 @@ uint32_t BaseWorkpiece::getPosition() const {
     return position;
 }
 
-uint8_t  BaseWorkpiece::setPosition(uint32_t newPos) {
+uint8_t  BaseWorkpiece::setPosition(int32_t newPos) {
     if(newPos <0 || newPos >MAXPOSITION){
         stringstream x;
         x << "Workpiece position is illegal.New pos should be: " << newPos <<"  Max position is: "<<  MAXPOSITION << " and Min  position is: 0.  Obj:" << *this;

@@ -23,7 +23,7 @@ public:
      * position = 0
      * @param name name of obj
      */
-    explicit BaseWorkpiece(string name);
+    explicit BaseWorkpiece(string name = "BaseWorkpiece");
 
     /**
     * create workpiece by name
@@ -45,7 +45,7 @@ public:
      * @param pos
      * @return
      */
-    uint8_t setPosition(uint32_t pos);
+    uint8_t setPosition(int32_t pos);
 
     /**
      * get obj name

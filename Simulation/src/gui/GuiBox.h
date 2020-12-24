@@ -9,15 +9,15 @@
 #include <src/productionStation/BaseProductionStation.h>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QLabel>
-#include "GuiStation.h"
 
 class GuiBox : public QWidget{
 Q_OBJECT
-    BaseWorkpiece *connectedWorkpiece;
     QLabel *l;
 protected:
     void mousePressEvent(QMouseEvent * event);
 public:
+    BaseWorkpiece *connectedWorkpiece;
+
     GuiBox(BaseWorkpiece *connectedWorkpiece, QWidget *parent_ = nullptr);
     /**
      * calculate the new positio based on the widget pos
@@ -34,6 +34,10 @@ public:
      * @param baseWidgetSizeY size of station widget
      */
     void moveToNewPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY,BaseProductionStation * station);
+public slots:
+    void resizeEvent( QResizeEvent *e);
+    void update();
+
 
 
 };

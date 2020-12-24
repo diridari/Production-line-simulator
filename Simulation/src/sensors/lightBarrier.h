@@ -17,7 +17,7 @@ public:
     * @param boxSet set of boxes to run
     * @param nextStation
     */
-    void checkSensor( vector<BaseWorkpiece*> * boxSet);;
+    void checkSensor( vector<BaseWorkpiece*> * boxSet);
 };
 
 
