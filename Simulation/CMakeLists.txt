@@ -28,13 +28,13 @@ find_library(ZeroMQ_LIBRARY
         REQUIRED
         )
 
-add_executable(apiTest src/main2.cpp)
-target_link_libraries(apiTest ${ZeroMQ_LIBRARY} )
+
 
 include_directories(lib/zeromq)
 message("zeroMQ found at: " ${ZeroMQ_LIBRARY})
 
 if (CMAKE_BUILD_TYPE MATCHES Test)
+
     set( CMAKE_BUILD_TYPE Debug)
     find_package(GTest)
     if (GTest_FOUND)
@@ -49,10 +49,9 @@ if (CMAKE_BUILD_TYPE MATCHES Test)
         message(WARNING "to enable self test install gtest")
     endif ()
 else()
-    message("Build for testing")
-    find_package(GTest)
-
     message("Build for simulation")
+    add_executable(apiExample src/apiExample.cpp)
+    target_link_libraries(apiExample ${ZeroMQ_LIBRARY} )
     # QT 5
     find_package(Qt5Widgets)
     if(Qt5Widgets_FOUND)

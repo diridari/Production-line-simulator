@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     }
 
     // init api
-    api * api_ = new api(startStation);
+    api * api_ = new api(startStation,port);
 
     // simulation steps
     /**

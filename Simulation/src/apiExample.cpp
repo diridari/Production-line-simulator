@@ -159,7 +159,7 @@ int main (void)
         printf ("Error occurred during zmq_init(): %s\n", zmq_strerror (errno));
         exit (-2);
     }
-    assert(zmq_connect(requester, "tcp://localhost:5556") == 0);
+    assert(zmq_connect(requester, "tcp://localhost:5555") == 0);
 
     while(1){
         runOneTime();

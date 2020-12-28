@@ -25,7 +25,8 @@ void workerThread(void * zeroMQ_, api* api){
 #if selfTest != 1
     void *context = zmq_ctx_new ();
     void * responder = zmq_socket (context, ZMQ_REP);
-    int rc = zmq_bind (responder, "tcp://*:5556");
+    string s = "tcp://*:"+to_string(api->getPort());
+    int rc = zmq_bind (responder,s.c_str() );
     assert (rc == 0);
     while(1){
 
@@ -46,7 +47,8 @@ void workerThread(void * zeroMQ_, api* api){
 
 }
 
-api::api(BaseProductionStation *startStation_, int port) {
+api::api(BaseProductionStation *startStation_, int port_) {
+    port = port_;
     Log::log("init api",Info);
     startStation = startStation_;
 #if selfTest != 1
