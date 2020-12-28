@@ -48,7 +48,6 @@ void GuiBox::mousePressEvent(QMouseEvent *event) {
 
 
 void GuiBox::resizeEvent(QResizeEvent *e) {
-    cout << "resize to " << e->size().height()<<endl;
     l->resize(e->size());
     pwSize = e->size().width();
     l->setPixmap(QPixmap("../img/box.png").scaled(e->size(),Qt::IgnoreAspectRatio));

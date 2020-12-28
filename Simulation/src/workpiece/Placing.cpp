@@ -73,7 +73,7 @@ guiPos Placing::calculateGuiPosition(uint32_t pos, BaseProductionStation *statio
     }
     uint32_t posX,posY;
     // Calculate the pos depending of station direction
-    if(pos < 25){
+    if(pos < 50){
         switch (station->getInputDirection()) {
             case directionUp    : posY = pos;        if (station->getOutputDirection() == directionDown ) {posX = 50;}
                 else if(station->getOutputDirection() == directionRight) {posX= 25+ (float)pos/2;}
