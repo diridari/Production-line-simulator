@@ -60,7 +60,7 @@ else()
         set(CMAKE_AUTOMOC ON)
         set(CMAKE_AUTOUIC ON)
         set(CMAKE_AUTORCC ON)
-        add_executable(Production_line_simulator ${src_files}  ${src_gui} src/main.cpp )
+        add_executable(Production_line_simulator ${src_files}  ${src_gui} src/main.cpp src/ArgumentCallbackFunctions.h src/ArgumentCallbackFunctions.cpp )
         target_link_libraries(Production_line_simulator pthread CPPArgvParsLib SimpleLoggingLib  Qt5::Widgets ${ZeroMQ_LIBRARY} )
 
         #message( "src: " ${src_files} )

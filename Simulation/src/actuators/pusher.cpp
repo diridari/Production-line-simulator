@@ -20,7 +20,7 @@ void pusher::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation 
         case PushDirection::Forward :  newPos = position +2;    break;
     }
     bool couldPlaceAllBoxes = true;
-    if(newPos <= 101 && newPos >= 0 ) {
+    if(newPos <= 95 && newPos >= 0 ) {
 
         // process all boxes if moving forward
         if (direction == PushDirection::Forward){
@@ -28,22 +28,24 @@ void pusher::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation 
 
             for (int i = boxSet->size() - 1; i >= 0; i--) {
                 BaseWorkpiece *wp = boxSet->at(i);
-                if (Placing::canWorkpieceBePlacedAt(station, wp, newPos+wp->getWorkpieceSize()/2)) {
-                    if (newPos+wp->getWorkpieceSize()/2 < BaseProductionStation::sizeOfStation ) { // Move Box
-                        if(wp->getPosition()<= newPos+wp->getWorkpieceSize()/2) // TODO
-                            wp->setPosition(newPos+wp->getWorkpieceSize()/2);
-                    } else { // moved out of station
-                        Log::log(station->getStationName() + ": element has moved out of Station --> move to next",
-                                 Info);
-                        boxSet->erase(boxSet->begin() + i); // drop element
-                        wp->setPosition(0); //reset pos information
-                        station->getNextStationInChain()->insertBox(wp); // insert in next chain
+                if(wp->getPosition()<= newPos+wp->getWorkpieceSize()/2){
+                     if (Placing::canWorkpieceBePlacedAt(station, wp, newPos+wp->getWorkpieceSize()/2)) {
+                        if (newPos + wp->getWorkpieceSize() / 2 < BaseProductionStation::sizeOfStation) { // Move Box
+                            wp->setPosition(newPos + wp->getWorkpieceSize() / 2);
+                        } else { // moved out of station
+                            Log::log(station->getStationName() + ": element has moved out of Station --> move to next",
+                                     Info);
+                            boxSet->erase(boxSet->begin() + i); // drop element
+                            wp->setPosition(0); //reset pos information
+                            station->getNextStationInChain()->insertBox(wp); // insert in next chain
+                        }
+                     }
+                     else {
+                        Log::log("can not place box on shifter at pos: " + to_string(newPos) + ""
+                                     " the reason is that there is already a box. It is not allowed to move several boxes on the pusher at the same time!",
+                                 Error);
+                        couldPlaceAllBoxes = false;
                     }
-                } else {
-                    Log::log("can not place box on shifter at pos: " + to_string(newPos) + ""
-                                 " the reason is that there is already a box. It is not allowed to move several boxes on the pusher at the same time!",
-                             Error);
-                    couldPlaceAllBoxes = false;
                 }
             }
         }

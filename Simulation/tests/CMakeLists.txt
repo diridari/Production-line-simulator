@@ -8,6 +8,7 @@ set(test_files
         ${dir}TestApi.cpp
         ${dir}Test_BaseWorkStation.cpp
         ${dir}Test_GuiPlacing.cpp
+        ${dir}Test_Pusher.cpp
         src/gui/GuiPlacing.h
         src/gui/GuiPlacing.cpp
         PARENT_SCOPE )

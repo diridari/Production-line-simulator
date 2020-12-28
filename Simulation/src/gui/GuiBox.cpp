@@ -6,6 +6,7 @@
 #include "MainWindow.h"
 #include <src/workpiece/Placing.h>
 #include <src/main.h>
+static int pwSize = 0;
 
 GuiBox::GuiBox( BaseWorkpiece *connectedWorkpiece, QWidget *parent_):
         QWidget(parent_),connectedWorkpiece(connectedWorkpiece) {
@@ -45,14 +46,20 @@ void GuiBox::mousePressEvent(QMouseEvent *event) {
     }
 }
 
+
 void GuiBox::resizeEvent(QResizeEvent *e) {
     cout << "resize to " << e->size().height()<<endl;
     l->resize(e->size());
+    pwSize = e->size().width();
     l->setPixmap(QPixmap("../img/box.png").scaled(e->size(),Qt::IgnoreAspectRatio));
     show();
 }
 
 void GuiBox::update() {
 
+}
+
+int GuiBox::getWPSIze() {
+    return pwSize;
 }
 

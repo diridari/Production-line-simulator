@@ -7,6 +7,7 @@
 #include <QWidget>
 #include <src/workpiece/Placing.h>
 #include <src/actuators/pusher.h>
+#include "GuiBox.h"
 
 GuiActuator::GuiActuator(BaseActuator *connectedActuator_, BaseProductionStation *station_, QWidget *parent): QWidget(parent)  {
     if(connectedActuator_ == nullptr)
@@ -84,19 +85,19 @@ QPoint GuiActuator::getPos(QPoint BaseOffset_, uint32_t baseWidgetSizeX, uint32_
     switch (connectedActuator->getActuatorKind()) {
         case actuatorKind::Pusher:
               switch (station->getOutputDirection()) {
-                    case directionUp:         rot = QTransform().rotate(270); BaseOffset = QPoint(0,-this->height());
+                    case directionUp:         rot = QTransform().rotate(270); BaseOffset = QPoint(0,-this->height()/2+GuiBox::getWPSIze()/2);
                       //p = guiPos(0,100-connectedActuator->getPosition()*0.8);
                       p.posX = 0;
                     break;
-                    case directionDown:       rot = QTransform().rotate(90);  BaseOffset = QPoint(0,-this->height()*2);
+                    case directionDown:       rot = QTransform().rotate(90);  BaseOffset = QPoint(0,-this->height()/2-GuiBox::getWPSIze()/2);
                       //p = guiPos(0,connectedActuator->getPosition()*0.8);
                       p.posX = 0;
                       break;
-                    case directionRight:      rot = QTransform().rotate(0);   BaseOffset = QPoint(-this->width()*2,0);
+                  case directionRight:      rot = QTransform().rotate(0);   BaseOffset = QPoint(-this->width()/2-GuiBox::getWPSIze()/2,0);
                      // p = guiPos(connectedActuator->getPosition()*0.8,0);
                       p.posY = 0;
                       break;
-                    case directionLeft:       rot = QTransform().rotate(180); BaseOffset = QPoint(this->width()*2,0);
+                    case directionLeft:       rot = QTransform().rotate(180); BaseOffset = QPoint(this->width()/2+GuiBox::getWPSIze()/2,0);
                      // p = guiPos(100-connectedActuator->getPosition()*0.8,0);
                       p.posY = 0;
                       break;
