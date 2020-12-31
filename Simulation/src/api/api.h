@@ -30,6 +30,13 @@ public:
     string handleRequest(string request);
     BaseProductionStation * getStationByName(string stationName);
     string getNextToken(string * stringToAnalyze);
+    /**
+     * generate the C api for interacting with the simulation
+     * @param startStation_
+     * @return  header file
+     */
+    //string generateApi(BaseProductionStation *startStation_);
+
     int getPort(){
         return port;
     }
