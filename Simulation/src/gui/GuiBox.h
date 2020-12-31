@@ -13,6 +13,7 @@
 class GuiBox : public QWidget{
 Q_OBJECT
     QLabel *l;
+
 protected:
     void mousePressEvent(QMouseEvent * event);
 public:
@@ -34,6 +35,7 @@ public:
      * @param baseWidgetSizeY size of station widget
      */
     void moveToNewPos(QPoint BaseOffset, uint32_t baseWidgetSizeX, uint32_t baseWidgetSizeY,BaseProductionStation * station);
+    static int getWPSIze();
 public slots:
     void resizeEvent( QResizeEvent *e);
     void update();

@@ -22,7 +22,7 @@ MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : s
         GridPosition gp = p.addStation(station);
         objectMapper->addStation(station,guiStation);
         guiStation->setGridPosition(gp.x, gp.y); // add the minimum size to the position to get the total position
-        Log::log("pre place station at:"+to_string(gp.x)+","+to_string(gp.y),Message);
+        Log::log("pre place station at grid pos:"+to_string(gp.x)+","+to_string(gp.y),Message);
         station = station->getNextStationInChain();
         stationSet->push_back(guiStation);
     }
@@ -50,8 +50,19 @@ MainWindow::MainWindow(BaseProductionStation *startStation, QWidget *parent) : s
     timer->start(100);
     Log::log("Main window Done",Message);
 
-    // Resize
+    show();
 
+    // to calc the box size is necessary to create on
+    BaseWorkpiece *wp = new BaseWorkpiece(43,"shall not be part of the simulation!!");
+    startStation->insertBox(wp,50);
+    update();
+    GuiBox *gb = objectMapper->getGuiBox(wp);
+    objectMapper->dropBox(wp);
+    if(!dropBox(wp)){
+        Log::log("Gui Box failed to delete Box",Error);
+    }
+    delete gb;
+    delete wp;
 
 }
 

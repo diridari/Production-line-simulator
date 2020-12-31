@@ -19,12 +19,12 @@ Q_OBJECT
     BaseProductionStation * startStation;
     vector<GuiBox*> *boxSet = new vector<GuiBox*>();
     vector<GuiStation*> *stationSet = new vector<GuiStation*>();
-    uint8_t gridSizeX = 1,gridSizeY=1;
+
 
 public:
     MainWindow(BaseProductionStation *startStation, QWidget *parent = nullptr);
     bool dropBox(BaseWorkpiece *wp);
-
+    uint8_t gridSizeX = 1,gridSizeY=1;
 
 public slots:
     void update();

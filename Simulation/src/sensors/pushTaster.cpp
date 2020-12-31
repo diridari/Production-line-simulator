@@ -11,6 +11,7 @@ pushTaster::pushTaster(uint32_t placedAt,int32_t detect_, pusher *connectedPushe
     sensOffImage = "../img/pushOff.png";
     detect = detect_;
 
+    SensorInfo = "Pushtaster. when the Pusher on that station is near the sensors position this sensor sends a active signal";
 }
 
 void pushTaster::checkSensor(vector<BaseWorkpiece *> *boxSet) {

@@ -48,6 +48,10 @@ int32_t BaseActuator::getPosition() {
     return position;
 }
 
+string BaseActuator::getActuatorInfo() {
+    return ActuatorInfo + " \r\n \t\t    position: "  + to_string(position);
+}
+
 
 std::ostream &operator<<(ostream &strm, actuatorState a) {
     switch (a) {

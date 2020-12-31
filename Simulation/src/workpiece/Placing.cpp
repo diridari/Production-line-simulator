@@ -77,19 +77,19 @@ guiPos Placing::calculateGuiPosition(uint32_t pos, BaseProductionStation *statio
         switch (station->getInputDirection()) {
             case directionUp    : posY = pos;        if (station->getOutputDirection() == directionDown ) {posX = 50;}
                 else if(station->getOutputDirection() == directionRight) {posX= 25+ (float)pos/2;}
-                else {posX= 75 - (float)pos/2;}
+                else {posX= 75 - (float)pos;}
               break;
             case directionDown  : posY = 100-pos;    if (station->getOutputDirection() == directionUp ) {posX = 50;}
                 else if (station->getOutputDirection() == directionRight ){posX= 25+ (float)pos/2;}
-                else {posX= 75 - (float)pos/2;}
+                else {posX= 75 - (float)pos;}
               break;
             case directionLeft  : posX = pos;        if (station->getOutputDirection() == directionRight ) {posY = 50;}
                 else if(station->getOutputDirection() == directionDown) {posY= 25+ (float)pos/2;}
-                else{posY= 75- (float)pos/2;}
+                else{posY= 75- (float)pos;}
               break;
             case directionRight : posX = 100- pos;   if (station->getOutputDirection() == directionLeft ) {posY = 50;}
                 else if(station->getOutputDirection() == directionDown) {posY= 25+ (float)pos/2;}
-                else{posY= 75- (float)pos/2;}
+                else{posY= 75- (float)pos;}
               break;
         }
     }else {

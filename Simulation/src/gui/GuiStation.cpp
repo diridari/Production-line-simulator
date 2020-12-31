@@ -245,13 +245,25 @@ void GuiStation::resizeEvent(QResizeEvent *e) {
     }
 
     for(int i = 0; i<guiSensors->size();i++){
-       // guiSensors->at(i)->resize(e->size().height()/4,e->size().width()/4);
+       //guiSensors->at(i)->resize(e->size().height()/4,e->size().width()/4);
 
     }
     for(int i = 0; i<guiActuators->size();i++){
        // guiActuators->at(i)->resize(e->size().height()/4,e->size().width()/4);
 
     }
+    vector<BaseWorkpiece*> * boxes = connectedStation->getBoxesOnStation();
+    for(int i = 0; i< boxes->size();i++) {
+        BaseWorkpiece *wp = boxes->at(i);
+        GuiBox *gb = objectMapper->getGuiBox(wp);
+        int s = parentWidget()->height()/((MainWindow*)parentWidget())->gridSizeY;
+        if(parentWidget()->width()/((MainWindow*)parentWidget())->gridSizeX < s)
+            s = parentWidget()->width()/((MainWindow*)parentWidget())->gridSizeX;
+
+        s = s*wp->getWorkpieceSize()/100;
+        gb->resize(s*2,s*2);
+    }
+
     show();
 }
 

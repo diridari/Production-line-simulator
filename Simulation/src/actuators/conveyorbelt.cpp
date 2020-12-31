@@ -11,6 +11,7 @@ conveyorbelt::conveyorbelt(string name) : BaseActuator("conveyorbelt:"+ name){
     actuatorImageInactiv = "../img/convorbeltInactiv.png";
 
     position = 50;
+    ActuatorInfo = "Conveyorbelt. If activated this actuator moves all boxes.";
 }
 
 void conveyorbelt::runActuator(vector<BaseWorkpiece *> *boxSet, BaseProductionStation *station) {

@@ -14,20 +14,29 @@
 #include "ArgumentCallbackFunctions.h"
 #include "src/gui/ObjMapper.h"
 ObjMapper *objectMapper;
-BaseProductionStation *c6 = new conveyorbeltStation(nullptr,"End");
-BaseProductionStation *c5 = new PushStation(c6,"Pusher2");
-BaseProductionStation *c4 = new MillAndDrillStation(c5,"Drill");
-BaseProductionStation *c3 = new MillAndDrillStation(c4,"Mill");
-BaseProductionStation *c2 = new PushStation(c3,"Pusher1");
-BaseProductionStation *c1 = new conveyorbeltStation(c2,"Start");
 
+BaseProductionStation *startStation;
 int main(int argc, char *argv[])
 {
-
-
-
     Log::setLogLevel(Message,DebugL3);
+
+    // create Station before argument parsing that the arg parser can create a help info for the current setup
+    BaseProductionStation *c6 = new conveyorbeltStation(nullptr,"End");
+    BaseProductionStation *c5 = new PushStation(c6,"Pusher2");
+    BaseProductionStation *c4 = new MillAndDrillStation(c5,"Drill");
+    BaseProductionStation *c3 = new MillAndDrillStation(c4,"Mill");
+    BaseProductionStation *c2 = new PushStation(c3,"Pusher1");
+    startStation = new conveyorbeltStation(c2,"Start");
+    startStation->setDirection(directionDown, directionUp);
+    c2->setDirection(directionDown, directionRight);
+    c3->setDirection(directionLeft, directionRight);
+    c4->setDirection(directionLeft, directionRight);
+    c5->setDirection(directionLeft, directionDown);
+    c6->setDirection(directionUp, directionDown);
+
+    // Parse Arguments
     argvParser *p = initProgramArguments();
+
     // analyze the given parameters
     if (!p->analyseArgv(argc, argv)) {
         p->printHelpMessage(cliHighlighting);
@@ -39,18 +48,11 @@ int main(int argc, char *argv[])
 
 
     if(newStartStation != nullptr){
-        c1 = newStartStation; // setup defined by arguments
-    }else {
-        c1->setDirection(directionDown, directionUp);
-        c2->setDirection(directionDown, directionRight);
-        c3->setDirection(directionLeft, directionRight);
-        c4->setDirection(directionLeft, directionRight);
-        c5->setDirection(directionLeft, directionDown);
-        c6->setDirection(directionUp, directionDown);
+        startStation = newStartStation; // setup defined by arguments
     }
 
     // init api
-    api * api_ = new api(c1);
+    api * api_ = new api(startStation,port);
 
     // simulation steps
     /**
@@ -69,7 +71,7 @@ int main(int argc, char *argv[])
      */
     objectMapper = new ObjMapper;
     QApplication app(argc,argv);
-    MainWindow w(c1);
+    MainWindow w(startStation);
     w.show();
     return app.exec();
 }

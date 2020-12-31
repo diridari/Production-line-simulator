@@ -20,6 +20,8 @@ BaseSensor::BaseSensor(uint32_t placedAt_ = 0, string sensorName_) : placedAt(pl
     sensOnImage = "../img/lightSensDetect.png";
     sensOffImage = "../img/lightSensIdle.png";
 
+    SensorInfo = "a not further defined sensor";
+
 }
 
 uint32_t BaseSensor::getSensorPos() {
@@ -40,6 +42,10 @@ string BaseSensor::getSensOffImage() {
 
 string BaseSensor::getSensOnImage() {
     return sensOnImage;
+}
+
+string BaseSensor::getSensorInfo() {
+    return SensorInfo+ " \r\n \t\t    position: "  + to_string(getSensorPos());
 }
 
 std::ostream &operator<<(ostream &strm, sensorState a) {

@@ -28,6 +28,7 @@ protected:
     int32_t placedAt;
     sensorKind kinfOfSensor = sensorKind::baseSensor;
     string sensOnImage,sensOffImage;
+    string SensorInfo;
 
 public:
     uint32_t getSensorPos();
@@ -45,6 +46,7 @@ public:
     sensorKind getSensorKind();
     string getSensOffImage();
     string getSensOnImage();
+    string getSensorInfo();
 
 };
 
