@@ -90,7 +90,7 @@ string api::getNextToken(string *stringTo) {
         return getNextToken(stringTo); // If multiple spaces
     return outstring;
 }
-
+/*
 string api::generateApi(BaseProductionStation *startStation_){
     string headerFile = "//\n"
                         "// Generated api for the interaction with the ProductionLine Simulation. .\n"
@@ -115,7 +115,7 @@ string api::generateApi(BaseProductionStation *startStation_){
 
     }
 }
-
+*/
 
 string api::handleRequest(string request) {
     if(request.empty()){
