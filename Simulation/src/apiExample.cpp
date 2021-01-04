@@ -9,26 +9,26 @@
 
 void * context;
 void *requester;
-void apiSend(char *toSend,int size, void * context_ ){
+void apiSend(char *toSend,int size, void * socket ){
     if(size <=5){
         printf("error\r\n");
     }
     printf("send :   \"%s\"\r\n",toSend);
     char buff[64] = {0,};
     int s;
-    if((s = zmq_send (requester, toSend,size, 0))<0){
+    if((s = zmq_send (socket, toSend,size, 0))<0){
         printf("error send ret: %d, %d, %s\r\n",s, zmq_errno(), zmq_strerror(zmq_errno()));
     }
     memset(buff,0,64);
-    if((s=zmq_recv (requester, buff, 64, 0))<0){
+    if((s=zmq_recv (socket, buff, 64, 0))<0){
         printf("error gets  ret: %d , %d %s\r\n",s, zmq_errno(),zmq_strerror(zmq_errno()));
     }
 }
-int apiGet(char * request,int size, void* context_){
+int apiGet(char * request,int size, void* socket){
     char buff[64] = {0,};
-    zmq_send (requester, request, size, 0);
+    zmq_send (socket, request, size, 0);
     memset(buff,0,64);
-    size = zmq_recv (requester, buff, 64, 0);
+    size = zmq_recv (socket, buff, 64, 0);
     // expect "ok: XX"
     int data = -1;
     if(size >0 && strstr(buff,"ok:")!= NULL){
@@ -87,36 +87,36 @@ void handleMiller(char* name){
     char buff[128];
     int s;
     s = sprintf(buff,"set %s 0 1",name); // start conv
-    apiSend(buff,s,context);
+    apiSend(buff,s,requester);
     do{
         int s = sprintf(buff,"get %s 0 ",name); // get light
-        tmp = apiGet(buff, s, context);
+        tmp = apiGet(buff, s, requester);
         usleep(1000);
     }while (!tmp);
     s = sprintf(buff,"set %s 0 0",name); // stop conv
-    apiSend(buff,s,context);
+    apiSend(buff,s,requester);
     s = sprintf(buff,"set %s 1 1",name); // start miller
-    apiSend(buff,s,context);
+    apiSend(buff,s,requester);
     usleep(1000000);
     s = sprintf(buff,"set %s 0 1",name); // start conv
-    apiSend(buff,s,context);
+    apiSend(buff,s,requester);
     s = sprintf(buff,"set %s 1 0",name); // stop miller
-    apiSend(buff,s,context);
+    apiSend(buff,s,requester);
 }
 void runOneTime(){
     printf("run one time \r\n");
     char buff[128];
-    int s = sprintf(buff,"set %s 0 1",s1); // start conv1
-    apiSend(buff,s,context);
+    int s = sprintf(buff,"setx %s 0 1",s1); // start conv1
+    apiSend(buff,s,requester);
     uint8_t tmp = 0;
     do{
         int s = sprintf(buff,"get %s 0 ",s1); // get light
-        tmp = apiGet(buff, s, context);
+        tmp = apiGet(buff, s, requester);
         usleep(1000);
     }while (!tmp);
     usleep(3000000);
     s = sprintf(buff,"set %s 0 0",s1); // stop conv1
-    apiSend(buff,s,context);
+    apiSend(buff,s,requester);
 
     // PUSHER 1 Forward
     handlePusher(s2);
@@ -125,21 +125,21 @@ void runOneTime(){
     handleMiller(s4);
 
     s = sprintf(buff,"set %s 0 0",s3); // stop miller
-    apiSend(buff,s,context);
+    apiSend(buff,s,requester);
 
     usleep(4500000); // wait until box has moved to pusher
     s = sprintf(buff,"set %s 0 0",s4); // stop conv1
-    apiSend(buff,s,context);
+    apiSend(buff,s,requester);
     handlePusher(s5);
     s = sprintf(buff,"set %s 0 1",s6); // start end
-    apiSend(buff,s,context);
+    apiSend(buff,s,requester);
     do{
         int s = sprintf(buff,"get %s 0 ",s6); // get taster 1 front
-        tmp = apiGet(buff, s, context);
+        tmp = apiGet(buff, s, requester);
         usleep(1000);
     }while (!tmp);
     s = sprintf(buff,"set %s 0 0",s6); // stop end
-    apiSend(buff,s,context);
+    apiSend(buff,s,requester);
 
 
     // Miller

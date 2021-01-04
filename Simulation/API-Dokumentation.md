@@ -17,7 +17,7 @@ A set request for the second  actuator on the Milling station to the value â€œ1â
       set Milling 2 1 
 
 
-By calling the application with the argument
+By calling the application with the argument:
 
     --currentSetup
 
