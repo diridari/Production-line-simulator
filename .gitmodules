@@ -1,0 +1,6 @@
+[submodule "lib/CPP-Argument-Parser"]
+	path = lib/CPP-Argument-Parser
+	url = https://github.com/diridari/CPP-Argument-Parser.git
+[submodule "lib/logging-cpp"]
+	path = lib/logging-cpp
+	url = https://github.com/diridari/logging-cpp.git
