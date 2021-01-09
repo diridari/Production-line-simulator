@@ -18,7 +18,7 @@ ObjMapper *objectMapper;
 BaseProductionStation *startStation;
 int main(int argc, char *argv[])
 {
-    Log::setLogLevel(Message,DebugL3);
+    Log::setLogLevel(Error,DebugL3);
 
     // create Station before argument parsing that the arg parser can create a help info for the current setup
     BaseProductionStation *c6 = new conveyorbeltStation(nullptr,"End");
@@ -43,6 +43,17 @@ int main(int argc, char *argv[])
         return -5;
     }
     logArgumentStatus();
+    int index = 1;
+    // log current setup
+    BaseProductionStation *s = startStation;
+    string setup;
+    while (s != nullptr){
+        setup += to_string(index) + ": " +s->getStationInfo()+"\r\n";
+        s = s->getNextStationInChain();
+        index++;
+    }
+
+    Log::log("current setup:\r\n" + setup,Info);
     Log:log("start simulation version: " + to_string(VERSION_MAJOR) + "."+ to_string(VERSION_MINOR) + "."+ to_string(VERSION_REVISION) +"\r\n",Message);
 
 
