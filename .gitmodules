@@ -1,7 +1,3 @@
-[submodule "Simulation/lib/CPP-Argument-Parser"]
-	path = Simulation/lib/CPP-Argument-Parser
-	url = https://github.com/diridari/CPP-Argument-Parser.git
 [submodule "Simulation/lib/SimpleLogging"]
 	path = Simulation/lib/SimpleLogging
 	url = https://github.com/diridari/logging-cpp.git
-
