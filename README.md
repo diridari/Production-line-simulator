@@ -10,6 +10,7 @@ However, the project does not have the goal to simulate the plant one to one, bu
 The application does only simulate the actuators, sensors, boxes and Stations. The production logic (when to turn on/off the individual actuators) has to get defined by the user. For that there is a special API. 
 
 clone:
+
 	git clone --recurse-submodules https://github.com/intel/Dependency-Reduction-Unit-Framework.git 
 	
 ## Features
