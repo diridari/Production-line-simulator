@@ -17,3 +17,7 @@ cmake-build-debug/
 Simulation/cmake-build-qt/
 
 Simulation/cmake-build-test/
+
+cmake-build-test/
+
+cmake-build-debug-qt-minggw/
