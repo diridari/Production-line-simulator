@@ -109,7 +109,7 @@ void generateSetupInfo(){
 
 }
 argvParser *initProgramArguments() {
-    string desc = "This application intense to simulate the \"Fischertechnik-Productionline\". \r\n"
+    string desc = "This application intended to simulate the \"Fischertechnik-Productionline\". \r\n"
                   "This simulation was created during the Corona crisis to enable the students of the University of Applied Sciences Munich to attend the work placement  for the lecture \"Embedded Systems\". \r\n"
                   "The goal of the practical course is to control the sensors and actuators of the production line on a binary level with the help of an embedded system.\r\n"
                   "This simulation is therefore controlled on the level of the individual sensors and actuators. \r\n"

@@ -15,3 +15,12 @@ A get request for the second sensor in the “pushStation1” would be:
 A set request for the second  actuator on the Milling station to the value “1” would be
 
       set Milling 2 1 
+
+
+By calling the application with the argument:
+
+    --currentSetup
+
+the application generates an inforamtion about the current setup. Here it is also possible to see the api for the current setup.
+
+

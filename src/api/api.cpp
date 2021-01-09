@@ -90,6 +90,32 @@ string api::getNextToken(string *stringTo) {
         return getNextToken(stringTo); // If multiple spaces
     return outstring;
 }
+/*
+string api::generateApi(BaseProductionStation *startStation_){
+    string headerFile = "//\n"
+                        "// Generated api for the interaction with the ProductionLine Simulation. .\n"
+                        "#ifndef GENERATED_USER_API_FOR_PRODUCTIONLINE_SIMULATION\r\n"
+                        "#define GENERATED_USER_API_FOR_PRODUCTIONLINE_SIMULATION\r\n";
+    BaseProductionStation *station = startStation_;
+    while(station != nullptr){
+        headerFile += "///////////////////////////////////////\r\n"
+                      "//" + station->getStationName() + "\r\n"
+                      + "///////////////////////////////////////\r\n";
+        for(int i = 0; i<station->getSensors()->size();i++){
+
+            BaseSensor *s = station->getSensors()->at(i);
+            headerFile += "//" + s->getSensorName() + "\r\n";
+            headerFile += "get";
+
+
+        }
+        for(int i = 0; i<station->getActuators()->size();i++){
+
+        }
+
+    }
+}
+*/
 
 string api::handleRequest(string request) {
     if(request.empty()){
