@@ -1,3 +1,0 @@
-[submodule "Simulation/lib/SimpleLogging"]
-	path = Simulation/lib/SimpleLogging
-	url = https://github.com/diridari/logging-cpp.git
