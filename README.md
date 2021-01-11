@@ -11,7 +11,7 @@ The application does only simulate the actuators, sensors, boxes and Stations. T
 
 clone:
 
-	git clone --recurse-submodules https://github.com/intel/Dependency-Reduction-Unit-Framework.git 
+	git clone --recurse-submodules https://github.com/diridari/Production-line-simulator.git
 	
 ## Features
 * Define you own production station layout
