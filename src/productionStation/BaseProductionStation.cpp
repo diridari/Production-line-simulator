@@ -109,7 +109,11 @@ bool BaseProductionStation::stationCanReceiveNewBoxes() {
 bool BaseProductionStation::dropBox(BaseWorkpiece *wpToDrop) {
     Log::log("drop box on station "+ getStationName(),Info);
     for(int i = 0; i<boxSet->size();i++){
+        if(boxSet == nullptr){
+            Log::log("no boxset on station (Bug)",CriticError);
+        }
         if(boxSet->at(i) == wpToDrop){
+            Log::log("box found, erase it",DebugL2);
             boxSet->erase(boxSet->begin()+i);
             return true;
         }
