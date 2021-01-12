@@ -28,7 +28,16 @@ GuiSensor::GuiSensor(BaseSensor *connectedSensor_, BaseProductionStation *statio
     l = new QLabel(this);
    // setMinimumSize(parent->height()/5,parent->width()/5);
 
-    l->setPixmap(QPixmap(connectedSensor->getSensOffImage().c_str()).scaled(MinStationSize/4,MinStationSize/4,Qt::IgnoreAspectRatio));
+    QPixmap *p = new QPixmap(connectedSensor->getSensOffImage().c_str());
+    if( p->isNull()){
+        string s = "../" + connectedSensor->getSensOffImage();
+        p = new QPixmap(s.c_str());
+        if( p->isNull()){
+            Log::log("Failed to open box image",Error);
+            exit (-11);
+        }
+    }
+    l->setPixmap(p->scaled(MinStationSize/4,MinStationSize/4,Qt::IgnoreAspectRatio));
     //setMinimumSize(MinStationSize/4,MinStationSize/4);
     //l->setMinimumSize(MinStationSize/4,MinStationSize/4);
     l->show();
@@ -38,18 +47,28 @@ GuiSensor::GuiSensor(BaseSensor *connectedSensor_, BaseProductionStation *statio
 
 void GuiSensor::update() {
 
+
     if(connectedSensor->getSensorState() != lastState){
+        string s;
         lastState = connectedSensor->getSensorState();
         if(lastState == SENSOR_ON){
-            l->setPixmap(QPixmap(connectedSensor->getSensOnImage().c_str()).scaled(l->width(),l->height(),Qt::IgnoreAspectRatio));
-
+            s = connectedSensor->getSensOnImage();
         }else{
-            l->setPixmap(QPixmap(connectedSensor->getSensOffImage().c_str()).scaled(l->width(),l->height(),Qt::IgnoreAspectRatio));
+            s = connectedSensor->getSensOffImage();
         }
+        QPixmap *p = new QPixmap(s.c_str());
+        if( p->isNull()){
+            string ns = "../" + s;
+            p = new QPixmap(ns.c_str());
+            if( p->isNull()){
+                Log::log("Failed to open sensor image " + s,Error);
+                exit (-11);
+            }
+        }
+        l->setPixmap(p->scaled(l->width(),l->height(),Qt::IgnoreAspectRatio));
 
     }
-    QPoint BaseOffset = QPoint(-l->width()/2,-l->height()/2);
-    l->move(getPos(BaseOffset,parentWidget()->width(),parentWidget()->height()));
+    l->move(getPos(QPoint(-l->width()/2,-l->height()/2),parentWidget()->width(),parentWidget()->height()));
 
 
 

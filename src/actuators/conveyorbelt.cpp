@@ -7,8 +7,8 @@
 
 conveyorbelt::conveyorbelt(string name) : BaseActuator("conveyorbelt:"+ name){
     kindOfAktuator = actuatorKind::Conveyorbelt_;
-    actuatorImageActiv = "../img/convorbelt.png";
-    actuatorImageInactiv = "../img/convorbeltInactiv.png";
+    actuatorImageActiv = "img/convorbelt.png";
+    actuatorImageInactiv = "img/convorbeltInactiv.png";
 
     position = 50;
     ActuatorInfo = "Conveyorbelt. If activated this actuator moves all boxes.";

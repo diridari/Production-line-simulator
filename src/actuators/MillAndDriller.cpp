@@ -6,8 +6,8 @@
 
 MillAndDriller::MillAndDriller(string name) : BaseActuator("Driller:"+name) {
     kindOfAktuator = actuatorKind::MillerDrill;
-    actuatorImageActiv = "../img/driller.png";
-    actuatorImageInactiv = "../img/drillerInactiv.png";
+    actuatorImageActiv = "img/driller.png";
+    actuatorImageInactiv = "img/drillerInactiv.png";
 
     position = 50;
 

@@ -7,8 +7,8 @@
 
 pusher::pusher(string name) : BaseActuator("pusher:"+name) {
     position = 0;
-    actuatorImageActiv = "../img/pusherForward.png";
-    actuatorImageInactiv = "../img/pusherInactiv.png";
+    actuatorImageActiv = "img/pusherForward.png";
+    actuatorImageInactiv = "img/pusherInactiv.png";
     kindOfAktuator = actuatorKind::Pusher;
 }
 
