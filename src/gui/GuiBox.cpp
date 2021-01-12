@@ -12,7 +12,15 @@ GuiBox::GuiBox( BaseWorkpiece *connectedWorkpiece, QWidget *parent_):
         QWidget(parent_),connectedWorkpiece(connectedWorkpiece) {
     Log::log("new gui Box for " + connectedWorkpiece->getName(),Info);
     l = new QLabel(this);
-    l->setPixmap(QPixmap("../img/box.png"));
+    QPixmap *p = new QPixmap("../img/box.png");
+    if(p == nullptr){
+        p = new QPixmap("img/box.png");
+        if( p->isNull()){
+            Log::log("Failed to open box image",Error);
+            exit (-11);
+        }
+    }
+    l->setPixmap(*p);
     l->show();
 
 }
@@ -50,7 +58,15 @@ void GuiBox::mousePressEvent(QMouseEvent *event) {
 void GuiBox::resizeEvent(QResizeEvent *e) {
     l->resize(e->size());
     pwSize = e->size().width();
-    l->setPixmap(QPixmap("../img/box.png").scaled(e->size(),Qt::IgnoreAspectRatio));
+    QPixmap *p = new QPixmap("../img/box.png");
+    if( p->isNull()){
+        p = new QPixmap("img/box.png");
+        if( p->isNull()){
+            Log::log("Failed to open box image",Error);
+            exit (-11);
+        }
+    }
+    l->setPixmap(p->scaled(e->size(),Qt::IgnoreAspectRatio));
     show();
 }
 

@@ -30,21 +30,21 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
 
     // get station direction to termine picmap and rotation matrix
     if(inputDirection == directionUp && outputDirection == directionDown || inputDirection == directionDown && outputDirection ==  directionUp) {
-        imagePath = "../img/BaseStation.png";
+        imagePath = "img/BaseStation.png";
         size = QSize(MinStationSize,MinStationSize*2);
         stationScaleFaktors = tuple<int,int>(1,2);
     }else if (inputDirection == directionLeft && outputDirection == directionRight || inputDirection == directionRight && outputDirection ==  directionLeft){
-        imagePath = "../img/BaseStation.png";
+        imagePath = "img/BaseStation.png";
         rot = QTransform().rotate(90);
         size = QSize(MinStationSize*2,MinStationSize);
         stationScaleFaktors = tuple<int,int>(2,1);
     }else if(inputDirection == directionUp && outputDirection == directionRight) {
-        imagePath = "../img/BaseStationEdge.png";
+        imagePath = "img/BaseStationEdge.png";
         size = QSize(MinStationSize*2,MinStationSize);
         stationScaleFaktors = tuple<int,int>(2,1);
 
     }else if(inputDirection == directionRight && outputDirection == directionUp){
-        imagePath = "../img/BaseStationEdge.png";
+        imagePath = "img/BaseStationEdge.png";
         size = QSize(MinStationSize*2,MinStationSize);
         stationScaleFaktors = tuple<int,int>(2,1);
 
@@ -52,28 +52,28 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
         rot = rot.rotate(180,Qt::XAxis);
     }
     else if(inputDirection == directionRight && outputDirection == directionDown) {
-        imagePath = "../img/BaseStationEdge.png";
+        imagePath = "img/BaseStationEdge.png";
         rot = QTransform().rotate(90);
         size = QSize(MinStationSize,MinStationSize*2);
         stationScaleFaktors = tuple<int,int>(1,2);
 
     }
     else if(inputDirection == directionDown && outputDirection == directionRight){
-        imagePath = "../img/BaseStationEdge.png";
+        imagePath = "img/BaseStationEdge.png";
         rot = rot.rotate(180);
         rot = rot.rotate(180,Qt::YAxis);
         size = QSize(MinStationSize*2,MinStationSize);
         stationScaleFaktors = tuple<int,int>(2,1);
 
     }else if(inputDirection == directionDown && outputDirection == directionLeft) {
-        imagePath = "../img/BaseStationEdge.png";
+        imagePath = "img/BaseStationEdge.png";
         rot = QTransform().rotate(180);
         size = QSize(MinStationSize*2,MinStationSize);
         stationScaleFaktors = tuple<int,int>(2,1);
 
 
     }else if(inputDirection == directionLeft && outputDirection == directionDown){
-        imagePath = "../img/BaseStationEdge.png";
+        imagePath = "img/BaseStationEdge.png";
         size = QSize(MinStationSize,MinStationSize*2);
         stationScaleFaktors = tuple<int,int>(1,2);
         rot = QTransform().rotate(90);
@@ -82,7 +82,7 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
 
     }
     else if(inputDirection == directionLeft && outputDirection == directionUp || inputDirection == directionUp && outputDirection == directionLeft){
-        imagePath = "../img/BaseStationEdge.png";
+        imagePath = "img/BaseStationEdge.png";
         rot = QTransform().rotate(270);
         size = QSize(MinStationSize,MinStationSize*2);
 
@@ -90,8 +90,16 @@ GuiStation::GuiStation(BaseProductionStation *connectedStation, Direction inputD
         Log::log("Gui station could not find rotation matrix to determine station image: inputdir" + to_string(inputDirection) + " outputdir: "+ to_string(outputDirection),Error);
     }
     l = new QLabel(this);
-    QPixmap pix = QPixmap(imagePath.c_str()).scaled(size,Qt::IgnoreAspectRatio).transformed(rot);
-    l->setPixmap(pix);
+    QPixmap *pix =  (new QPixmap(imagePath.c_str()));
+    if( pix->isNull()){
+        pix = new QPixmap(("../"+imagePath).c_str());
+        if( pix->isNull()){
+            Log::log("Failed to open station image",Error);
+            exit (-11);
+        }
+    }
+    pix->scaled(size,Qt::IgnoreAspectRatio).transformed(rot);
+    l->setPixmap(*pix);
     l->setScaledContents(true);
     l->setMinimumSize(size);
     setMinimumSize(size);

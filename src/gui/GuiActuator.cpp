@@ -40,7 +40,16 @@ GuiActuator::GuiActuator(BaseActuator *connectedActuator_, BaseProductionStation
         }
     }
     setMinimumSize(actuatorSize);
-    l->setPixmap(QPixmap(connectedActuator->getActuatorImage().c_str()).scaled(actuatorSize,Qt::IgnoreAspectRatio).transformed(rot));
+    QPixmap *p = new QPixmap(connectedActuator->getActuatorImage().c_str());
+    if( p->isNull()){
+        string s = "../" + connectedActuator->getActuatorImage();
+        p = new QPixmap(s.c_str());
+        if( p->isNull()){
+            Log::log("Failed to open actuator image",Error);
+            exit (-11);
+        }
+    }
+    l->setPixmap(p->scaled(actuatorSize,Qt::IgnoreAspectRatio).transformed(rot));
     l->setMinimumSize(actuatorSize);
     show();
     move(getPos(BaseOffset,parent->width(),parent->height()));
@@ -53,7 +62,16 @@ void GuiActuator::update() {
 
     if(connectedActuator->getActuatorImage() != lastImg){
         lastImg =  connectedActuator->getActuatorState();
-        l->setPixmap(QPixmap(connectedActuator->getActuatorImage().c_str()).scaled(actuatorSize,Qt::IgnoreAspectRatio).transformed(rot));
+        QPixmap *p = new QPixmap(connectedActuator->getActuatorImage().c_str());
+        if( p->isNull()){
+            string s = "../" + connectedActuator->getActuatorImage();
+            p = new QPixmap(s.c_str());
+            if( p->isNull()){
+                Log::log("Failed to open actuator image",Error);
+                exit (-11);
+            }
+        }
+        l->setPixmap(p->scaled(actuatorSize,Qt::IgnoreAspectRatio).transformed(rot));
     }
     if(connectedActuator->getActuatorKind() == actuatorKind::Pusher) {
         switch (station->getOutputDirection()) {

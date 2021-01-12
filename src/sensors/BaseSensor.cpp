@@ -17,8 +17,8 @@ string BaseSensor::getSensorName() {
 }
 
 BaseSensor::BaseSensor(uint32_t placedAt_ = 0, string sensorName_) : placedAt(placedAt_), sensorName(sensorName_){
-    sensOnImage = "../img/lightSensDetect.png";
-    sensOffImage = "../img/lightSensIdle.png";
+    sensOnImage = "img/lightSensDetect.png";
+    sensOffImage = "img/lightSensIdle.png";
 
     SensorInfo = "a not further defined sensor";
 

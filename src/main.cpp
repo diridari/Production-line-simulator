@@ -4,7 +4,6 @@
 #include <lib/SimpleLogging/include/logging.h>
 #include <thread>
 #include <src/gui/MainWindow.h>
-#include <zconf.h>
 #include <src/productionStation/conveyorbeltStation.h>
 #include <QtWidgets/QApplication>
 #include <src/productionStation/PushStation.h>

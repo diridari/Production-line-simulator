@@ -7,8 +7,8 @@
 pushTaster::pushTaster(uint32_t placedAt,int32_t detect_, pusher *connectedPusher_,string name):BaseSensor(placedAt,name) {
     connectedPusher = connectedPusher_;
     kinfOfSensor = sensorKind::taster;
-    sensOnImage = "../img/pushOn.png";
-    sensOffImage = "../img/pushOff.png";
+    sensOnImage = "img/pushOn.png";
+    sensOffImage = "img/pushOff.png";
     detect = detect_;
 
     SensorInfo = "Pushtaster. when the Pusher on that station is near the sensors position this sensor sends a active signal";
