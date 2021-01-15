@@ -22,6 +22,15 @@ clone:
 # Usage
 * See 'Simulation/Usage.md'
 
+# Dependencies
+This simulation has following dependencies:
+* logging-cpp (submodule)
+* CPP-Argument-Parser (submodule)
+* ZeroMQ (windows binary's can be found at lib/zeromq | Linux: libzmq3-dev)
+* Qt5::Widgets
+    
+    
+
 # API Documentation
 ## Idea
 Each station shout have a defined unique name (e.g. pusher1, miller. driller) and a defined set of actuators and sensors. 
